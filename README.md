@@ -84,7 +84,7 @@ use asdf
 
 # Other valid `use asdf` examples:
 # use asdf /path/to/other/.tool-versions # if you want to load from another location
-# use asdf rust 1.38.0 # even if no present in your local versions file
+# use asdf rust $ASDF_RUST_VERSION # for things not on the tool versions file.
 ```
 
 Finally, run `direnv allow .envrc` to trust your new file.
