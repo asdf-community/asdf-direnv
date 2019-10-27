@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+#
+# Copyright 2019 asdf-direnv authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+set -eo pipefail
+
+fail() {
+  echo -e "\e[31mFail:\e[m $* 😭"
+  exit 1
+}
+
+install_direnv() {
+  local install_type=$1
+  local version=$2
+  local install_path=$3
+
+  if [ "$install_type" != "version" ]; then
+    fail "asdf-direnv supports release installs only"
+  fi
+
+  local platform
+
+  case "$OSTYPE" in
+    darwin*) platform="darwin" ;;
+    linux*) platform="linux" ;;
+    *) fail "Unsupported platform" ;;
+  esac
+
+  local architecture
+
+  case "$(uname -m)" in
+    x86_64) architecture="amd64" ;;
+    *) fail "Unsupported architecture" ;;
+  esac
+
+  local download_url="https://github.com/direnv/direnv/releases/download/v${version}/direnv.${platform}-${architecture}"
+  local source_path="${install_path}/bin/direnv"
+
+  (
+    echo "∗ Downloading and installing direnv..."
+    mkdir -p "${install_path}/bin"
+    curl --silent --location --create-dirs --output "$source_path" "$download_url" || fail "Could not download"
+    chmod +x "${install_path}/bin/direnv" || fail "Could not set executable bit on binary"
+    echo "The installation was successful!"
+  ) || (
+    rm -rf "$install_path"
+    fail "An error occurred"
+  )
+}
+
+install_direnv "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
