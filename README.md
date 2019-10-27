@@ -87,6 +87,22 @@ use asdf
 # use asdf rust 1.38.0 # even if no present in your local versions file
 ```
 
+Finally, run `direnv allow .envrc` to trust your new file.
+
+That's it!
+
+Now when you leave your project directoy and come back to it, direnv will manage the
+environment variables for you, for example:
+
+```bash
+cd /some/project
+direnv: loading .envrc
+direnv: using asdf /some/project/.tool-versions
+direnv: using asdf elixir 1.8.1-otp-21
+direnv: using asdf nodejs 12.6.0
+direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
+```
+
 
 ## Useful links
 
