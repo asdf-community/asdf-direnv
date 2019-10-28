@@ -60,10 +60,9 @@ asdf tools, primarily the PATH environment, but also any other variable exposed
 by your plugin (eg, MIX_HOME exposed by the asdf-elixir plugin).
 
 This way, the running `node` will not invoke the asdf-shim but the _real_
-asdf-managed executable in PATH. Which will improve speed since the version is
-resolution is out of the way and made only once by `direnv` upon entering your
+asdf-managed executable in PATH. Which will improve speed since version resolution is out of the way and made only once by `direnv` upon entering your
 project directory. Commands trying to find themselves in PATH will find their
-expected location. Also, no more _re-shim_ needed upon `npm install`.
+expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ## Prerequirements
 
