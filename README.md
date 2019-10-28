@@ -15,21 +15,21 @@
 [asdf](https://asdf-vm.com) is a great tool for managing multiple versions of
 command line tools. 99% of the time these managed tools work just as expected.
 
-Shims are just tiny executables managed by asdf that just forward execution to
-the _real_ versioned executables installed by asdf. This way asdf has a single
+Shims are just tiny executables created by asdf and just forward execution to
+the _real_ versioned executables installed by asdf. This way, asdf has a single
 shims directory added to your PATH and has no need of mangling the PATH for
-every installed tool.
+every installed version.
 
-So, when you execute an asdf-managed command, like `node`, it will actually run
-an asdf-shim, which will determine which `node` version to activate according to
+When you execute an asdf-managed command, like `node`, it will actually run
+an asdf-shim, which will determine the `node` version to activate according to
 your `.tool-versions` file.
 
-As convenient as it is, every single time you run `node` asdf will have to
+A downside of this is that every single time you run `node` asdf will have to
 determine again which version to use. Even if you haven't changed your
-`.tool-versions` file to upgrade the nodejs plugin version. And this happens for
+`.tool-versions` file to upgrade the node version to use. And this happens for
 every shim execution, which could lead to some users experiencing certain
-_slowness_ while asdf is looking up versions (since it has to check not only
-.tool-versions, but probably also legacy version files every time)
+_slowness_ while asdf is looking up versions, since it has to traverse directories
+looking up for a .tool-versions file and probably also legacy version files.
 
 Another inconvenience is that commands installed by these tools can have some
 problems by the way asdf shims work. For example, if a command tries to find
@@ -38,9 +38,9 @@ executable and not the _actual_ executable delegated-to by asdf. This might
 cause problems if the command tries to use this location as an installation root
 to find auxiliary files, since shims will mask the real executable.
 
-Another problem usually found by asdf users is, if you have an asdf-managed
-package manager, say `npm`, `hex`, `gem` and the like. Any new binaries
-installed by these tools are not available on PATH unless you `asdf reshim`.
+Also, asdf users commonly ask about auto-reshim, because if you have an asdf-managed
+package manager like `npm`, `hex`, `gem`, `opam`, etc. Any new binaries
+installed by these tools are not available on PATH unless you run `asdf reshim`.
 This is because asdf has no way of knowing what the `npm install` command does,
 and it's until `asdf reshim` that it will figure out new executables are
 available and will create shims for them accordingly.
