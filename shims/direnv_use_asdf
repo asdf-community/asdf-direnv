@@ -25,7 +25,7 @@ use_asdf() {
     local IFS
     IFS=$'\n'
     for plugin_and_version in $(cut -d'#' -f1 "$tool_versions" | awk NF | tail -r); do
-      IFS=$' ' read -r plugin version <<< "$plugin_and_version"
+      IFS=$' ' read -r plugin version <<<"$plugin_and_version"
       echo "direnv: using asdf $plugin $version"
       direnv_load _direnv_asdf_dump_env "$plugin" "$version"
     done
@@ -39,9 +39,9 @@ use_asdf() {
     echo "direnv: using asdf $plugin $version"
     direnv_load _direnv_asdf_dump_env "$1" "$2"
   else
-    echo "direnv: Invalid args: use asdf $*"     >&2
-    echo "        use asdf TOOL_VERSIONS_FILE"   >&2
-    echo "        use asdf TOOL_NAME [VERSION]"  >&2
+    echo "direnv: Invalid args: use asdf $*" >&2
+    echo "        use asdf TOOL_VERSIONS_FILE" >&2
+    echo "        use asdf TOOL_NAME [VERSION]" >&2
     return 1
   fi
 }
@@ -54,7 +54,8 @@ _direnv_asdf_dump() {
 # asdf helper: get a tool version
 _direnv_asdf_preset_version() {
   local plugin=$1
-  ( # use a sub-shell since asdf introduces set -e
+  (
+    # use a sub-shell since asdf introduces set -e
     # shellcheck disable=SC1090 # Can't follow non-constant source. Use a directive to specify location.
     source "$ASDF_DIR/lib/utils.sh"
     get_preset_version_for "$plugin"
@@ -65,7 +66,8 @@ _direnv_asdf_preset_version() {
 _direnv_asdf_dump_env() {
   local plugin=$1
   local version=$2
-  ( # use a sub-shell since asdf introduces set -e
+  (
+    # use a sub-shell since asdf introduces set -e
     # shellcheck disable=SC1090 # Can't follow non-constant source. Use a directive to specify location.
     source "$ASDF_DIR/lib/utils.sh"
     with_plugin_env "$plugin" "$version" _direnv_asdf_dump
