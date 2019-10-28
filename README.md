@@ -79,7 +79,7 @@ Follow the [instructions to hook direnv](https://github.com/direnv/direnv/blob/m
 Then on your project root where you have a `.tool-versions` file, create a `.envrc` file with the following content:
 
 ```bash
-source $(asdf which direnv_use_adf) # needed until https://github.com/direnv/direnv/pull/534 gets merged.
+source $(asdf which direnv_use_asdf) # needed until https://github.com/direnv/direnv/pull/534 gets merged.
 use asdf
 
 # Other valid `use asdf` examples:
