@@ -15,12 +15,12 @@
 [asdf](https://asdf-vm.com) is a great tool for managing multiple versions of
 command line tools. 99% of the time these managed tools work just as expected.
 
-Shims are just tiny executables created by asdf and just forward execution to
+Shims are just tiny wrappers created by asdf that just forward execution to
 the _real_ versioned executables installed by asdf. This way, asdf has a single
 shims directory added to your PATH and has no need of mangling the PATH for
 every installed version.
 
-When you execute an asdf-managed command, like `node`, it will actually run an
+When you run an asdf-managed command, like `node`, it will actually execute an
 asdf-shim, which will determine the `node` version to activate according to your
 `.tool-versions` file.
 
@@ -34,7 +34,7 @@ version files.
 
 Another inconvenience is that commands installed by these tools can have some
 problems by the way asdf shims work. For example, if a command tries to find
-itself by name in PATH (eg, using `which my-command`) it will find the asdf shim
+itself by name in PATH (e.g. using `which my-command`) it will find the asdf shim
 executable and not the _actual_ executable delegated-to by asdf. This might
 cause problems if the command tries to use this location as an installation root
 to find auxiliary files, since shims will mask the real executable.
@@ -58,7 +58,7 @@ leave that directory.
 This `asdf-direnv` plugin lets you install `direnv` and also provides a tiny
 script to integrate both. Allowing `direnv` to manage any variables exposed by
 asdf tools, primarily the PATH environment, but also any other variable exposed
-by your plugin (eg, MIX_HOME exposed by the asdf-elixir plugin).
+by your plugin (e.g. MIX_HOME exposed by the asdf-elixir plugin).
 
 This way, running `node` will not invoke the asdf-shim but the _real_
 asdf-managed executable in PATH. Which will improve speed since version
