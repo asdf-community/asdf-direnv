@@ -38,9 +38,9 @@ executable and not the _actual_ executable delegated-to by asdf. This might
 cause problems if the command tries to use this location as an installation root
 to find auxiliary files, since shims will mask the real executable.
 
-Also, asdf users commonly ask about auto-reshim, because if you have an asdf-managed
-package manager like `npm`, `hex`, `gem`, `opam`, etc. Any new binaries
-installed by these tools are not available on PATH unless you run `asdf reshim`.
+Also, people frequently ask why is reshim needed. Suppose you used asdf to install
+a package manager like `npm`, `hex`, `gem`, `cargo`, etc. Any new binaries
+installed by these tools wont be available on PATH unless you run `asdf reshim`.
 This is because asdf has no way of knowing what the `npm install` command does,
 and it's until `asdf reshim` that it will figure out new executables are
 available and will create shims for them accordingly.
