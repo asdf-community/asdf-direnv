@@ -60,7 +60,8 @@ asdf tools, primarily the PATH environment, but also any other variable exposed
 by your plugin (eg, MIX_HOME exposed by the asdf-elixir plugin).
 
 This way, running `node` will not invoke the asdf-shim but the _real_
-asdf-managed executable in PATH. Which will improve speed since version resolution is out of the way and made only once by `direnv` upon entering your
+asdf-managed executable in PATH. Which will improve speed since version
+resolution is out of the way and made only once by `direnv` upon entering your
 project directory. Commands trying to find themselves in PATH will find their
 expected location. Also, no more _reshim_ needed upon `npm install`.
 
@@ -69,12 +70,6 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 - Make sure you have the required dependencies installed:
   - curl
   - git
-
-## Installation
-
-```bash
-asdf plugin-add direnv https://github.com/asdf-community/asdf-direnv.git
-```
 
 ## Usage
 
@@ -116,8 +111,8 @@ use asdf rust $ASDF_RUST_VERSION
 
 Finally, run `direnv allow .envrc` to trust your new file.
 
-That's it! Now when you leave your project directory and come back to it, direnv will manage the
-environment variables for you, for example:
+That's it! Now when you leave your project directory and come back to it, direnv
+will manage the environment variables for you, for example:
 
 ```bash
 cd /some/project
@@ -127,6 +122,40 @@ direnv: using asdf elixir 1.8.1-otp-21
 direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
+
+## Benchmark
+
+![benchmark](https://user-images.githubusercontent.com/38746192/67657932-8483fb80-f99b-11e9-96d8-3d46d419ea62.png)
+
+#### `node --version`
+
+with asdf-direnv:
+
+| Mean [ms] | Min [ms] | Max [ms] | Relative |
+| --------: | -------: | -------: | -------: |
+| 4.3 ± 0.4 |      3.6 |      6.0 |     1.00 |
+
+without asdf-direnv:
+
+|   Mean [ms] | Min [ms] | Max [ms] | Relative |
+| ----------: | -------: | -------: | -------: |
+| 189.7 ± 2.7 |    185.6 |    194.0 |     1.00 |
+
+---
+
+#### `npm install -g yarn`
+
+with asdf-direnv:
+
+|    Mean [ms] | Min [ms] | Max [ms] | Relative |
+| -----------: | -------: | -------: | -------: |
+| 683.3 ± 17.3 |    667.9 |    725.1 |     1.00 |
+
+without asdf-direnv:
+
+|    Mean [ms] | Min [ms] | Max [ms] | Relative |
+| -----------: | -------: | -------: | -------: |
+| 870.0 ± 12.9 |    848.4 |    894.6 |     1.00 |
 
 ## Useful links
 
