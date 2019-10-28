@@ -1,6 +1,6 @@
 <div align="center">
 <h1>asdf-direnv</h1>
-https://direnv.net/ plugin for asdf version manager
+<span><a href="https://direnv.net">direnv</a> plugin for asdf version manager</span>
 </div>
 <hr />
 
