@@ -96,19 +96,29 @@ Then on your project root where you have a `.tool-versions` file, create a
 
 ```bash
 source $(asdf which direnv_use_asdf) # needed until https://github.com/direnv/direnv/pull/534 gets merged.
-use asdf
+use asdf # this will load your .tool-versions file.
+```
 
-# Other valid `use asdf` examples:
-# use asdf /path/to/other/.tool-versions # if you want to load from another location
-# use asdf rust $ASDF_RUST_VERSION # for things not on the tool versions file.
+Other valid `use asdf` examples:
+
+```bash
+# Explicitly set the file to load. The file will be automatically watched for changes.
+use asdf /path/to/other/.tool-versions
+
+# For plugins that can read legacy version files, and hence not present on .tool-versions,
+# you can specify just the tool name and asdf will lookup for the current version.
+# However, you have to explicitly ask direnv to watch the legacy file for changes.
+use asdf mill
+watch_file .mill-version
+
+# Or if for some reason you want to explicitly force a particular tool and version
+use asdf rust $ASDF_RUST_VERSION
 ```
 
 Finally, run `direnv allow .envrc` to trust your new file.
 
-That's it!
-
-Now when you leave your project directory and come back to it, direnv will
-manage the environment variables for you, for example:
+That's it! Now when you leave your project directory and come back to it, direnv will manage the
+environment variables for you, for example:
 
 ```bash
 cd /some/project
