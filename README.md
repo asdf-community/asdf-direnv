@@ -20,16 +20,17 @@ the _real_ versioned executables installed by asdf. This way, asdf has a single
 shims directory added to your PATH and has no need of mangling the PATH for
 every installed version.
 
-When you execute an asdf-managed command, like `node`, it will actually run
-an asdf-shim, which will determine the `node` version to activate according to
-your `.tool-versions` file.
+When you execute an asdf-managed command, like `node`, it will actually run an
+asdf-shim, which will determine the `node` version to activate according to your
+`.tool-versions` file.
 
 A downside of this is that every single time you run `node` asdf will have to
 determine again which version to use. Even if you haven't changed your
 `.tool-versions` file to upgrade the node version to use. And this happens for
 every shim execution, which could lead to some users experiencing certain
-_slowness_ while asdf is looking up versions, since it has to traverse directories
-looking up for a .tool-versions file and probably also legacy version files.
+_slowness_ while asdf is looking up versions, since it has to traverse
+directories looking up for a .tool-versions file and probably also legacy
+version files.
 
 Another inconvenience is that commands installed by these tools can have some
 problems by the way asdf shims work. For example, if a command tries to find
@@ -38,12 +39,12 @@ executable and not the _actual_ executable delegated-to by asdf. This might
 cause problems if the command tries to use this location as an installation root
 to find auxiliary files, since shims will mask the real executable.
 
-Also, people frequently ask why is reshim needed. Suppose you used asdf to install
-a package manager like `npm`, `hex`, `gem`, `cargo`, etc. Any new binaries
-installed by these tools wont be available on PATH unless you run `asdf reshim`.
-This is because asdf has no way of knowing what the `npm install` command does,
-and it's until `asdf reshim` that it will figure out new executables are
-available and will create shims for them accordingly.
+Also, people frequently ask why is reshim needed. Suppose you used asdf to
+install a package manager like `npm`, `hex`, `gem`, `cargo`, etc. Any new
+binaries installed by these tools wont be available on PATH unless you run
+`asdf reshim`. This is because asdf has no way of knowing what the `npm install`
+command does, and it's until `asdf reshim` that it will figure out new
+executables are available and will create shims for them accordingly.
 
 ## Solution
 
@@ -141,6 +142,10 @@ without asdf-direnv:
 | ----------: | -------: | -------: | -------: |
 | 189.7 ± 2.7 |    185.6 |    194.0 |     1.00 |
 
+```bash
+hyperfine 'node --version'
+```
+
 ---
 
 #### `npm install -g yarn`
@@ -156,6 +161,10 @@ without asdf-direnv:
 |    Mean [ms] | Min [ms] | Max [ms] | Relative |
 | -----------: | -------: | -------: | -------: |
 | 870.0 ± 12.9 |    848.4 |    894.6 |     1.00 |
+
+```bash
+hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
+```
 
 ## Useful links
 
