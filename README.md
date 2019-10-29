@@ -90,7 +90,7 @@ Then on your project root where you have a `.tool-versions` file, create a
 `.envrc` file with the following content:
 
 ```bash
-source $(asdf which direnv_use_asdf) # needed until https://github.com/direnv/direnv/pull/534 gets merged.
+source $(asdf which direnv_use_asdf)
 use asdf # this will load your .tool-versions file.
 ```
 
