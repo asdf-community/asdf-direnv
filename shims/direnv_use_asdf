@@ -85,14 +85,10 @@ _plugin_env_bash() {
 
   _plugin_env() {
     echo "log_status using asdf $plugin $version"
-    direnv dotenv bash <(
-      env | grep -v '^PATH='
-      # shellcheck disable=SC2016 # Expressions dont expand in single quotes
-      echo "PATH=$PATH"':$PATH' | sed "s#:$old_path##"
-    )
+    direnv dotenv bash <(env)
   }
 
-  with_plugin_env "$plugin" "$version" _plugin_env
+  with_plugin_env "$plugin" "$version" _plugin_env | sed "s#:$old_path#:'\"\$PATH\"'#"
 }
 
 if [ "do" == "$1" ]; then
