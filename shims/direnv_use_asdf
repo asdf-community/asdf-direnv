@@ -36,7 +36,7 @@ use_asdf() {
     if [ -f "$tool_versions" ]; then
       use asdf "$tool_versions"
     else
-      log_error "could not find .tool-versions file" >&2
+      log_error "could not find .tool-versions file"
       return 1
     fi
   elif [ -f "$1" ]; then
@@ -73,6 +73,10 @@ _load_plugins_env() {
   eval "$(_plugins_in_file "$tool_versions" | _xargs_par direnv_use_asdf 'do' _plugin_env_bash)"
 }
 
+_plugin_env() {
+  direnv dotenv bash <(env)
+}
+
 _plugin_env_bash() {
   local plugin=$1
   local version
@@ -83,11 +87,7 @@ _plugin_env_bash() {
     return 1
   fi
 
-  _plugin_env() {
-    echo "log_status using asdf $plugin $version"
-    direnv dotenv bash <(env)
-  }
-
+  echo "log_status using asdf $plugin $version"
   with_plugin_env "$plugin" "$version" _plugin_env | sed "s#:$old_path#:'\"\$PATH\"'#"
 }
 
