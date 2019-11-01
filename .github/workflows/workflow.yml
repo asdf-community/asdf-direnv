@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v1
 
       - name: Install asdf
@@ -30,7 +30,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v1
 
       - name: Install asdf
@@ -48,6 +48,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v1
+
       - name: Run ShellCheck
         run: shellcheck bin/*
+
+  format:
+    runs-on: macOS-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Install shfmt
+        run: brew install shfmt
+
+      - name: Run shfmt
+        run: shfmt -d .
