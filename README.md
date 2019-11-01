@@ -15,8 +15,8 @@
 [asdf](https://asdf-vm.com) is a great tool for managing multiple versions of
 command line tools. 99% of the time these managed tools work just as expected.
 
-Shims are just tiny wrappers created by asdf that just forward execution to
-the _real_ versioned executables installed by asdf. This way, asdf has a single
+Shims are just tiny wrappers created by asdf that just forward execution to the
+_real_ versioned executables installed by asdf. This way, asdf has a single
 shims directory added to your PATH and has no need of mangling the PATH for
 every installed version.
 
@@ -34,8 +34,8 @@ version files.
 
 Another inconvenience is that commands installed by these tools can have some
 problems by the way asdf shims work. For example, if a command tries to find
-itself by name in PATH (e.g. using `which my-command`) it will find the asdf shim
-executable and not the _actual_ executable delegated-to by asdf. This might
+itself by name in PATH (e.g. using `which my-command`) it will find the asdf
+shim executable and not the _actual_ executable delegated-to by asdf. This might
 cause problems if the command tries to use this location as an installation root
 to find auxiliary files, since shims will mask the real executable.
 
