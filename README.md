@@ -124,6 +124,11 @@ direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
 
+### Tips for direnv beginners
+
+If you want to silence the console output of direnv, you can do that by setting
+an empty environment variable `DIRENV_LOG_FORMAT`.
+
 ## Benchmark
 
 ![benchmark](https://user-images.githubusercontent.com/38746192/67657932-8483fb80-f99b-11e9-96d8-3d46d419ea62.png)
