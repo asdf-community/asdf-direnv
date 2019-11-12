@@ -46,6 +46,11 @@ binaries installed by these tools wont be available on PATH unless you run
 command does, and it's until `asdf reshim` that it will figure out new
 executables are available and will create shims for them accordingly.
 
+And finally, some language package come not only with language-specific commands, 
+but with tons of system tools that will shadow those already installed on your 
+system. While this may be desirable while the language is in use, having it 
+installed and not activated leaves dead shims all over the place. 
+
 ## Solution
 
 All these previously mentioned issues can be solved by using asdf along with the
@@ -82,9 +87,24 @@ asdf install direnv 2.20.0
 asdf global  direnv 2.20.0
 ```
 
-Follow the
-[instructions to hook direnv](https://github.com/direnv/direnv/blob/master/docs/hook.md)
-into your SHELL.
+Then edit your .bash_profile and add the following somewhere at the end
+
+```
+# declare where the .asdf folder can be found
+export ASDF_DIR=$HOME/.asdf #could be elsewhere if installed by homebrew
+# Add the command asdf to your PATH
+[[ $PATH == *"asdf/bin"* ]] || export PATH="$PATH:$ASDF_DIR/bin"
+# Comment out asdf.sh to prevent the loading of shims 
+## . $HOME/.asdf/asdf.sh
+# Add asdf command completions (optional)
+. $ASDF_DIR/completions/asdf.bash
+# insert direnv hook into bash
+eval "$(asdf exec direnv hook bash)"
+```
+
+Compare with
+[instructions to hook direnv into various other SHELLS](https://github.com/direnv/direnv/blob/master/docs/hook.md) if needed (note that we can invoke `direnv` indirectly through `asdf exec` if it's not on the PATH yet).
+
 
 Then on your project root where you have a `.tool-versions` file, create a
 `.envrc` file with the following content:
@@ -110,7 +130,7 @@ watch_file .mill-version
 use asdf rust $ASDF_RUST_VERSION
 ```
 
-Finally, run `direnv allow .envrc` to trust your new file.
+Finally, run `asdf exec direnv allow .envrc` to trust your new file.
 
 That's it! Now when you leave your project directory and come back to it, direnv
 will manage the environment variables for you, for example:
