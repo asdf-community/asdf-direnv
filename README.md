@@ -13,7 +13,7 @@
 ## Motivation (or shims de-motivation)
 
 [asdf](https://asdf-vm.com) is a great tool for managing multiple versions of
-command line tools. 99% of the time these managed tools work just as expected.
+command-line tools. 99% of the time these managed tools work just as expected.
 
 Shims are just tiny wrappers created by asdf that just forward execution to the
 _real_ versioned executables installed by asdf. This way, asdf has a single
@@ -41,7 +41,7 @@ to find auxiliary files, since shims will mask the real executable.
 
 Also, people frequently ask why is reshim needed. Suppose you used asdf to
 install a package manager like `npm`, `hex`, `gem`, `cargo`, etc. Any new
-binaries installed by these tools wont be available on PATH unless you run
+binaries installed by these tools won't be available on PATH unless you run
 `asdf reshim`. This is because asdf has no way of knowing what the `npm install`
 command does, and it's until `asdf reshim` that it will figure out new
 executables are available and will create shims for them accordingly.
@@ -89,7 +89,7 @@ asdf global  direnv 2.20.0
 
 Then edit your .bash_profile and add the following somewhere at the end
 
-```
+```bash
 # declare where the .asdf folder can be found
 export ASDF_DIR=$HOME/.asdf #could be elsewhere if installed by homebrew
 # Add the command asdf to your PATH
