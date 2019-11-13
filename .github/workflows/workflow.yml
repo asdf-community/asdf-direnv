@@ -52,7 +52,9 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Run ShellCheck
-        run: shellcheck bin/*
+        run: |
+          shellcheck bin/*
+          shellcheck shims/*
 
   format:
     runs-on: macOS-latest
