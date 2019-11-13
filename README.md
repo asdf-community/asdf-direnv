@@ -46,10 +46,10 @@ binaries installed by these tools won't be available on PATH unless you run
 command does, and it's until `asdf reshim` that it will figure out new
 executables are available and will create shims for them accordingly.
 
-And finally, some packages come not only with language-specific commands,
-but with tons of system tools that will shadow those already installed
-on your system. While this may be desirable while the language is in use, having
-it installed and not activated leaves dead shims all over the place.
+And finally, some packages come not only with language-specific commands, but
+with tons of system tools that will shadow those already installed on your
+system. While this may be desirable while the language is in use, having it
+installed and not activated leaves dead shims all over the place.
 
 ## Solution
 
