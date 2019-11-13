@@ -75,7 +75,7 @@ _load_plugins_env() {
 }
 
 _plugin_env() {
-  direnv dotenv bash <(env)
+  asdf exec direnv dotenv bash <(env)
 }
 
 _plugin_env_bash() {
