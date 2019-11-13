@@ -69,8 +69,9 @@ _load_plugin_env() {
 
 _load_plugins_env() {
   local tool_versions=$1
+  this_file="$BASH_SOURCE" #needs to before watch_file !
   watch_file "$tool_versions"
-  eval "$(_plugins_in_file "$tool_versions" | _xargs_par direnv_use_asdf 'do' _plugin_env_bash)"
+  eval "$(_plugins_in_file "$tool_versions" | _xargs_par $this_file 'do' _plugin_env_bash)"
 }
 
 _plugin_env() {
