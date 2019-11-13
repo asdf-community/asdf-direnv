@@ -46,8 +46,8 @@ binaries installed by these tools won't be available on PATH unless you run
 command does, and it's until `asdf reshim` that it will figure out new
 executables are available and will create shims for them accordingly.
 
-And finally, some language package come not only with language-specific
-commands, but with tons of system tools that will shadow those already installed
+And finally, some packages come not only with language-specific commands,
+but with tons of system tools that will shadow those already installed
 on your system. While this may be desirable while the language is in use, having
 it installed and not activated leaves dead shims all over the place.
 
@@ -87,25 +87,32 @@ asdf install direnv 2.20.0
 asdf global  direnv 2.20.0
 ```
 
-Then edit your .bash_profile and add the following somewhere at the end
+Then edit your `.bash_profile` or equivalent shell profile:
 
 ```bash
-# declare where the .asdf folder can be found
-export ASDF_DIR=$HOME/.asdf #could be elsewhere if installed by homebrew
-# Add the command asdf to your PATH
+# Declare where the .asdf folder can be found
+# could be elsewhere if installed by homebrew
+export ASDF_DIR=$HOME/.asdf
+
+# Add asdf executable to PATH, since we still want to use it.
 [[ $PATH == *"asdf/bin"* ]] || export PATH="$PATH:$ASDF_DIR/bin"
-# Comment out asdf.sh to prevent the loading of shims
+
+# But commment out the following line to prevent the asdf shims directoy from
+# being included in your PATH.
 ## . $HOME/.asdf/asdf.sh
-# Add asdf command completions (optional)
+
+# Optionally, add asdf command completions.
 . $ASDF_DIR/completions/asdf.bash
-# insert direnv hook into bash
+
+# Hook direnv hook into your shell.
 eval "$(asdf exec direnv hook bash)"
 ```
 
-Compare with
+If you are not using bash, adapt the previous snippet by following the
 [instructions to hook direnv into various other SHELLS](https://github.com/direnv/direnv/blob/master/docs/hook.md)
-if needed (note that we can invoke `direnv` indirectly through `asdf exec` if
-it's not on the PATH yet).
+
+Note that even when the `shims` directory is no longer in PATH, you are always
+able to invoke any asdf managed command via `asdf exec`.
 
 Then on your project root where you have a `.tool-versions` file, create a
 `.envrc` file with the following content:
