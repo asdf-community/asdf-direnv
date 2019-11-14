@@ -104,7 +104,7 @@ export ASDF_DIR=$HOME/.asdf
 # Optionally, add asdf command completions.
 . $ASDF_DIR/completions/asdf.bash
 
-# Hook direnv hook into your shell.
+# Hook direnv into your shell.
 eval "$(asdf exec direnv hook bash)"
 ```
 
