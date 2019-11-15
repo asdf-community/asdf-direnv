@@ -31,7 +31,34 @@ use_asdf() {
   local plugin
   local version
   if [ -z "$*" ]; then
-    local tool_versions
+    _use_tool_versions true
+  elif [ -f "$1" ]; then
+    _load_plugins_env "$1"
+  elif [ -n "$1" ]; then
+    if [ "$1" == "exclusive" ]; then
+      _use_tool_versions false
+    elif ! (check_if_plugin_exists "$1"); then
+      return 1
+    else
+      _load_plugin_env "$1" "$2"
+    fi
+  else
+    log_error "Invalid args for use asdf. Usage:"
+    log_error "   use asdf TOOL_VERSIONS_FILE"
+    log_error "   use asdf TOOL_NAME [VERSION]"
+    log_error "   use asdf exclusive"
+    return 1
+  fi
+}
+
+## Usage: _use_tool_versions true [/pathto/.tool-versions]
+#
+# $1 should be true for recursive and false for exclusive sourcing.
+# $2 will be passed automatically for iteration over parent directories.
+# Upward folders are searched up to root level "/.tool-versions".
+_use_tool_versions() {
+  local tool_versions
+  if [ -z "$2" ]; then
     tool_versions="$(find_up .tool-versions)"
     if [ -f "$tool_versions" ]; then
       use asdf "$tool_versions"
@@ -39,18 +66,24 @@ use_asdf() {
       log_error "could not find .tool-versions file"
       return 1
     fi
-  elif [ -f "$1" ]; then
-    _load_plugins_env "$1"
-  elif [ -n "$1" ]; then
-    if ! (check_if_plugin_exists "$1"); then
-      return 1
+    # checking whether to proceed recursively.
+    if $1 ; then
+      _use_tool_versions true "$tool_versions"
+    else
+      echo "$tool_versions is used exclusively";
     fi
-    _load_plugin_env "$1" "$2"
-  else
-    log_error "Invalid args for use asdf. Usage:"
-    log_error "   use asdf TOOL_VERSIONS_FILE"
-    log_error "   use asdf TOOL_NAME [VERSION]"
-    return 1
+  elif $1; then
+    local dir
+    local file
+    dir=$(dirname "$2")
+    file=$(basename "$2")
+    while [ "$dir" != "/" ] ; do
+      dir=$(dirname "$dir")
+      tool_versions=$(find "$dir" -maxdepth 1 -name "$file")
+      if [ -f "$tool_versions" ];then
+        use asdf "$tool_versions"
+      fi
+    done
   fi
 }
 

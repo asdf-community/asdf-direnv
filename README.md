@@ -79,8 +79,7 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ## Usage
 
-First, make sure you install and globally activate the most recent direnv
-version:
+First, make sure you install this plugin, then install and globally activate the most recent direnv version:
 
 ```bash
 asdf plugin-add direnv
@@ -120,7 +119,10 @@ Then on your project root where you have a `.tool-versions` file, create a
 
 ```bash
 source $(asdf which direnv_use_asdf)
-use asdf # this will load your .tool-versions file.
+# this will load your global .tool-versions (optional)
+use asdf $HOME/.tool-versions
+# this will load your local .tool-versions
+use asdf
 ```
 
 Other valid `use asdf` examples:
@@ -135,6 +137,11 @@ use asdf /path/to/other/.tool-versions
 use asdf mill
 watch_file .mill-version
 
+# If you want to load only the .tool-versions file in your current project and ignore
+# all other .tool-versions in parent directories. This also prevents stacking with
+# your global configuration.
+use asdf exclusive
+
 # Or if for some reason you want to explicitly force a particular tool and version
 use asdf rust $ASDF_RUST_VERSION
 ```
@@ -147,9 +154,11 @@ will manage the environment variables for you, for example:
 ```bash
 cd /some/project
 direnv: loading .envrc
-direnv: using asdf /some/project/.tool-versions
+direnv: using asdf ~/some/project/.tool-versions
 direnv: using asdf elixir 1.8.1-otp-21
 direnv: using asdf nodejs 12.6.0
+direnv: using asdf ~/.tool-versions
+direnv: using asdf direnv 2.20.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
 
