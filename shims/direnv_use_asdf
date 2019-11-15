@@ -67,20 +67,20 @@ _use_tool_versions() {
       return 1
     fi
     # checking whether to proceed recursively.
-    if $1 ; then
+    if $1; then
       _use_tool_versions true "$tool_versions"
     else
-      echo "$tool_versions is used exclusively";
+      echo "$tool_versions is used exclusively"
     fi
   elif $1; then
     local dir
     local file
     dir=$(dirname "$2")
     file=$(basename "$2")
-    while [ "$dir" != "/" ] ; do
+    while [ "$dir" != "/" ]; do
       dir=$(dirname "$dir")
       tool_versions=$(find "$dir" -maxdepth 1 -name "$file")
-      if [ -f "$tool_versions" ];then
+      if [ -f "$tool_versions" ]; then
         use asdf "$tool_versions"
       fi
     done
