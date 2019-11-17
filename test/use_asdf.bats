@@ -33,18 +33,29 @@ teardown() {
 
 @test "dummy 1.0 is available via asdf exec" {
   install_dummy_plugin "dummy" "1.0"
-  ASDF_DUMMY_VERSION=1.0 asdf exec dummy
-  [ "$output" = "dummy 1.0" ]
+  ASDF_DUMMY_VERSION=1.0 run asdf exec dummy
+  [ "$output" == "This is dummy 1.0" ]
 }
 
-@test "use asdf dummy 1.0 explicitly activates" {
-  install_dummy_plugin "dummy" "1.0"
-  echo "dummy 1.0" > "$PROJECT_DIR/.tool-versions"
-  envrc_use_asdf # no args should load local file
-
-  [ ! $(command -v dummy) ] # not available before cd
+@test "direnv loads simple envrc" {
   cd "$PROJECT_DIR"
-  echo $PATH
-  tree -a $HOME
-  command -v dummy # available after cd
+
+  [ -z "$FOO" ]
+  echo 'export FOO=BAR' > "$PROJECT_DIR/.envrc"
+  asdf exec direnv allow "$PROJECT_DIR/.envrc"
+
+  envrc_load
+  [ "$FOO" ==  "BAR" ]
+}
+
+@test "use asdf dummy 1.0 needs no local tool-versions file" {
+  cd "$PROJECT_DIR"
+
+  install_dummy_plugin dummy 1.0
+  envrc_use_asdf dummy 1.0
+
+  [ ! $(command -v dummy) ] # not available
+  envrc_load
+  run dummy
+  [ "$output" == "This is dummy 1.0" ]
 }

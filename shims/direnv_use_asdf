@@ -17,6 +17,7 @@
 
 # Load asdf util functions if not already loaded
 if [ -z "$(declare -f -F with_plugin_env)" ]; then
+  ASDF_DIR="${ASDF_DIR:-$(dirname "$(dirname "$(command -v asdf)")")}"
   # shellcheck disable=SC1090 # Can't follow non-constant source. Use a directive to specify location.
   source "$ASDF_DIR/lib/utils.sh"
 fi
