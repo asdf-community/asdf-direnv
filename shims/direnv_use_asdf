@@ -57,9 +57,7 @@ use_asdf() {
     eval "$(_plugin_env_bash "$1" "$2")"
 
   else
-    log_error "Invalid args for use asdf. Usage:"
-    log_error "   use asdf TOOL_VERSIONS_FILE"
-    log_error "   use asdf TOOL_NAME [VERSION]"
+    log_error "use asdf: Invalid args. See README.md for some examples."
     return 1
   fi
 }
