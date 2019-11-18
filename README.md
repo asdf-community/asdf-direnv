@@ -128,7 +128,9 @@ use asdf # this will activate your plugins listed by `asdf current`
 
 Finally, run `asdf exec direnv allow .envrc` to trust your new file.
 
-That's it! Now when you leave your project directory and come back to it, direnv
+###### That's it!
+
+Now when you leave your project directory and come back to it, direnv
 will manage the environment variables for you, for example:
 
 ```bash
@@ -140,7 +142,7 @@ direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
 
-#### Other valid `use asdf` usages
+#### Other `use asdf` options.
 
 `use asdf` with no argument is equivalent to `use asdf current`.
 
@@ -150,7 +152,7 @@ When a tool gets activated, this plugin will automatically watch the
 file specifying its version (be it a tool-versions file or
 legacy version file) for changes.
 
-* `use asdf current` *default*
+* `use asdf current` __(default)__
 
 Just an alias for `use asdf global` followed by `use asdf local`.
 Activating global plugins first makes sure your local tools are first on PATH.
@@ -175,32 +177,6 @@ This works by listing all your installed plugins and filtering out those present
 in the upmost `.tool-versions` file. Effectively activating any globally
 selected plugin like those present on `~/.tool-versions` and also those
 local tools that use legacy filenames.
-
-### Tips for direnv beginners
-
-* If you want to silence the console output of direnv, you can do that by setting
-an empty environment variable `DIRENV_LOG_FORMAT`.
-
-* Remember that activation order is important. In the following example,
-  toolB will be presnet before toolA in PATH.
-
-```bash
-# .envrc
-use asdf toolA 1.0
-use asdf toolB 2.0
-```
-
-* Remember `direnv` can reload the environment whenever a file changes.
-By default this plugin will try to load any `.tool-versions` file or legacy
-version file that selects a tool. But you can easily add them yourself.
-
-```bash
-# .envrc
-watch_file "package.json"
-```
-
-* Using `asdf exec direnv status` can be helpful to inspect current state.
-Also, you can execute `asdf exec direnv --help` anytime.
 
 ## Benchmark
 
@@ -243,6 +219,33 @@ without asdf-direnv:
 ```bash
 hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 ```
+
+### Tips for direnv beginners
+
+* If you want to silence the console output of direnv, you can do that by setting
+an empty environment variable `DIRENV_LOG_FORMAT`.
+
+* Remember that activation order is important. In the following example,
+  toolB will be present before toolA in PATH.
+
+```bash
+# .envrc
+use asdf toolA 1.0
+use asdf toolB 2.0
+```
+
+* Remember `direnv` can reload the environment whenever a file changes.
+By default this plugin will watch any `.tool-versions` file or legacy
+version file that explicitly selects a tool.
+
+But you can easily watch more files when needed.
+```bash
+# .envrc
+watch_file "package.json"
+```
+
+* Using `asdf exec direnv status` can be helpful to inspect current state.
+Also, you might want to take a look to `asdf exec direnv --help`.
 
 ## Useful links
 
