@@ -38,7 +38,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: Macos coreutils
+      - name: Macos coreutils # needed by bats-core
         if: matrix.os == 'macOS-latest'
         run: brew install coreutils
 

@@ -35,25 +35,25 @@ fi
 # Otherwise two argments are expected, a plugin name and version.
 # If no arguments are given, a .tool-versions file will be looked up.
 use_asdf() {
-  if [ -z "$*" ] || [ "local" == "$*" ]; then
-    use_asdf "$(_local_versions_file)"
+  if [ -z "$*" ] || [ "current" == "$*" ]; then
+    use_asdf global
+    use_asdf local
 
-  elif [ "current" == "$*" ]; then
-    eval "$(_load_current_plugins_env "$(_local_versions_file)")"
+  elif [ "global" == "$*" ]; then
+    eval "$(_load_global_plugins_env "$(_local_versions_file)")"
 
-  elif [ -f "$1" ]; then
+  elif [ "local" == "$*" ]; then
+    eval "$(_load_local_plugins_env "$(_local_versions_file)")"
+
+  elif [ -f "$1" ]; then # [tool-versions file]
     eval "$(_load_local_plugins_env "$1")"
 
-  elif [ -n "$1" ] && [ -z "$2" ]; then
-    if ! (check_if_plugin_exists "$1"); then
-      return 1
-    fi
+  elif [ -n "$1" ] && [ -z "$2" ]; then # [name] only
+    check_if_plugin_exists "$1"
     eval "$(_load_plugin_version_and_file "$1")"
 
-  elif [ -n "$1" ] && [ -n "$2" ]; then
-    if ! (check_if_version_exists "$1" "$2"); then
-      return 1
-    fi
+  elif [ -n "$1" ] && [ -n "$2" ]; then # [name] [version]
+    check_if_version_exists "$1" "$2"
     eval "$(_plugin_env_bash "$1" "$2")"
 
   else
@@ -64,13 +64,23 @@ use_asdf() {
   fi
 }
 
+_tail_r() {
+  # portable version of tail -r
+  cat -n | sort -nr | cut -f2
+}
+
 _xargs_par() {
-  xargs -P "$(getconf _NPROCESSORS_ONLN)" "$@"
+  local nproc="${ASDF_CONCURRENCY:-$(getconf _NPROCESSORS_ONLN || echo 1)}"
+  if [ "$nproc" -gt 1 ]; then
+    xargs -P "$nproc" "$@"
+  else
+    xargs "$@"
+  fi
 }
 
 _pardo() {
   local this_file="${BASH_SOURCE[0]}"
-  _xargs_par -n 1 "$this_file" 'do' "$@"
+  _xargs_par -L 1 "$this_file" 'do' "$@"
 }
 
 _local_versions_file() {
@@ -90,25 +100,26 @@ _plugins_in_file() {
 }
 
 _all_plugins_list() {
-  find "$(get_plugin_path)" -maxdepth 1 -mindepth 1 -exec basename '{}' \;
+  find "$(get_plugin_path)" -maxdepth 1 -mindepth 1 -exec basename '{}' \; | sort
 }
 
-_load_current_plugins_env() {
-  _sort_all_plugins_list "$@" | _pardo _load_plugin_version_and_file
-}
-
-_sort_all_plugins_list() {
+_except_local_plugins_list() {
   local tool_versions=$1
   local tmp_local_plugin_names
   tmp_local_plugin_names="$(mktemp)"
-  _plugins_in_file "$tool_versions" | tee "$tmp_local_plugin_names"
+  _plugins_in_file "$tool_versions" >"$tmp_local_plugin_names"
   _all_plugins_list | grep -v -F -f "$tmp_local_plugin_names"
   rm "$tmp_local_plugin_names"
 }
 
+_load_global_plugins_env() {
+  local tool_versions=$1
+  _except_local_plugins_list "$tool_versions" | _tail_r | _pardo _load_plugin_version_and_file
+}
+
 _load_local_plugins_env() {
   local tool_versions=$1
-  _plugins_in_file "$tool_versions" | _pardo _load_plugin_version_and_file
+  _plugins_in_file "$tool_versions" | _tail_r | _pardo _load_plugin_version_and_file
 }
 
 _plugin_env() {
@@ -128,10 +139,11 @@ _load_plugin_version_and_file() {
   path=$(cut -d '|' -f 2 <<<"$versions_and_path")
   IFS=$'\n' read -r -a versions <<<"$(cut -d '|' -f 1 <<<"$versions_and_path" | uniq)"
   for version in "${versions[@]}"; do
-    echo use_asdf "$plugin_name" "$version"
+    _plugin_env_bash "$plugin_name" "$version"
+    log_status "using asdf ${plugin_name} ${version}"
   done
   if [ -f "$path" ]; then
-    echo watch_file "$path"
+    asdf exec direnv watch bash "$path"
   fi
 }
 
@@ -140,7 +152,6 @@ _plugin_env_bash() {
   local version="${2}"
   local old_path="$PATH"
   if [ -n "$version" ]; then
-    echo "log_status using asdf $plugin $version"
     with_plugin_env "$plugin" "$version" _plugin_env | sed "s#:$old_path#:'\"\$PATH\"'#"
   fi
 }

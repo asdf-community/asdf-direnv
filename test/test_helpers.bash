@@ -5,7 +5,6 @@ die() {
   exit 1
 }
 
-
 setup_asdf_direnv() {
   ASDF_CMD="$(command -v asdf)"
   test -x "$ASDF_CMD" || die "Expected asdf command to be available."
@@ -34,7 +33,7 @@ setup_asdf_direnv() {
   mkdir -p "${ASDF_DATA_DIR}/installs/direnv"
   ln -s "$ASDF_WHERE_DIRENV" "${ASDF_DATA_DIR}/installs/direnv/$ASDF_DIRENV_VERSION"
 
-  echo "direnv $ASDF_DIRENV_VERSION" > "$HOME/.tool-versions"
+  echo "direnv $ASDF_DIRENV_VERSION" >"$HOME/.tool-versions"
   asdf reshim direnv "$ASDF_DIRENV_VERSION"
 
   PROJECT_DIR=$HOME/project
@@ -43,6 +42,7 @@ setup_asdf_direnv() {
 
 clean_asdf_direnv() {
   rm -rf "$BASE_DIR"
+  unset ASDF_CONCURRENCY
 }
 
 envrc_load() {
@@ -54,22 +54,59 @@ allow_direnv() {
 }
 
 envrc_use_asdf() {
-  echo 'source $(asdf which direnv_use_asdf)' > ".envrc"
-  echo "use asdf $*" >> ".envrc"
+  echo 'source $(asdf which direnv_use_asdf)' >".envrc"
+  echo "use asdf $*" >>".envrc"
   allow_direnv
 }
 
-install_dummy_plugin() {
-  local plugin_name="$1"
+dummy_bin_path() {
+  local plugin_name="${1:-dummy}"
   local version="${2:-'1.0'}"
+  echo "$ASDF_DATA_DIR/installs/${plugin_name}/${version}/bin"
+}
 
-  mkdir -p "${ASDF_DATA_DIR}/plugins/${plugin_name}/shims/"
-  echo "echo Plugin $plugin_name" > "${ASDF_DATA_DIR}/plugins/$plugin_name/shims/plugin_${plugin_name}"
-  chmod +x "${ASDF_DATA_DIR}/plugins/$plugin_name/shims/plugin_${plugin_name}"
+dummy_shims_path() {
+  local plugin_name="${1:-dummy}"
+  local version="${2:-'1.0'}"
+  echo "$ASDF_DATA_DIR/plugins/${plugin_name}/shims"
+}
 
-  mkdir -p "${ASDF_DATA_DIR}/installs/${plugin_name}/${version}/bin"
-  echo "echo This is $plugin_name $version" > "${ASDF_DATA_DIR}/installs/${plugin_name}/${version}/bin/${plugin_name}"
-  chmod +x "${ASDF_DATA_DIR}/installs/${plugin_name}/${version}/bin/${plugin_name}"
+path_as_lines() {
+  echo "$PATH" | tr ':' $'\n'
+}
+
+install_dummy_plugin() {
+  local plugin_name="${1:-dummy}"
+  local version="${2:-'1.0'}"
+  local shim="$3"
+
+  mkdir -p "${ASDF_DATA_DIR}/plugins/${plugin_name}/bin"
+
+  if test -n "$shim"; then
+    local plugin_shims
+    plugin_shims="${ASDF_DATA_DIR}/plugins/${plugin_name}/shims"
+    mkdir -p "$plugin_shims"
+    echo "echo This is $plugin_name $shim shim" >"${plugin_shims}/$shim"
+    chmod +x "${plugin_shims}/$shim"
+  fi
+
+  local plugin_bin
+  plugin_bin="$(dummy_bin_path "$plugin_name" "$version")"
+  mkdir -p "$plugin_bin"
+  echo "echo This is $plugin_name $version" >"${plugin_bin}/${plugin_name}"
+  chmod +x "${plugin_bin}/${plugin_name}"
 
   asdf reshim "$plugin_name" "$version"
+}
+
+setup_dummy_legacyfile() {
+  local plugin_name="${1:-dummy}"
+  local legacyfile="${2:-.${plugin_name}-version}"
+
+  echo "legacy_version_file = yes" >"$HOME/.asdfrc"
+  cat <<-EOF >"$ASDF_DATA_DIR/plugins/${plugin_name}/bin/list-legacy-filenames"
+#!/usr/bin/env bash
+echo ${legacyfile}
+EOF
+  chmod +x "$ASDF_DATA_DIR/plugins/${plugin_name}/bin/list-legacy-filenames"
 }
