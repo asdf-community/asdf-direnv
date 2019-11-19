@@ -25,6 +25,17 @@
         "ideas",
         "doc"
       ]
+    },
+    {
+      "login": "michi-zuri",
+      "name": "Michael Paul Killian",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/26734536?v=4",
+      "profile": "https://github.com/michi-zuri",
+      "contributions": [
+        "code",
+        "doc",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
