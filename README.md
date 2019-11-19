@@ -7,7 +7,7 @@
 [![Main workflow](https://github.com/asdf-community/asdf-direnv/workflows/Main%20workflow/badge.svg)](https://github.com/asdf-community/asdf-direnv/actions)
 [![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv "Average time to resolve an issue")
 [![Percentage of issues still open](https://isitmaintained.com/badge/open/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv "Percentage of issues still open")
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![License](https://img.shields.io/github/license/asdf-community/asdf-direnv?color=brightgreen)](https://github.com/asdf-community/asdf-direnv/blob/master/LICENSE)
 
@@ -261,6 +261,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://keybase.io/oeiuwq"><img src="https://avatars3.githubusercontent.com/u/331?v=4" width="100px;" alt="Victor Borja"/><br /><sub><b>Victor Borja</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=vic" title="Code">💻</a> <a href="#ideas-vic" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/asdf-community/asdf-direnv/commits?author=vic" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://bsky.moe"><img src="https://avatars3.githubusercontent.com/u/38746192?v=4" width="100px;" alt="BSKY"/><br /><sub><b>BSKY</b></sub></a><br /><a href="#ideas-imbsky" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/asdf-community/asdf-direnv/commits?author=imbsky" title="Documentation">📖</a></td>
   </tr>
 </table>
 

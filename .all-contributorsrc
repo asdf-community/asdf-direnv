@@ -15,6 +15,16 @@
         "ideas",
         "doc"
       ]
+    },
+    {
+      "login": "imbsky",
+      "name": "BSKY",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/38746192?v=4",
+      "profile": "https://bsky.moe",
+      "contributions": [
+        "ideas",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
