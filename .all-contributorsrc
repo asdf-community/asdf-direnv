@@ -36,6 +36,15 @@
         "doc",
         "bug"
       ]
+    },
+    {
+      "login": "jfly",
+      "name": "Jeremy Fleischman",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/277474?v=4",
+      "profile": "https://www.jflei.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
