@@ -5,11 +5,9 @@
 <hr />
 
 [![Main workflow](https://github.com/asdf-community/asdf-direnv/workflows/Main%20workflow/badge.svg)](https://github.com/asdf-community/asdf-direnv/actions)
-[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv "Average time to resolve an issue")
-[![Percentage of issues still open](https://isitmaintained.com/badge/open/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv "Percentage of issues still open")
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-[![License](https://img.shields.io/github/license/asdf-community/asdf-direnv?color=brightgreen)](https://github.com/asdf-community/asdf-direnv/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![License](https://img.shields.io/github/license/asdf-community/asdf-direnv?style=flat-square&color=brightgreen)](https://github.com/asdf-community/asdf-direnv/blob/master/LICENSE)
 
 ## Motivation (or shims de-motivation)
 
