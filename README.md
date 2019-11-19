@@ -1,13 +1,13 @@
 <div align="center">
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 <h1>asdf-direnv</h1>
 <span><a href="https://direnv.net">direnv</a> plugin for asdf version manager</span>
 </div>
 <hr />
 
 [![Main workflow](https://github.com/asdf-community/asdf-direnv/workflows/Main%20workflow/badge.svg)](https://github.com/asdf-community/asdf-direnv/actions)
-[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv 'Average time to resolve an issue')
-[![Percentage of issues still open](https://isitmaintained.com/badge/open/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv 'Percentage of issues still open')
+[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv "Average time to resolve an issue")
+[![Percentage of issues still open](https://isitmaintained.com/badge/open/asdf-community/asdf-direnv.svg)](https://isitmaintained.com/project/asdf-community/asdf-direnv "Percentage of issues still open")
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg)](#contributors)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![License](https://img.shields.io/github/license/asdf-community/asdf-direnv?color=brightgreen)](https://github.com/asdf-community/asdf-direnv/blob/master/LICENSE)
 
@@ -114,7 +114,6 @@ If you are not using bash, adapt the previous snippet by following the
 Note that even when the `shims` directory is no longer in PATH, you are always
 able to invoke any asdf managed command via `asdf exec`.
 
-
 #### The .envrc file.
 
 Once hooked into your shell, `direnv` will expect to find a `.envrc` file
@@ -153,24 +152,24 @@ When a tool gets activated, this plugin will automatically watch the
 file specifying its version (be it a tool-versions file or
 legacy version file) for changes.
 
-* `use asdf current` __(default)__
+- `use asdf current` **(default)**
 
 Just an alias for `use asdf global` followed by `use asdf local`.
 Activating global plugins first makes sure your local tools are first on PATH.
 
-* `use asdf TOOL_NAME [VERSION]`
+- `use asdf TOOL_NAME [VERSION]`
 
 Load the environment for a tool and version.
 
-* `use asdf FILE_NAME`
+- `use asdf FILE_NAME`
 
 Load the environment for tools listed on file.
 
-* `use asdf local`
+- `use asdf local`
 
 Only load the environment for tools present in upmost `.tool-versions` file.
 
-* `use asdf global`
+- `use asdf global`
 
 Only load the environment for tools not present in upmost `.tool-versions` file.
 
@@ -223,10 +222,10 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 
 ### Tips for direnv beginners
 
-* If you want to silence the console output of direnv, you can do that by setting
-an empty environment variable `DIRENV_LOG_FORMAT`.
+- If you want to silence the console output of direnv, you can do that by setting
+  an empty environment variable `DIRENV_LOG_FORMAT`.
 
-* Remember that activation order is important. In the following example,
+- Remember that activation order is important. In the following example,
   toolB will be present before toolA in PATH.
 
 ```bash
@@ -235,24 +234,25 @@ use asdf toolA 1.0
 use asdf toolB 2.0
 ```
 
-* Remember `direnv` can reload the environment whenever a file changes.
-By default this plugin will watch any `.tool-versions` file or legacy
-version file that explicitly selects a tool.
+- Remember `direnv` can reload the environment whenever a file changes.
+  By default this plugin will watch any `.tool-versions` file or legacy
+  version file that explicitly selects a tool.
 
 But you can easily watch more files when needed.
+
 ```bash
 # .envrc
 watch_file "package.json"
 ```
 
-* Using `asdf exec direnv status` can be helpful to inspect current state.
-Also, you might want to take a look to `asdf exec direnv --help`.
+- Using `asdf exec direnv status` can be helpful to inspect current state.
+  Also, you might want to take a look to `asdf exec direnv --help`.
 
 ## Useful links
 
 Read [direnv documentation](https://direnv.net/) for more on `.envrc`
 
-## Contributors ✨
+## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
