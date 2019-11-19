@@ -1,4 +1,5 @@
 <div align="center">
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 <h1>asdf-direnv</h1>
 <span><a href="https://direnv.net">direnv</a> plugin for asdf version manager</span>
 </div>
@@ -250,3 +251,19 @@ Also, you might want to take a look to `asdf exec direnv --help`.
 ## Useful links
 
 Read [direnv documentation](https://direnv.net/) for more on `.envrc`
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table>
+  <tr>
+    <td align="center"><a href="https://keybase.io/oeiuwq"><img src="https://avatars3.githubusercontent.com/u/331?v=4" width="100px;" alt="Victor Borja"/><br /><sub><b>Victor Borja</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=vic" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
