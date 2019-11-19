@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "vic",
+      "name": "Victor Borja",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/331?v=4",
+      "profile": "https://keybase.io/oeiuwq",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "asdf-direnv",
+  "projectOwner": "asdf-community",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
