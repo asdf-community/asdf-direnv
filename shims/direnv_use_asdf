@@ -16,14 +16,14 @@
 #
 
 # Load asdf util functions if not already loaded
-if ! type with_plugin_env > /dev/null 2>&1; then
+if ! type with_plugin_env >/dev/null 2>&1; then
   ASDF_DIR="${ASDF_DIR:-$(dirname "$(dirname "$(command -v asdf)")")}"
   # shellcheck disable=SC1090 # Can't follow non-constant source. Use a directive to specify location.
   . "$ASDF_DIR/lib/utils.sh"
 fi
 
 # Load direnv stdlib if not already loaded
-if ! type watch_file > /dev/null 2>&1; then
+if ! type watch_file >/dev/null 2>&1; then
   eval "$(asdf exec direnv stdlib)"
 fi
 
@@ -120,11 +120,11 @@ _load_local_plugins_env() {
 }
 
 _plugin_env() {
-  used_shell=$(echo $SHELL |rev| cut -d '/' -f1 | rev)
+  used_shell=$(echo "$SHELL" | rev | cut -d '/' -f1 | rev)
   temp_env_file=$(mktemp)
-  env > $temp_env_file
-  asdf exec direnv dotenv "$used_shell" $temp_env_file
-  /bin/rm $temp_env_file
+  env >"$temp_env_file"
+  asdf exec direnv dotenv "$used_shell" "$temp_env_file"
+  /bin/rm "$temp_env_file"
 }
 
 # from asdf plugin_current_command
@@ -144,7 +144,7 @@ _load_plugin_version_and_file() {
     log_status "using asdf ${plugin_name} ${version}"
   done
   if [ -f "$path" ]; then
-    used_shell=$(echo "$SHELL" |rev| cut -d '/' -f1 | rev)
+    used_shell=$(echo "$SHELL" | rev | cut -d '/' -f1 | rev)
     asdf exec direnv watch "$used_shell" "$path"
   fi
 }
