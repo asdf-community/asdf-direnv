@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 #
 # Copyright 2019 asdf-direnv authors
 #
@@ -16,14 +16,14 @@
 #
 
 # Load asdf util functions if not already loaded
-if [ -z "$(declare -f -F with_plugin_env)" ]; then
+if ! type with_plugin_env > /dev/null; then
   ASDF_DIR="${ASDF_DIR:-$(dirname "$(dirname "$(command -v asdf)")")}"
   # shellcheck disable=SC1090 # Can't follow non-constant source. Use a directive to specify location.
-  source "$ASDF_DIR/lib/utils.sh"
+  . "$ASDF_DIR/lib/utils.sh"
 fi
 
 # Load direnv stdlib if not already loaded
-if [ -z "$(declare -f -F watch_file)" ]; then
+if ! type watch_file > /dev/null; then
   eval "$(asdf exec direnv stdlib)"
 fi
 
@@ -35,14 +35,14 @@ fi
 # Otherwise two argments are expected, a plugin name and version.
 # If no arguments are given, a .tool-versions file will be looked up.
 use_asdf() {
-  if [ -z "$*" ] || [ "current" == "$*" ]; then
+  if [ -z "$*" ] || [ "current" = "$*" ]; then
     use_asdf global
     use_asdf local
 
-  elif [ "global" == "$*" ]; then
+  elif [ "global" = "$*" ]; then
     eval "$(_load_global_plugins_env "$(_local_versions_file)")"
 
-  elif [ "local" == "$*" ]; then
+  elif [ "local" = "$*" ]; then
     eval "$(_load_local_plugins_env "$(_local_versions_file)")"
 
   elif [ -f "$1" ]; then # [tool-versions file]
@@ -68,7 +68,7 @@ _tail_r() {
 }
 
 _xargs_par() {
-  local nproc="${ASDF_CONCURRENCY:-$(getconf _NPROCESSORS_ONLN || echo 1)}"
+  nproc="${ASDF_CONCURRENCY:-$(getconf _NPROCESSORS_ONLN || echo 1)}"
   if [ "$nproc" -gt 1 ]; then
     xargs -P "$nproc" "$@"
   else
@@ -77,12 +77,12 @@ _xargs_par() {
 }
 
 _pardo() {
-  local this_file="${BASH_SOURCE[0]}"
+  this_file=$(asdf which direnv_use_asdf)
   _xargs_par -L 1 "$this_file" 'do' "$@"
 }
 
 _local_versions_file() {
-  local tool_versions
+  # tool_versions
   tool_versions="$(find_up .tool-versions)"
   if [ -f "$tool_versions" ]; then
     echo "$tool_versions"
@@ -93,7 +93,7 @@ _local_versions_file() {
 }
 
 _plugins_in_file() {
-  local tool_versions=$1
+  tool_versions=$1
   cut -d'#' -f1 "$tool_versions" | cut -d' ' -f1 | awk NF | uniq
 }
 
@@ -102,58 +102,65 @@ _all_plugins_list() {
 }
 
 _except_local_plugins_list() {
-  local tool_versions=$1
-  local tmp_local_plugin_names
+  tool_versions=$1
   tmp_local_plugin_names="$(mktemp)"
   _plugins_in_file "$tool_versions" >"$tmp_local_plugin_names"
   _all_plugins_list | grep -v -F -f "$tmp_local_plugin_names"
-  rm "$tmp_local_plugin_names"
+  /bin/rm "$tmp_local_plugin_names"
 }
 
 _load_global_plugins_env() {
-  local tool_versions=$1
+  tool_versions=$1
   _except_local_plugins_list "$tool_versions" | _tail_r | _pardo _load_plugin_version_and_file
 }
 
 _load_local_plugins_env() {
-  local tool_versions=$1
+  tool_versions=$1
   _plugins_in_file "$tool_versions" | _tail_r | _pardo _load_plugin_version_and_file
 }
 
 _plugin_env() {
-  asdf exec direnv dotenv bash <(env)
+  used_shell=$(echo $SHELL |rev| cut -d '/' -f1 | rev)
+  temp_env_file=$(mktemp)
+  env > $temp_env_file
+  asdf exec direnv dotenv "$used_shell" $temp_env_file
+  /bin/rm $temp_env_file
 }
 
 # from asdf plugin_current_command
 _load_plugin_version_and_file() {
-  local plugin_name=$1
-  local versions_and_path
+  plugin_name=$1
   versions_and_path="$(find_versions "$plugin_name" "$(pwd)")"
   if test -z "$versions_and_path"; then
     return 0
   fi
 
-  local path
-  path=$(cut -d '|' -f 2 <<<"$versions_and_path")
-  IFS=$'\n' read -r -a versions <<<"$(cut -d '|' -f 1 <<<"$versions_and_path" | uniq)"
-  for version in "${versions[@]}"; do
+  # path=$(cut -d '|' -f 2 <<<"$versions_and_path")
+  path=$(printf '%s\n' "$versions_and_path" | cut -d '|' -f 2)
+  unique_versions=$(printf '%s\n' "$versions_and_path" | cut -d '|' -f 1 | uniq)
+  # IFS=$'\n' read -r -a versions <<<"$unique_versions"
+  for version in ${unique_versions}; do
     _plugin_env_bash "$plugin_name" "$version"
     log_status "using asdf ${plugin_name} ${version}"
   done
   if [ -f "$path" ]; then
-    asdf exec direnv watch bash "$path"
+    used_shell=$(echo "$SHELL" |rev| cut -d '/' -f1 | rev)
+    asdf exec direnv watch "$used_shell" "$path"
   fi
 }
 
 _plugin_env_bash() {
-  local plugin="${1}"
-  local version="${2}"
-  local old_path="$PATH"
+  plugin="${1}"
+  version="${2}"
+  old_path="$PATH"
   if [ -n "$version" ]; then
     with_plugin_env "$plugin" "$version" _plugin_env | sed "s#:$old_path#:'\"\$PATH\"'#"
   fi
 }
 
-if [ "do" == "$1" ]; then
-  eval "${@:2}"
+if [ "do" = "$1" ]; then
+  shift 1
+  eval "${@}"
 fi
+
+set +e
