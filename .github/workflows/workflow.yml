@@ -1,13 +1,16 @@
 name: Main workflow
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * 5"
 
 jobs:
   build:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest]
-        direnv: [2.20.0]
 
     runs-on: ${{ matrix.os }}
 
@@ -22,9 +25,9 @@ jobs:
         run: |
           . $HOME/asdf/asdf.sh
           asdf plugin-add direnv $GITHUB_WORKSPACE
-          asdf install direnv ${{ matrix.direnv }}
-          asdf global direnv ${{ matrix.direnv }}
-          direnv --version
+          asdf install direnv latest
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     strategy:
@@ -38,7 +41,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: Macos coreutils # needed by bats-core
+      - name: macOS coreutils # needed by bats-core
         if: matrix.os == 'macOS-latest'
         run: brew install coreutils
 
@@ -51,14 +54,14 @@ jobs:
           git clone https://github.com/asdf-vm/asdf.git $HOME/asdf
 
       - name: Run tests
-        env:
-          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export PATH=$HOME/bats-core/bin:$HOME/asdf/bin:$PATH
           asdf plugin-add direnv $GITHUB_WORKSPACE
           asdf install direnv ${{ matrix.direnv }}
           asdf global direnv ${{ matrix.direnv }}
           bats test
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
     runs-on: macOS-latest
