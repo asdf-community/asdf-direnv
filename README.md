@@ -97,7 +97,7 @@ Then edit your `.bashrc` or equivalent shell profile:
 
 # In order to bypass asdf shims. We *only* add the `ASDF_DIR/bin`
 # directory to PATH, since we still want to use `asdf` but not its shims.
-[[ $PATH == *"asdf/bin"* ]] || export PATH="$PATH:$ASDF_DIR/bin"
+export PATH="$PATH:$HOME/.asdf/bin"
 
 # Optionally, add asdf command completions.
 . $ASDF_DIR/completions/asdf.bash
@@ -229,8 +229,18 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 
 ### Tips for direnv beginners
 
+- Take a look at `direnv help true`.
+
 - If you want to silence the console output of direnv, you can do that by setting
   an empty environment variable `DIRENV_LOG_FORMAT`.
+  
+- Some times you might need to configure IDEs or other tools to find executables
+  like package managers/code linters/compilers being used on a project of yours.
+  For example, the `npm` executable can be invoked with:
+
+```bash
+direnv exec /some/project npm
+```
 
 - Remember that activation order is important. In the following example,
   toolB will be present before toolA in PATH.
