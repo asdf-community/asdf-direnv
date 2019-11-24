@@ -92,6 +92,7 @@ teardown() {
   cat <<-EOF > "$ASDF_DATA_DIR/plugins/dummy/bin/exec-env"
 #!/usr/bin/env bash
 export JOJO=JAJA
+export FOO=$'\nBAR' # something starting with new line
 EOF
   chmod +x "$ASDF_DATA_DIR/plugins/dummy/bin/exec-env"
 
@@ -100,6 +101,7 @@ EOF
   envrc_load
 
   [ "$JOJO" == "JAJA" ] # Env exported by plugin
+  [ "$FOO" == $'\nBAR' ] # Keeps special chars
 }
 
 @test "use asdf [name] - determines version from tool-versions" {
@@ -242,9 +244,6 @@ EOF
 }
 
 @test "use asdf current - sets local tools on PATH before global tools" {
-  # NOTE: order between tools is undefined when xargs maxproc > 1
-  export ASDF_CONCURRENCY=1 # Disabled xargs parallelism for deterministic tests
-
   install_dummy_plugin dummy 1.0
   install_dummy_plugin gummy 1.0
   install_dummy_plugin mummy 1.0
