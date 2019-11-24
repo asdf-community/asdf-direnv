@@ -232,11 +232,11 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 - Take a look at `direnv help true`.
 
 - If you want to silence the console output of direnv, you can do that by setting
-  an empty environment variable `DIRENV_LOG_FORMAT`.
+  an empty environment variable: `export DIRENV_LOG_FORMAT=""`.
   
 - Some times you might need to configure IDEs or other tools to find executables
   like package managers/code linters/compilers being used on a project of yours.
-  For example, the `npm` executable can be invoked with:
+  For example, to execute `npm` outside your project directory you can do:
 
 ```bash
 direnv exec /some/project npm
