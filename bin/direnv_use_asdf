@@ -37,10 +37,11 @@ _die() {
 }
 
 _asdf_env_file() {
-  local dump_dir="$(asdf where direnv)/env"
-  local tools_file="$(_local_versions_file)"
-  local tools_cksum="$(_cksum "$tools_file" "$@")"
-  local env_file="$dump_dir/$tools_cksum"
+  local dump_dir tools_file tools_cksum env_file
+  dump_dir="$(asdf where direnv)/env"
+  tools_file="$(_local_versions_file)"
+  tools_cksum="$(_cksum "$tools_file" "$@")"
+  env_file="$dump_dir/$tools_cksum"
 
   if [ -f "$env_file" ]; then
     echo "$env_file"
@@ -53,7 +54,7 @@ _asdf_env_file() {
   rm "$dump_dir/$(echo "$tools_cksum" | cut -d- -f1-2)"-* 2>/dev/null || true
   log_status "Creating env file $env_file"
 
-  _asdf_env "$@" > "$env_file"
+  _asdf_env "$@" >"$env_file"
   echo "$env_file"
 }
 
@@ -170,13 +171,14 @@ _new_items() {
 }
 
 _path_changed_entries() {
-  local old_path="$(echo -n "$1" | tr ':' $'\n' )"
-  local new_path="$(echo -n "$2" | tr ':' $'\n' )"
+  local old_path new_path
+  old_path="$(echo -n "$1" | tr ':' $'\n')"
+  new_path="$(echo -n "$2" | tr ':' $'\n')"
   echo -n "$new_path" | _new_items <(echo -n "$old_path")
 }
 
 _direnv_bash_dump() {
-  "$direnv" dump bash | sed -e $'s#;export#\\\nexport#g' | sed -e 's#;$##'
+  direnv dump bash | sed -e $'s#;export#\\\nexport#g' | sed -e 's#;$##'
 }
 _plugin_env_bash() {
   local plugin="${1}"
@@ -186,7 +188,7 @@ _plugin_env_bash() {
   old_env="$(_direnv_bash_dump)"
   new_env="$(with_plugin_env "$plugin" "$version" _direnv_bash_dump | _new_items <(echo -n "$old_env"))"
 
-  echo "$new_env" | _tgrep -vF 'export PATH='  # export all env except PATH
+  echo "$new_env" | _tgrep -vF 'export PATH=' # export all env except PATH
   eval "$(echo -n "$old_env" | _tgrep -F 'export PATH=' | sed -e 's#export PATH=#old_path=#')"
   eval "$(echo -n "$new_env" | _tgrep -F 'export PATH=' | sed -e 's#export PATH=#new_path=#')"
 

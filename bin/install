@@ -34,16 +34,16 @@ install_direnv() {
   local platform
 
   case "$OSTYPE" in
-    darwin*) platform="darwin" ;;
-    linux*) platform="linux" ;;
-    *) fail "Unsupported platform" ;;
+  darwin*) platform="darwin" ;;
+  linux*) platform="linux" ;;
+  *) fail "Unsupported platform" ;;
   esac
 
   local architecture
 
   case "$(uname -m)" in
-    x86_64) architecture="amd64" ;;
-    *) fail "Unsupported architecture" ;;
+  x86_64) architecture="amd64" ;;
+  *) fail "Unsupported architecture" ;;
   esac
 
   local download_url="https://github.com/direnv/direnv/releases/download/v${version}/direnv.${platform}-${architecture}"
