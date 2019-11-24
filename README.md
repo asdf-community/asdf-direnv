@@ -126,19 +126,28 @@ use asdf # this will activate your plugins listed by `asdf current`
 
 Finally, run `asdf exec direnv allow .envrc` to trust your new file.
 
-###### That's it!
+###### Cached environment
+
+To speed up things a lot, this plugin creates direnv `envrc` files that
+contain your plugins environment. They are created whenever
+your `.envrc` or your `.tool-versions` files change, and are cached
+under the current direnv installation directory inside `env/*`.
+
+If you ever need to regenerate a cached environment file, just `touch .envrc`.
 
 Now when you leave your project directory and come back to it, direnv
-will manage the environment variables for you, for example:
+will manage the environment variables for you really fast. For example:
 
 ```bash
-cd /some/project
 direnv: loading .envrc
-direnv: using asdf /some/project/.tool-versions
+direnv: using asdf
+direnv: Creating env file ~/.asdf/installs/direnv/2.20.0/env/909519368-2773408541-1591703797-361987458
+direnv: loading ~/.asdf/installs/direnv/2.20.0/env/909519368-2773408541-1591703797-361987458
 direnv: using asdf elixir 1.8.1-otp-21
 direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
+
 
 #### Other `use asdf` options.
 
