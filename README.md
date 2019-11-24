@@ -5,7 +5,7 @@
 <hr />
 
 [![Main workflow](https://github.com/asdf-community/asdf-direnv/workflows/Main%20workflow/badge.svg)](https://github.com/asdf-community/asdf-direnv/actions)
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![License](https://img.shields.io/github/license/asdf-community/asdf-direnv?style=flat-square&color=brightgreen)](https://github.com/asdf-community/asdf-direnv/blob/master/LICENSE)
 
@@ -271,6 +271,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://bsky.moe"><img src="https://avatars3.githubusercontent.com/u/38746192?v=4" width="100px;" alt="BSKY"/><br /><sub><b>BSKY</b></sub></a><br /><a href="#ideas-imbsky" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/asdf-community/asdf-direnv/commits?author=imbsky" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/michi-zuri"><img src="https://avatars3.githubusercontent.com/u/26734536?v=4" width="100px;" alt="Michael Paul Killian"/><br /><sub><b>Michael Paul Killian</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=michi-zuri" title="Code">💻</a> <a href="https://github.com/asdf-community/asdf-direnv/commits?author=michi-zuri" title="Documentation">📖</a> <a href="https://github.com/asdf-community/asdf-direnv/issues?q=author%3Amichi-zuri" title="Bug reports">🐛</a> <a href="#ideas-michi-zuri" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://www.jflei.com"><img src="https://avatars1.githubusercontent.com/u/277474?v=4" width="100px;" alt="Jeremy Fleischman"/><br /><sub><b>Jeremy Fleischman</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/issues?q=author%3Ajfly" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="http://timosand.com"><img src="https://avatars0.githubusercontent.com/u/27202?v=4" width="100px;" alt="Timo Sand"/><br /><sub><b>Timo Sand</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=deiga" title="Code">💻</a></td>
   </tr>
 </table>
 
