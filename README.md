@@ -92,6 +92,8 @@ asdf global  direnv 2.20.0
 Then edit your `.bashrc` or equivalent shell profile:
 
 ```bash
+# File: ~/.bashrc
+
 # If you have the following line enabled, comment or remove it.
 ## . $HOME/.asdf/asdf.sh
 
@@ -118,6 +120,7 @@ By creating a `~/.config/direnv/.direnvrc` file, you don't have to write a line
 to load `direnv_use_asdf` each `.envrc` file.
 
 ```bash
+# File: ~/.config/direnv/.direnvrc
 source $(asdf which direnv_use_asdf)
 ```
 
@@ -129,6 +132,7 @@ whenever you need to change tool versions.
 On your project directory you can now create an `.envrc` file like this:
 
 ```bash
+# File: /your/project/.envrc
 use asdf # this will activate your plugins listed by `asdf current`
 ```
 
