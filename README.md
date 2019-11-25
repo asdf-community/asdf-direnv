@@ -80,8 +80,8 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 #### Setup
 
-First, make sure you install this plugin, then install and globally activate
-the most recent direnv version:
+First, make sure you install this plugin, then install and globally activate the
+most recent direnv version:
 
 ```bash
 asdf plugin-add direnv
@@ -112,6 +112,15 @@ If you are not using bash, adapt the previous snippet by following the
 Note that even when the `shims` directory is no longer in PATH, you are always
 able to invoke any asdf managed command via `asdf exec`.
 
+#### The .direnvrc file.
+
+By creating a `~/.config/direnv/.direnvrc` file, you don't have to write a line
+to load `direnv_use_asdf` each `.envrc` file.
+
+```bash
+source $(asdf which direnv_use_asdf)
+```
+
 #### The .envrc file.
 
 Once hooked into your shell, `direnv` will expect to find a `.envrc` file
@@ -120,7 +129,6 @@ whenever you need to change tool versions.
 On your project directory you can now create an `.envrc` file like this:
 
 ```bash
-source $(asdf which direnv_use_asdf)
 use asdf # this will activate your plugins listed by `asdf current`
 ```
 
@@ -128,15 +136,15 @@ Finally, run `asdf exec direnv allow .envrc` to trust your new file.
 
 ###### Cached environment
 
-To speed up things a lot, this plugin creates direnv `envrc` files that
-contain your plugins environment. They are created whenever
-your `.envrc` or your `.tool-versions` files change, and are cached
-under the current direnv installation directory inside `env/*`.
+To speed up things a lot, this plugin creates direnv `envrc` files that contain
+your plugins environment. They are created whenever your `.envrc` or your
+`.tool-versions` files change, and are cached under the current direnv
+installation directory inside `env/*`.
 
 If you ever need to regenerate a cached environment file, just `touch .envrc`.
 
-Now when you leave your project directory and come back to it, direnv
-will manage the environment variables for you really fast. For example:
+Now when you leave your project directory and come back to it, direnv will
+manage the environment variables for you really fast. For example:
 
 ```bash
 direnv: loading .envrc
@@ -148,21 +156,20 @@ direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
 
-
 #### Other `use asdf` options.
 
 `use asdf` with no argument is equivalent to `use asdf current`.
 
 _Note_: Tool versions are resolved just like `asdf current tool-name`.
 
-When a tool gets activated, this plugin will automatically watch the
-file specifying its version (be it a tool-versions file or
-legacy version file) for changes.
+When a tool gets activated, this plugin will automatically watch the file
+specifying its version (be it a tool-versions file or legacy version file) for
+changes.
 
 - `use asdf current` **(default)**
 
-Just an alias for `use asdf global` followed by `use asdf local`.
-Activating global plugins first makes sure your local tools are first on PATH.
+Just an alias for `use asdf global` followed by `use asdf local`. Activating
+global plugins first makes sure your local tools are first on PATH.
 
 - `use asdf TOOL_NAME [VERSION]`
 
@@ -182,8 +189,8 @@ Only load the environment for tools not present in upmost `.tool-versions` file.
 
 This works by listing all your installed plugins and filtering out those present
 in the upmost `.tool-versions` file. Effectively activating any globally
-selected plugin like those present on `~/.tool-versions` and also those
-local tools that use legacy filenames.
+selected plugin like those present on `~/.tool-versions` and also those local
+tools that use legacy filenames.
 
 ## Benchmark
 
@@ -231,9 +238,9 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 
 - Take a look at `direnv help true`.
 
-- If you want to silence the console output of direnv, you can do that by setting
-  an empty environment variable: `export DIRENV_LOG_FORMAT=""`.
-  
+- If you want to silence the console output of direnv, you can do that by
+  setting an empty environment variable: `export DIRENV_LOG_FORMAT=""`.
+
 - Some times you might need to configure IDEs or other tools to find executables
   like package managers/code linters/compilers being used on a project of yours.
   For example, to execute `npm` outside your project directory you can do:
@@ -242,8 +249,8 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 direnv exec /some/project npm
 ```
 
-- Remember that activation order is important. In the following example,
-  toolB will be present before toolA in PATH.
+- Remember that activation order is important. In the following example, toolB
+  will be present before toolA in PATH.
 
 ```bash
 # .envrc
@@ -251,9 +258,9 @@ use asdf toolA 1.0
 use asdf toolB 2.0
 ```
 
-- Remember `direnv` can reload the environment whenever a file changes.
-  By default this plugin will watch any `.tool-versions` file or legacy
-  version file that explicitly selects a tool.
+- Remember `direnv` can reload the environment whenever a file changes. By
+  default this plugin will watch any `.tool-versions` file or legacy version
+  file that explicitly selects a tool.
 
 But you can easily watch more files when needed.
 
@@ -262,8 +269,8 @@ But you can easily watch more files when needed.
 watch_file "package.json"
 ```
 
-- Using `asdf exec direnv status` can be helpful to inspect current state.
-  Also, you might want to take a look to `asdf exec direnv --help`.
+- Using `asdf exec direnv status` can be helpful to inspect current state. Also,
+  you might want to take a look to `asdf exec direnv --help`.
 
 ## Useful links
 
@@ -271,7 +278,8 @@ Read [direnv documentation](https://direnv.net/) for more on `.envrc`
 
 ## Contributors
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks goes to these wonderful people
+([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
@@ -287,7 +295,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the
+[all-contributors](https://github.com/all-contributors/all-contributors)
+specification. Contributions of any kind welcome!
 
 ## License
 
