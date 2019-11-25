@@ -101,9 +101,6 @@ Then edit your `.bashrc` or equivalent shell profile:
 # directory to PATH, since we still want to use `asdf` but not its shims.
 export PATH="$PATH:$HOME/.asdf/bin"
 
-# Optionally, add asdf command completions.
-. $ASDF_DIR/completions/asdf.bash
-
 # Hook direnv into your shell.
 eval "$(asdf exec direnv hook bash)"
 ```
@@ -114,26 +111,31 @@ If you are not using bash, adapt the previous snippet by following the
 Note that even when the `shims` directory is no longer in PATH, you are always
 able to invoke any asdf managed command via `asdf exec`.
 
-#### The .direnvrc file.
+##### Global asdf-direnv integration.
 
-By creating a `~/.config/direnv/.direnvrc` file, you don't have to write a line
-to load `direnv_use_asdf` each `.envrc` file.
+The [`~/.config/direnv/direnvrc`](https://direnv.net/#faq) file is a good place to add common 
+functionality for all `.envrc` file.
+
+The following snippet makes the `use asdf` feature available:
 
 ```bash
-# File: ~/.config/direnv/.direnvrc
+# File: ~/.config/direnv/direnvrc
 source $(asdf which direnv_use_asdf)
+
+# Uncomment the following line to make direnv silent by default.
+# export DIRENV_LOG_FORMAT=""
 ```
 
-#### The .envrc file.
+##### The .envrc file in your project root.
 
 Once hooked into your shell, `direnv` will expect to find a `.envrc` file
 whenever you need to change tool versions.
 
-On your project directory you can now create an `.envrc` file like this:
+On your project directory, create an `.envrc` file like this:
 
 ```bash
 # File: /your/project/.envrc
-use asdf # this will activate your plugins listed by `asdf current`
+use asdf # activates plugins listed by `asdf current`
 ```
 
 Finally, run `asdf exec direnv allow .envrc` to trust your new file.
