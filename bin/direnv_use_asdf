@@ -54,7 +54,7 @@ _asdf_env_file() {
   rm "$dump_dir/$(echo "$tools_cksum" | cut -d- -f1-2)"-* 2>/dev/null || true
   log_status "Creating env file $env_file"
 
-  _asdf_env "$@" >"$env_file"
+  _asdf_env "$@" | _no_dups >"$env_file"
   echo "$env_file"
 }
 
@@ -98,6 +98,10 @@ _tgrep() {
 _tail_r() {
   # portable version of tail -r
   cat -n | sort -nr | cut -f2-
+}
+
+_no_dups() {
+  awk '!a[$0]++' -
 }
 
 _each_do() {
