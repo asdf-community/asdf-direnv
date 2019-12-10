@@ -185,8 +185,9 @@ _path_changed_entries() {
 }
 
 _direnv_bash_dump() {
-  $direnv dump bash | sed -e $'s#;export#\\\nexport#g' | sed -e 's#;$##'
+  "$direnv" dump bash | sed -e $'s#;export#\\\nexport#g' | sed -e 's#;$##'
 }
+
 _plugin_env_bash() {
   local plugin="${1}"
   local version="${2}"
