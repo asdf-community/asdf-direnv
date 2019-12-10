@@ -55,11 +55,21 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "omares",
+      "name": "Ota Mares",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1375307?v=4",
+      "profile": "https://tech.rebuy.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "asdf-direnv",
   "projectOwner": "asdf-community",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
