@@ -89,7 +89,8 @@ _asdf_env() {
 _cksum() {
   local file="$1"
   # working directory, the arguments given to use_asdf, direnv status, and the tools-version modification times.
-  cksum <(pwd) <(echo "$@") <(direnv status) <(ls -l "$file") | cut -d' ' -f 1 | tr $'\n' '-' | sed -e 's/-$//'
+  # shellcheck disable=SC2154 # var is referenced but not assigned.
+  cksum <(pwd) <(echo "$@") <("$direnv" status) <(ls -l "$file") | cut -d' ' -f 1 | tr $'\n' '-' | sed -e 's/-$//'
 }
 
 _tgrep() {
@@ -184,8 +185,9 @@ _path_changed_entries() {
 }
 
 _direnv_bash_dump() {
-  direnv dump bash | sed -e $'s#;export#\\\nexport#g' | sed -e 's#;$##'
+  "$direnv" dump bash | sed -e $'s#;export#\\\nexport#g' | sed -e 's#;$##'
 }
+
 _plugin_env_bash() {
   local plugin="${1}"
   local version="${2}"
