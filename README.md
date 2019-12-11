@@ -94,33 +94,26 @@ Then edit your `.bashrc` or equivalent shell profile:
 ```bash
 # File: ~/.bashrc
 
-# If you have the following line enabled, comment or remove it.
-## . $HOME/.asdf/asdf.sh
-
-# In order to bypass asdf shims. We *only* add the `ASDF_DIR/bin`
-# directory to PATH, since we still want to use `asdf` but not its shims.
-export PATH="$HOME/.asdf/bin:$PATH"
-
 # Hook direnv into your shell.
-eval "$(asdf exec direnv hook bash)"
+eval "$(asdf direnv hook bash)"
+
+# A shortcut for asdf managed direnv.
+direnv() { asdf direnv "$@"; }
 ```
 
 If you are not using bash, adapt the previous snippet by following the
 [instructions to hook direnv into various other SHELLS](https://github.com/direnv/direnv/blob/master/docs/hook.md)
 
-Note that even when the `shims` directory is no longer in PATH, you are always
-able to invoke any asdf managed command via `asdf exec`.
-
 ##### Global asdf-direnv integration.
 
-The [`~/.config/direnv/direnvrc`](https://direnv.net/#faq) file is a good place to add common 
+The [`~/.config/direnv/direnvrc`](https://direnv.net/#faq) file is a good place to add common
 functionality for all `.envrc` file.
 
 The following snippet makes the `use asdf` feature available:
 
 ```bash
 # File: ~/.config/direnv/direnvrc
-source $(asdf which direnv_use_asdf)
+source "$(asdf direnv hook asdf)"
 
 # Uncomment the following line to make direnv silent by default.
 # export DIRENV_LOG_FORMAT=""
@@ -135,10 +128,10 @@ On your project directory, create an `.envrc` file like this:
 
 ```bash
 # File: /your/project/.envrc
-use asdf # activates plugins listed by `asdf current`
+use asdf
 ```
 
-Finally, run `asdf exec direnv allow .envrc` to trust your new file.
+Finally, run `direnv allow` to trust your new file.
 
 ###### Cached environment
 
@@ -161,42 +154,6 @@ direnv: using asdf elixir 1.8.1-otp-21
 direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
-
-#### Other `use asdf` options.
-
-`use asdf` with no argument is equivalent to `use asdf current`.
-
-_Note_: Tool versions are resolved just like `asdf current tool-name`.
-
-When a tool gets activated, this plugin will automatically watch the file
-specifying its version (be it a tool-versions file or legacy version file) for
-changes.
-
-- `use asdf current` **(default)**
-
-Just an alias for `use asdf global` followed by `use asdf local`. Activating
-global plugins first makes sure your local tools are first on PATH.
-
-- `use asdf TOOL_NAME [VERSION]`
-
-Load the environment for a tool and version.
-
-- `use asdf FILE_NAME`
-
-Load the environment for tools listed on file.
-
-- `use asdf local`
-
-Only load the environment for tools present in upmost `.tool-versions` file.
-
-- `use asdf global`
-
-Only load the environment for tools not present in upmost `.tool-versions` file.
-
-This works by listing all your installed plugins and filtering out those present
-in the upmost `.tool-versions` file. Effectively activating any globally
-selected plugin like those present on `~/.tool-versions` and also those local
-tools that use legacy filenames.
 
 ## Benchmark
 
@@ -240,9 +197,25 @@ without asdf-direnv:
 hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 ```
 
-### Tips for direnv beginners
+### Pro-Tips
 
 - Take a look at `direnv help true`.
+
+- Getting `$ASDF_DIR/shims` out of the PATH.
+
+  Some users might want to bypass asdf shims altogether. To do so,
+  include only `$ASDF_DIR/bin` in your PATH but exclude the shims
+  directory.
+
+  All shims are still available via `asdf exec <shim>`
+
+```bash
+# ~/.bashrc or equivalent
+
+# Dont source `~/.asdf/asdf.sh`
+PATH="$PATH:~/.asdf/bin"
+source "~/.asdf/lib/asdf.sh" # just load the asdf wrapper function
+```
 
 - If you want to silence the console output of direnv, you can do that by
   setting an empty environment variable: `export DIRENV_LOG_FORMAT=""`.
@@ -255,13 +228,44 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 direnv exec /some/project npm
 ```
 
-- Remember that activation order is important. In the following example, toolB
-  will be present before toolA in PATH.
+- Remember that activation order is important.
+
+  If a local `.tool-versions` file is present, the order of listed plugins will be
+  preserved, so that toolA will be present before toolB in PATH.
+
+```bash
+# .tool-versions
+toolA 1.0
+toolB 2.0
+```
+
+- You can `use asdf` even if current directory has no `.tool-versions` file.
+
+  In this case the the activated versions will be the same than those returned
+  by `asdf current` command.
+
+- You can override any tool version via environment variables.
+
+  See the asdf documentation regarding versions from environment variables.
 
 ```bash
 # .envrc
-use asdf toolA 1.0
-use asdf toolB 2.0
+ASDF_PLUGIN_VERSION=1.0
+use asdf
+```
+
+- You can omit direnv on your global `~/.tool-versions` file.
+
+  You just need to provide the version via an environment variable.
+
+```bash
+# File: ~/.bashrc
+
+# Hook direnv into your shell.
+eval "$(env ASDF_DIRENV_VERSION=2.20.0 asdf direnv hook bash)"
+
+# A shortcut for asdf managed direnv.
+direnv() { env ASDF_DIRENV_VERSION=2.20.0 asdf direnv "$@"; }
 ```
 
 - Remember `direnv` can reload the environment whenever a file changes. By
@@ -275,8 +279,8 @@ But you can easily watch more files when needed.
 watch_file "package.json"
 ```
 
-- Using `asdf exec direnv status` can be helpful to inspect current state. Also,
-  you might want to take a look to `asdf exec direnv --help`.
+- Using `direnv status` can be helpful to inspect current state. Also,
+  you might want to take a look to `direnv --help`.
 
 ## Useful links
 

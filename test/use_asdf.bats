@@ -15,20 +15,12 @@ teardown() {
   command -v asdf
 }
 
-@test "direnv executable should not be on path" {
-  [ ! $(command -v direnv) ]
-}
-
-@test "direnv_use_asdf should not be on path" {
-  [ ! $(command -v direnv_use_asdf) ]
+@test "direnv executable should be on path" {
+  [ $(command -v direnv) ]
 }
 
 @test "direnv is available via asdf" {
-  asdf exec direnv --version
-}
-
-@test "direnv_use_asdf is available via asdf" {
-  asdf which direnv_use_asdf
+  direnv --version
 }
 
 @test "dummy 1.0 is available via asdf exec" {
@@ -42,35 +34,45 @@ teardown() {
 
   [ -z "$FOO" ]
   echo 'export FOO=BAR' > "$PROJECT_DIR/.envrc"
-  asdf exec direnv allow "$PROJECT_DIR/.envrc"
+  direnv allow "$PROJECT_DIR/.envrc"
 
   envrc_load
   [ "$FOO" ==  "BAR" ]
 }
 
-@test "use asdf [name] [version] - prepends plugin/bin to PATH" {
+@test "use asdf - makes tools available in PATH" {
   install_dummy_plugin dummy 1.0
+  install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  envrc_use_asdf dummy 1.0
+  envrc_use_asdf
 
   [ ! $(command -v dummy) ] # not available
+
+  asdf global dummy 1.0
+  touch .envrc
   envrc_load
 
   run dummy
   [ "$output" == "This is dummy 1.0" ] # executable in path
 
-  # plugin bin at head of PATH
-  path_as_lines | sed -n 1p | grep "$(dummy_bin_path dummy 1.0)"
+
+  asdf local dummy 2.0
+  # Touching local .envrc file should re-create cached-envrc
+  touch .envrc
+  envrc_load
+  run dummy
+  [ "$output" == "This is dummy 2.0" ] # executable in path
 }
 
 
-@test "use asdf [name] [version] - prepends plugin custom shims to PATH" {
+@test "use asdf - prepends plugin custom shims to PATH" {
   echo "If a plugin has helper shims defined, they also appear on PATH"
   install_dummy_plugin dummy 1.0 mummy
+  asdf global dummy 1.0
 
   cd "$PROJECT_DIR"
-  envrc_use_asdf dummy 1.0
+  envrc_use_asdf
 
   [ ! $(command -v mummy) ] # not available
   [ ! $(command -v dummy) ] # not available
@@ -83,11 +85,13 @@ teardown() {
   [ "$output" == "This is dummy 1.0" ] # executable in path
 
   # plugin bin at head of PATH
-  path_as_lines | sed -n 1p | grep "$(dummy_shims_path dummy 1.0)"
-  path_as_lines | sed -n 2p | grep "$(dummy_bin_path dummy 1.0)"
+  path_as_lines
+  path_as_lines | sed -n 1p | grep "direnv"
+  path_as_lines | sed -n 2p | grep "$(dummy_shims_path dummy 1.0)"
+  path_as_lines | sed -n 3p | grep "$(dummy_bin_path dummy 1.0)"
 }
 
-@test "use asdf [name] [version] - exports plugin custom env not only PATH" {
+@test "use asdf - exports plugin custom env not only PATH" {
   install_dummy_plugin dummy 1.0
   cat <<-EOF > "$ASDF_DATA_DIR/plugins/dummy/bin/exec-env"
 #!/usr/bin/env bash
@@ -97,21 +101,22 @@ EOF
   chmod +x "$ASDF_DATA_DIR/plugins/dummy/bin/exec-env"
 
   cd "$PROJECT_DIR"
-  envrc_use_asdf dummy 1.0
+  export ASDF_DUMMY_VERSION=1.0
+  envrc_use_asdf
   envrc_load
 
   [ "$JOJO" == "JAJA" ] # Env exported by plugin
   [ "$FOO" == $'\nBAR' ] # Keeps special chars
 }
 
-@test "use asdf [name] - determines version from tool-versions" {
+@test "use asdf - determines version from tool-versions" {
   install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
   asdf global dummy 1.0
   asdf local dummy 2.0
-  envrc_use_asdf dummy
+  envrc_use_asdf
   envrc_load
 
   run dummy
@@ -119,64 +124,33 @@ EOF
 }
 
 
-@test "use asdf [name] - watches tool-versions for changes" {
+@test "use asdf - watches tool-versions for changes" {
   install_dummy_plugin dummy 1.0
 
   cd "$PROJECT_DIR"
   asdf local dummy 1.0
-  envrc_use_asdf dummy
+  envrc_use_asdf
   envrc_load
 
-  asdf exec direnv status | grep -F 'Loaded watch: ".tool-versions"'
+  direnv status | grep -F 'Loaded watch: ".tool-versions"'
 }
 
-@test "use asdf [name] - watches plugin legacy file for changes" {
+@test "use asdf - watches plugin legacy file for changes" {
   install_dummy_plugin dummy 1.0
   setup_dummy_legacyfile dummy .dummy-version
 
   cd "$PROJECT_DIR"
   echo "1.0" > "$PROJECT_DIR/.dummy-version"
-  envrc_use_asdf dummy
+  envrc_use_asdf
   envrc_load
 
   run dummy
   [ "$output" == "This is dummy 1.0" ]
 
-  asdf exec direnv status | grep -F 'Loaded watch: ".dummy-version"'
+  direnv status | grep -F 'Loaded watch: ".dummy-version"'
 }
 
-@test "use asdf local - loads only from local tool-versions" {
-  install_dummy_plugin dummy 1.0
-  install_dummy_plugin dummy 2.0
-  install_dummy_plugin gummy 1.0
-
-  cd "$PROJECT_DIR"
-  asdf global dummy 1.0
-  asdf global gummy 1.0
-  asdf local  dummy 2.0
-
-  envrc_use_asdf local
-  envrc_load
-
-  run dummy
-  [ "$output" == "This is dummy 2.0" ]
-
-  [ ! $(command -v gummy) ] # gummy not available
-  [ ! $(path_as_lines | grep "$(dummy_bin_path dummy 1.0)") ]
-}
-
-@test "use asdf local - watches tool-versions for changes" {
-  install_dummy_plugin dummy 1.0
-
-  cd "$PROJECT_DIR"
-  asdf local dummy 1.0
-  envrc_use_asdf local
-  envrc_load
-
-  asdf exec direnv status | grep -F 'Loaded watch: ".tool-versions"'
-}
-
-@test "use asdf current - activates currently selected plugins" {
+@test "use asdf - activates currently selected plugins" {
   install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
   install_dummy_plugin gummy 1.0
@@ -192,7 +166,7 @@ EOF
   echo "2.0" > "$PROJECT_DIR/.dummy-version"
   asdf local puppy 2.0
 
-  envrc_use_asdf current
+  envrc_use_asdf
   envrc_load
 
   run dummy # selected from legacyfile
@@ -208,7 +182,7 @@ EOF
   [ ! $(path_as_lines | grep "$(dummy_bin_path dummy 1.0)") ]
 }
 
-@test "use asdf current - watches selection files" {
+@test "use asdf - watches selection files" {
   install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
   install_dummy_plugin gummy 1.0
@@ -222,28 +196,28 @@ EOF
   asdf local dummy 2.0
   asdf local puppy 2.0
 
-  envrc_use_asdf current
+  envrc_use_asdf
   envrc_load
 
-  asdf exec direnv status | grep -F 'Loaded watch: ".tool-versions"'
-  asdf exec direnv status | grep -F 'Loaded watch: "../.tool-versions"'
+  direnv status | grep -F 'Loaded watch: ".tool-versions"'
+  direnv status | grep -F 'Loaded watch: "../.tool-versions"'
 }
 
-@test "use asdf current - watches legacy files" {
+@test "use asdf - watches legacy files" {
   install_dummy_plugin dummy 2.0
   setup_dummy_legacyfile dummy .dummy-version
 
   cd "$PROJECT_DIR"
   echo "2.0" > "$PROJECT_DIR/.dummy-version"
 
-  envrc_use_asdf current
+  envrc_use_asdf
   envrc_load
 
-  asdf exec direnv status
-  asdf exec direnv status | grep -F 'Loaded watch: ".dummy-version"'
+  direnv status
+  direnv status | grep -F 'Loaded watch: ".dummy-version"'
 }
 
-@test "use asdf current - sets local tools on PATH before global tools" {
+@test "use asdf - sets local tools on PATH before global tools" {
   install_dummy_plugin dummy 1.0
   install_dummy_plugin gummy 1.0
   install_dummy_plugin mummy 1.0
@@ -260,7 +234,7 @@ EOF
   asdf local puppy 1.0
   asdf local gummy 1.0
 
-  envrc_use_asdf current
+  envrc_use_asdf
   envrc_load
 
   path_as_lines

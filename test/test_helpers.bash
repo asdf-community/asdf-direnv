@@ -5,6 +5,10 @@ die() {
   exit 1
 }
 
+direnv() {
+  asdf direnv "$@"
+}
+
 setup_asdf_direnv() {
   ASDF_CMD="$(command -v asdf)"
   test -x "$ASDF_CMD" || die "Expected asdf command to be available."
@@ -46,17 +50,13 @@ clean_asdf_direnv() {
 }
 
 envrc_load() {
-  eval "$(asdf exec direnv export bash)"
-}
-
-allow_direnv() {
-  asdf exec direnv allow
+  eval "$(direnv export bash)"
 }
 
 envrc_use_asdf() {
-  echo 'source $(asdf which direnv_use_asdf)' >".envrc"
+  echo 'source $(asdf direnv hook asdf)' >".envrc"
   echo "use asdf $*" >>".envrc"
-  allow_direnv
+  direnv allow
 }
 
 dummy_bin_path() {
