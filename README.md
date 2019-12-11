@@ -113,8 +113,8 @@ able to invoke any asdf managed command via `asdf exec`.
 
 ##### Global asdf-direnv integration.
 
-The [`~/.config/direnv/direnvrc`](https://direnv.net/#faq) file is a good place to add common 
-functionality for all `.envrc` file.
+The [`~/.config/direnv/direnvrc`](https://direnv.net/#faq) file is a good place
+to add common functionality for all `.envrc` file.
 
 The following snippet makes the `use asdf` feature available:
 
@@ -288,6 +288,7 @@ Thanks goes to these wonderful people
 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
@@ -300,9 +301,9 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://tech.rebuy.com/"><img src="https://avatars0.githubusercontent.com/u/1375307?v=4" width="100px;" alt=""/><br /><sub><b>Ota Mares</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=omares" title="Code">💻</a></td>
   </tr>
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the
