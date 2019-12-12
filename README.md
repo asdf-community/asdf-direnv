@@ -95,10 +95,10 @@ Then edit your `.bashrc` or equivalent shell profile:
 # File: ~/.bashrc
 
 # Hook direnv into your shell.
-eval "$(asdf direnv hook bash)"
+eval "$(asdf exec direnv hook bash)"
 
 # A shortcut for asdf managed direnv.
-direnv() { asdf direnv "$@"; }
+direnv() { asdf exec direnv "$@"; }
 ```
 
 If you are not using bash, adapt the previous snippet by following the
