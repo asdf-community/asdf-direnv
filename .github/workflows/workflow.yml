@@ -16,13 +16,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [macos-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Install asdf
         run: git clone https://github.com/asdf-vm/asdf.git $HOME/asdf
@@ -38,7 +38,7 @@ jobs:
   plugin_test:
     strategy:
       matrix:
-        os: [macOS-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -53,17 +53,17 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [macOS-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
         direnv: [2.20.0]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: macOS coreutils # needed by bats-core
-        if: matrix.os == 'macOS-latest'
+        if: matrix.os == 'macos-latest'
         run: brew install coreutils
 
       - name: Install bats
@@ -85,11 +85,11 @@ jobs:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
-    runs-on: macOS-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Install shellcheck
         run: brew install shellcheck
@@ -100,11 +100,11 @@ jobs:
           shellcheck shims/*
 
   format:
-    runs-on: macOS-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Install shfmt
         run: brew install shfmt
