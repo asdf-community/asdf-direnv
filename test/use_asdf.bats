@@ -48,6 +48,33 @@ teardown() {
   [ "$FOO" ==  "BAR" ]
 }
 
+@test "use multiple versions for same plugin - multiline" {
+  install_dummy_plugin dummy 1.0
+  install_dummy_plugin dummy 2.0
+
+  cd "$PROJECT_DIR"
+  echo -e "\ndummy 2.0" >> .tool-versions
+  echo -e "\ndummy 1.0" >> .tool-versions
+  envrc_use_asdf dummy
+  envrc_load
+
+  path_as_lines | sed -n 1p | grep "$(dummy_bin_path dummy 2.0)"
+  path_as_lines | sed -n 2p | grep "$(dummy_bin_path dummy 1.0)"
+}
+
+@test "use multiple versions for same plugin - inline" {
+  install_dummy_plugin dummy 1.0
+  install_dummy_plugin dummy 2.0
+
+  cd "$PROJECT_DIR"
+  asdf global dummy 2.0 1.0
+  envrc_use_asdf dummy
+  envrc_load
+
+  path_as_lines | sed -n 1p | grep "$(dummy_bin_path dummy 2.0)"
+  path_as_lines | sed -n 2p | grep "$(dummy_bin_path dummy 1.0)"
+}
+
 @test "use asdf [name] [version] - prepends plugin/bin to PATH" {
   install_dummy_plugin dummy 1.0
 
