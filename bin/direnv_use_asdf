@@ -162,7 +162,13 @@ _load_plugin_version_and_file() {
 
   local path
   path=$(cut -d '|' -f 2 <<<"$versions_and_path")
-  IFS=$'\n' read -r -a versions <<<"$(cut -d '|' -f 1 <<<"$versions_and_path" | uniq)"
+  local versions=()
+  while IFS=$' \t' read -r -a inline_versions; do
+    for ((idx = ${#inline_versions[@]} - 1; idx >= 0; idx--)); do
+      versions+=("${inline_versions[idx]}")
+    done
+  done <<<"$(cut -d '|' -f 1 <<<"$versions_and_path" | uniq | _tail_r)"
+
   for version in "${versions[@]}"; do
     echo log_status "using asdf ${plugin_name} ${version}"
     _plugin_env_bash "$plugin_name" "$version"
