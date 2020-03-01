@@ -298,6 +298,7 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://www.jflei.com"><img src="https://avatars1.githubusercontent.com/u/277474?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Fleischman</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/issues?q=author%3Ajfly" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://timosand.com"><img src="https://avatars0.githubusercontent.com/u/27202?v=4" width="100px;" alt=""/><br /><sub><b>Timo Sand</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=deiga" title="Code">💻</a></td>
     <td align="center"><a href="https://tech.rebuy.com/"><img src="https://avatars0.githubusercontent.com/u/1375307?v=4" width="100px;" alt=""/><br /><sub><b>Ota Mares</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=omares" title="Code">💻</a></td>
+    <td align="center"><a href="https://hoon.dev"><img src="https://avatars2.githubusercontent.com/u/6194958?v=4" width="100px;" alt=""/><br /><sub><b>Sunghoon Kang</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=devholic" title="Code">💻</a></td>
   </tr>
 </table>
 
