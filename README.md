@@ -5,7 +5,7 @@
 <hr />
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/asdf-community/asdf-direnv/Main%20workflow?style=flat-square)](https://github.com/asdf-community/asdf-direnv/actions)
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![License](https://img.shields.io/github/license/asdf-community/asdf-direnv?style=flat-square&color=brightgreen)](https://github.com/asdf-community/asdf-direnv/blob/master/LICENSE)
 
