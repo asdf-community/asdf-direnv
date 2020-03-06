@@ -300,6 +300,9 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://tech.rebuy.com/"><img src="https://avatars0.githubusercontent.com/u/1375307?v=4" width="100px;" alt=""/><br /><sub><b>Ota Mares</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=omares" title="Code">💻</a></td>
     <td align="center"><a href="https://hoon.dev"><img src="https://avatars2.githubusercontent.com/u/6194958?v=4" width="100px;" alt=""/><br /><sub><b>Sunghoon Kang</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=devholic" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/comfortablynick"><img src="https://avatars2.githubusercontent.com/u/26119366?v=4" width="100px;" alt=""/><br /><sub><b>Nick Murphy</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=comfortablynick" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
