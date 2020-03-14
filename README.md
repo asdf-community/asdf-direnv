@@ -302,6 +302,7 @@ Thanks goes to these wonderful people
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/comfortablynick"><img src="https://avatars2.githubusercontent.com/u/26119366?v=4" width="100px;" alt=""/><br /><sub><b>Nick Murphy</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=comfortablynick" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/evhan"><img src="https://avatars1.githubusercontent.com/u/96712?v=4" width="100px;" alt=""/><br /><sub><b>Evan Hanson</b></sub></a><br /><a href="https://github.com/asdf-community/asdf-direnv/commits?author=evhan" title="Code">💻</a></td>
   </tr>
 </table>
 
