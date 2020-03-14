@@ -23,5 +23,9 @@
 # Otherwise two argments are expected, a plugin name and version.
 # If no arguments are given, a .tool-versions file will be looked up.
 use_asdf() {
-  source_env "$("$(asdf which direnv_use_asdf | xargs dirname | xargs dirname)/bin/direnv_use_asdf" _asdf_env_file "$@")"
+  local env
+  env=$("$(asdf which direnv_use_asdf | xargs dirname | xargs dirname)/bin/direnv_use_asdf" _asdf_env_file "$@")
+  if [ -n "$env" ]; then
+    source_env "$env"
+  fi
 }
