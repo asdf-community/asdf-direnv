@@ -66,9 +66,10 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: brew install coreutils
 
-      - name: Install bats
+      - name: Install bats-core on Unix systems
         run: |
-          git clone https://github.com/bats-core/bats-core.git $HOME/bats-core
+          git clone --depth 1 --branch v1.1.0 https://github.com/bats-core/bats-core.git $HOME/bats-core
+          echo "::add-path::$HOME/bats-core/bin"
 
       - name: Install asdf
         run: |
@@ -96,8 +97,7 @@ jobs:
 
       - name: Run ShellCheck
         run: |
-          shellcheck bin/*
-          shellcheck shims/*
+          shellcheck bin/* lib/commands/*
 
   format:
     runs-on: macos-latest

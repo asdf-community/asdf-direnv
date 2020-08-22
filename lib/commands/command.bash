@@ -35,12 +35,7 @@ _load_asdf_utils() {
   fi
 }
 
-_die() {
-  log_error "$*"
-  exit 1
-}
-
-_asdf_env_file() {
+_asdf_cached_envrc() {
   local dump_dir tools_file tools_cksum env_file
   dump_dir="$(asdf where direnv)/env"
   tools_file="$(_local_versions_file)"
@@ -58,35 +53,14 @@ _asdf_env_file() {
   rm "$dump_dir/$(echo "$tools_cksum" | cut -d- -f1-2)"-* 2>/dev/null || true
   log_status "Creating env file $env_file"
 
-  _asdf_env "$@" | _no_dups >"$env_file"
+  _asdf_envrc "$tools_file" | _no_dups >"$env_file"
   echo "$env_file"
 }
 
-_asdf_env() {
-  if [ -z "$*" ] || [ "current" == "$*" ]; then
-    _asdf_env global
-    _asdf_env local
-
-  elif [ "global" == "$*" ]; then
-    _load_global_plugins_env "$(_local_versions_file)"
-
-  elif [ "local" == "$*" ]; then
-    _load_local_plugins_env "$(_local_versions_file)"
-
-  elif [ -f "$1" ]; then # [tool-versions file]
-    _load_local_plugins_env "$1"
-
-  elif [ -n "$1" ] && [ -z "$2" ]; then # [name] only
-    check_if_plugin_exists "$1"
-    _load_plugin_version_and_file "$1"
-
-  elif [ -n "$1" ] && [ -n "$2" ]; then # [name] [version]
-    check_if_version_exists "$1" "$2"
-    _plugin_env_bash "$1" "$2"
-
-  else
-    _die "use asdf: Invalid args. See README.md for some examples."
-  fi
+_asdf_envrc() {
+  local tools_file="$1"
+  _load_global_plugins_env "$tools_file"
+  _load_local_plugins_env "$tools_file"
 }
 
 # compute a checksump to see if we can use the cache or have to compute the environment again
@@ -94,7 +68,7 @@ _cksum() {
   local file="$1"
   # working directory, the arguments given to use_asdf, direnv status, and the tools-version modification times.
   # shellcheck disable=SC2154 # var is referenced but not assigned.
-  cksum <(pwd) <(echo "$@") <("$direnv" status) <(ls -l "$file") | cut -d' ' -f 1 | tr $'\n' '-' | sed -e 's/-$//'
+  cksum <(pwd) <(echo "$@") <("$direnv" status) <(test -f "$file" && ls -l "$file") | cut -d' ' -f 1 | tr $'\n' '-' | sed -e 's/-$//'
 }
 
 _tgrep() {
@@ -122,8 +96,8 @@ _local_versions_file() {
   tool_versions="$(find_up .tool-versions)"
   if [ -f "$tool_versions" ]; then
     echo "$tool_versions"
-  else
-    _die "could not find .tool-versions file"
+  elif [ -f "$HOME/.tool-versions" ]; then
+    echo "$HOME/.tool-versions"
   fi
 }
 
@@ -138,11 +112,11 @@ _all_plugins_list() {
 
 _except_local_plugins_list() {
   local tool_versions=$1
-  local tmp_local_plugin_names
-  tmp_local_plugin_names="$(mktemp)"
-  _plugins_in_file "$tool_versions" >"$tmp_local_plugin_names"
-  _all_plugins_list | _new_items "$tmp_local_plugin_names"
-  rm "$tmp_local_plugin_names"
+  if [ -f "$tool_versions" ]; then
+    _all_plugins_list | _new_items <(_plugins_in_file "$tool_versions")
+  else
+    _all_plugins_list
+  fi
 }
 
 _load_global_plugins_env() {
@@ -152,7 +126,9 @@ _load_global_plugins_env() {
 
 _load_local_plugins_env() {
   local tool_versions=$1
-  _plugins_in_file "$tool_versions" | _tail_r | _each_do _load_plugin_version_and_file
+  if [ -f "$tool_versions" ]; then
+    _plugins_in_file "$tool_versions" | _tail_r | _each_do _load_plugin_version_and_file
+  fi
 }
 
 # from asdf plugin_current_command
@@ -213,4 +189,11 @@ _plugin_env_bash() {
   _path_changed_entries "$old_path" "$new_path" | _tail_r | _each_do echo PATH_add
 }
 
-"$@"
+case "$1" in
+  "_"*)
+    "$@"
+    ;;
+  *)
+    exec "$direnv" "$@"
+    ;;
+esac
