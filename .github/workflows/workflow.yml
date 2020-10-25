@@ -54,7 +54,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest]
-        direnv: [2.23.0]
+        direnv: [2.23.1]
 
     runs-on: ${{ matrix.os }}
 

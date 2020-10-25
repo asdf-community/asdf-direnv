@@ -34,7 +34,7 @@ teardown() {
 
   [ -z "$FOO" ]
   echo 'export FOO=BAR' > "$PROJECT_DIR/.envrc"
-  direnv allow .
+  direnv allow "$PROJECT_DIR/.envrc"
 
   envrc_load
   [ "$FOO" ==  "BAR" ]
