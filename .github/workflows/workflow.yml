@@ -1,44 +1,19 @@
 name: Main workflow
 
 on:
-  push:
-    paths-ignore:
-      - "**.md"
-      - ".all-contributorsrc"
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - ".all-contributorsrc"
+  push:
   schedule:
     - cron: "0 0 * * 5"
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install asdf
-        run: git clone https://github.com/asdf-vm/asdf.git $HOME/asdf
-
-      - name: Install direnv and print version
-        run: |
-          . $HOME/asdf/asdf.sh
-          asdf plugin-add direnv $GITHUB_WORKSPACE
-          asdf install direnv latest
-        env:
-          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   plugin_test:
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os:
+          - macos-latest
+          - ubuntu-latest
 
     runs-on: ${{ matrix.os }}
 
@@ -52,9 +27,13 @@ jobs:
 
   test:
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
-        direnv: [2.23.1]
+        os:
+          - macos-latest
+          - ubuntu-latest
+        direnv:
+          - 2.23.1
 
     runs-on: ${{ matrix.os }}
 
@@ -62,22 +41,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Setup asdf
+        uses: asdf-vm/actions/setup@v1
+
       - name: macOS coreutils # needed by bats-core
         if: matrix.os == 'macos-latest'
         run: brew install coreutils
 
-      - name: Install bats-core on Unix systems
+      - name: Install bats-core
         run: |
           git clone --depth 1 --branch v1.1.0 https://github.com/bats-core/bats-core.git $HOME/bats-core
-          echo "::add-path::$HOME/bats-core/bin"
-
-      - name: Install asdf
-        run: |
-          git clone https://github.com/asdf-vm/asdf.git $HOME/asdf
+          echo "$HOME/bats-core/bin" >>"$GITHUB_PATH"
 
       - name: Run tests
         run: |
-          export PATH=$HOME/bats-core/bin:$HOME/asdf/bin:$PATH
           asdf plugin-add direnv $GITHUB_WORKSPACE
           asdf install direnv ${{ matrix.direnv }}
           asdf global direnv ${{ matrix.direnv }}
@@ -96,8 +73,7 @@ jobs:
         run: brew install shellcheck
 
       - name: Run ShellCheck
-        run: |
-          shellcheck bin/* lib/commands/*
+        run: shellcheck bin/* lib/commands/*
 
   format:
     runs-on: macos-latest
