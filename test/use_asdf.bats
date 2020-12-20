@@ -290,12 +290,3 @@ EOF
   [ "$dummy_line" -lt "$mummy_line" ] # dummy is resolved by `use asdf global` since its not in tool-versions
   [ "$mummy_line" -lt "$rummy_line" ]
 }
-
-@test "use asdf list-all - list available release versions" {
-  cd "$PROJECT_DIR"
-
-  echo $(asdf list-all direnv)
-  latest_version=$(asdf list-all direnv | tail -1)
-
-  [ "$latest_version" == "was" ]
-}
