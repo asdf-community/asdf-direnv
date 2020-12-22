@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
   schedule:
-    - cron: "0 0 * * 5"
+    - cron: 0 0 * * 5
 
 jobs:
   plugin_test:
@@ -22,8 +22,6 @@ jobs:
         uses: asdf-vm/actions/plugin-test@v1
         with:
           command: direnv version
-        env:
-          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     strategy:
@@ -59,8 +57,6 @@ jobs:
           asdf install direnv ${{ matrix.direnv }}
           asdf global direnv ${{ matrix.direnv }}
           bats test
-        env:
-          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
     runs-on: macos-latest
