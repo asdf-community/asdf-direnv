@@ -54,6 +54,7 @@ envrc_load() {
 }
 
 envrc_use_asdf() {
+  # shellcheck disable=SC2016
   echo 'source $(asdf direnv hook asdf)' >".envrc"
   echo "use asdf $*" >>".envrc"
   direnv allow
