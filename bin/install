@@ -30,7 +30,7 @@ install_direnv() {
   local architecture
 
   case "$(uname -m)" in
-    aarch64*) architecture="arm64" ;;
+    aarch64* | arm64) architecture="arm64" ;;
     armv5* | armv6* | armv7*) architecture="arm" ;;
     i686*) architecture="386" ;;
     x86_64*) architecture="amd64" ;;
