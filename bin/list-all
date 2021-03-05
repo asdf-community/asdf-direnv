@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
-
-cmd="curl --silent --location"
-releases_path="https://api.github.com/repos/direnv/direnv/releases"
-
-if [ -n "$GITHUB_API_TOKEN" ]; then
-  cmd="$cmd --header 'Authorization: token $GITHUB_API_TOKEN'"
-fi
+set -Eeuo pipefail
 
 sort_versions() {
   sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
     LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
 }
 
-versions=$(eval "$cmd $releases_path" | grep 'tag_name' | sed -e 's/^.* "//;s/^v//;s/",$//' | sort_versions | xargs)
+list_all_versions() {
+  git ls-remote --tags --refs https://github.com/direnv/direnv.git |
+    grep -o 'refs/tags/.*' |
+    cut -d/ -f3- |
+    sed 's/^v//'
+}
 
-echo "$versions"
+list_all_versions | sort_versions | xargs echo
