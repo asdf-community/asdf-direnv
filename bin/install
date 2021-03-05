@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -Eeuo pipefail
+
+trap cleanup SIGINT SIGTERM ERR
+
+cleanup() {
+  trap - SIGINT SIGTERM ERR
+  rm -rf "$ASDF_INSTALL_PATH"
+  echo
+  echo -e "\e[33mCleanup:\e[m Something went wrong!"
+  echo
+  echo "$(caller): ${BASH_COMMAND}"
+}
 
 fail() {
   echo -e "\e[31mFail:\e[m $*"
@@ -45,16 +56,11 @@ install_direnv() {
   local download_url="https://github.com/direnv/direnv/releases/download/v${version}/direnv.${platform}-${architecture}"
   local source_path="${install_path}/bin/direnv"
 
-  (
-    echo "∗ Downloading and installing direnv..."
-    mkdir -p "${install_path}/bin"
-    curl --silent --location --create-dirs --output "$source_path" "$download_url" || fail "Could not download"
-    chmod +x "${install_path}/bin/direnv" || fail "Could not set executable bit on binary"
-    echo "The installation was successful!"
-  ) || (
-    rm -rf "$install_path"
-    fail "An error occurred"
-  )
+  echo "∗ Downloading and installing direnv..."
+  mkdir -p "${install_path}/bin"
+  curl --fail --silent --location --create-dirs --output "$source_path" "$download_url"
+  chmod +x "${install_path}/bin/direnv"
+  echo "The installation was successful!"
 }
 
 install_direnv "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
