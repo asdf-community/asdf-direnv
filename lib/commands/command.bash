@@ -13,8 +13,10 @@ _load_asdf_utils() {
     ASDF_DIR="${ASDF_DIR:-"$(command -v asdf | xargs dirname | xargs dirname)"}"
     # shellcheck disable=SC1090 # Can't follow non-constant source. Use a directive to specify location.
     if [ -f "$ASDF_DIR/lib/utils.sh" ]; then
+      # shellcheck disable=SC1091
       source "$ASDF_DIR/lib/utils.sh"
     else
+      # shellcheck disable=SC1091
       source "$ASDF_DIR/lib/utils.bash"
     fi
   fi
