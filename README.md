@@ -82,8 +82,8 @@ most recent direnv version:
 
 ```bash
 asdf plugin-add direnv
-asdf install direnv 2.20.0
-asdf global  direnv 2.20.0
+asdf install direnv latest
+asdf global direnv latest
 ```
 
 Then edit your `.bashrc` or equivalent shell profile:
