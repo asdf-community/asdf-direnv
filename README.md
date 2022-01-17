@@ -247,7 +247,7 @@ toolB 2.0
 
 ```bash
 # .envrc
-ASDF_PLUGIN_VERSION=1.0
+export ASDF_PLUGIN_VERSION=1.0
 use asdf
 ```
 
