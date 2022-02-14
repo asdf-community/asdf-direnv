@@ -40,7 +40,12 @@ _asdf_cached_envrc() {
   rm "$dump_dir/$(echo "$tools_cksum" | cut -d- -f1-2)"-* 2>/dev/null || true
   log_status "Creating env file $env_file"
 
-  _asdf_envrc "$tools_file" | _no_dups >"$env_file"
+  # Write to ${env_file}.new file instead of directly to ${env_file} so if we
+  # crash while generating the file, we don't leave the (broken) cached file
+  # around.
+  _asdf_envrc "$tools_file" | _no_dups >"${env_file}.new"
+  mv "${env_file}.new" "${env_file}"
+
   echo "$env_file"
 }
 
@@ -166,6 +171,16 @@ _plugin_env_bash() {
   local version="${2}"
   local old_env new_env old_path new_path
 
+  plugin_path=$(get_plugin_path "$plugin")
+  if [ ! -d "$plugin_path" ]; then
+    log_error "asdf plugin not installed: $plugin"
+    exit 1
+  fi
+  install_path=$(get_install_path "$plugin" "version" "$version")
+  if [ ! -d "$install_path" ]; then
+    log_error "$plugin $version not installed. Run 'asdf install' and try again."
+    exit 1
+  fi
   old_env="$(_direnv_bash_dump)"
   new_env="$(with_plugin_env "$plugin" "$version" _direnv_bash_dump | _new_items <(echo -n "$old_env"))"
 
