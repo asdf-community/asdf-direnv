@@ -176,10 +176,12 @@ _plugin_env_bash() {
     log_error "asdf plugin not installed: $plugin"
     exit 1
   fi
-  install_path=$(get_install_path "$plugin" "version" "$version")
-  if [ ! -d "$install_path" ]; then
-    log_error "$plugin $version not installed. Run 'asdf install' and try again."
-    exit 1
+  if [ "$version" != "system" ]; then
+    install_path=$(get_install_path "$plugin" "version" "$version")
+    if [ ! -d "$install_path" ]; then
+      log_error "$plugin $version not installed. Run 'asdf install' and try again."
+      exit 1
+    fi
   fi
   old_env="$(_direnv_bash_dump)"
   new_env="$(with_plugin_env "$plugin" "$version" _direnv_bash_dump | _new_items <(echo -n "$old_env"))"
