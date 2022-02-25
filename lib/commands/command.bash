@@ -179,7 +179,7 @@ _plugin_env_bash() {
   if [ "$version" != "system" ]; then
     install_path=$(get_install_path "$plugin" "version" "$version")
     if [ ! -d "$install_path" ]; then
-      log_error "$plugin $version not installed. Run 'asdf install' and try again."
+      log_error "$plugin $version not installed. Run 'asdf install' and then 'direnv reload'."
       exit 1
     fi
   fi
