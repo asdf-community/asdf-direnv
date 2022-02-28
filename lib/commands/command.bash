@@ -140,7 +140,7 @@ _load_plugin_version_and_file() {
     _plugin_env_bash "$plugin_name" "$version"
   done
   if [ -f "$path" ]; then
-    echo watch_file "$path"
+    printf 'watch_file %q\n' "$path"
   fi
 }
 
