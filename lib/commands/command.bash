@@ -8,11 +8,39 @@ if [ -z "$(declare -f -F watch_file)" ]; then
   eval "$(asdf exec direnv stdlib)"
 fi
 
+# This is inspired by https://stackoverflow.com/a/1116890
+_follow_symlink() {
+  path="$1"
+
+  # Start in the directory of the (possible) symlink.
+  cd "$(dirname "$path")"
+  filename="$(basename "$path")"
+
+  # Follow symlinks until we run out of symlinks.
+  # This probably will loop forever if there's a cycle.
+  while [ -L "$path" ]; do
+    path="$(readlink "$filename")"
+    cd "$(dirname "$path")"
+    filename="$(basename "$path")"
+  done
+
+  # Now print out the final directory we ended up in, plus the final filename.
+  echo "$(pwd -P)/$filename"
+}
+
 _load_asdf_utils() {
   if [ -z "$(declare -f -F with_plugin_env)" ]; then
-    ASDF_DIR="$(asdf info 2>/dev/null | grep ASDF_DIR | cut -d= -f2-)"
+    ASDF_DIR="${ASDF_DIR:-"$(_follow_symlink "$(command -v asdf)" | xargs dirname | xargs dirname)"}"
+    # libexec is a Homebrew specific thing. See
+    # https://github.com/asdf-community/asdf-direnv/issues/95 for details.
+    local lib_file
+    lib_file=$(ls "$ASDF_DIR"/{lib,libexec/lib}/utils.bash 2>/dev/null || true)
+    if [ ! -f "$lib_file" ]; then
+      log_error "Could not find asdf utils.bash file in $ASDF_DIR"
+      return 1
+    fi
     # shellcheck source=/dev/null # we don't want shellcheck trying to find this file
-    source "$ASDF_DIR/lib/utils.bash"
+    source "$lib_file"
   fi
 }
 
