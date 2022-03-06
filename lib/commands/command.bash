@@ -16,9 +16,17 @@ _load_asdf_utils() {
   fi
 }
 
+_cache_dir() {
+  XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+  local dir
+  dir=$XDG_CACHE_HOME/asdf-direnv
+  mkdir -p "$dir"
+  echo "$dir"
+}
+
 _asdf_cached_envrc() {
   local dump_dir tools_file tools_cksum env_file
-  dump_dir="$(asdf where direnv)/env"
+  dump_dir="$(_cache_dir)/env"
   tools_file="$(_local_versions_file)"
   tools_cksum="$(_cksum "$tools_file" "$@")"
   env_file="$dump_dir/$tools_cksum"
