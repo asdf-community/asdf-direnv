@@ -55,6 +55,7 @@ _cache_dir() {
 _asdf_cached_envrc() {
   local dump_dir tools_file tools_cksum env_file
   dump_dir="$(_cache_dir)/env"
+  generating_dump_dir="$(_cache_dir)/env-generating"
   tools_file="$(_local_versions_file)"
   tools_cksum="$(_cksum "$tools_file" "$@")"
   env_file="$dump_dir/$tools_cksum"
@@ -66,15 +67,18 @@ _asdf_cached_envrc() {
 
   _load_asdf_utils
 
-  mkdir -p "$dump_dir"
+  mkdir -p "$dump_dir" "$generating_dump_dir"
   rm "$dump_dir/$(echo "$tools_cksum" | cut -d- -f1-2)"-* 2>/dev/null || true
   log_status "Creating env file $env_file"
 
-  # Write to ${env_file}.new file instead of directly to ${env_file} so if we
+  # Write to a temp file first instead of directly to ${env_file} so if we
   # crash while generating the file, we don't leave the (broken) cached file
   # around.
-  _asdf_envrc "$tools_file" | _no_dups >"${env_file}.new"
-  mv "${env_file}.new" "${env_file}"
+  # We use a randomly chosen filename to allow two different processes to
+  # generate this at the same time without stepping on each other's toes.
+  generating_env_file="$(mktemp "$generating_dump_dir/$tools_cksum.XXXX")"
+  _asdf_envrc "$tools_file" | _no_dups >"${generating_env_file}"
+  mv "${generating_env_file}" "${env_file}"
 
   echo "$env_file"
 }
