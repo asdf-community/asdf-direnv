@@ -1,6 +1,10 @@
 SH_SRCFILES = $(shell git ls-files "bin/*" "*.bash")
 SHFMT_BASE_FLAGS = -s
 
+all:	test lint fmt-check
+
+.PHONY: all
+
 fmt:
 	shfmt -w $(SHFMT_BASE_FLAGS) $(SH_SRCFILES)
 .PHONY: fmt
@@ -16,3 +20,4 @@ lint:
 test:
 	bats test
 .PHONY: test
+
