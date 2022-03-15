@@ -279,6 +279,16 @@ watch_file "package.json"
 - Using `direnv status` can be helpful to inspect current state. Also,
   you might want to take a look to `direnv --help`.
 
+- Using a non-empty `ASDF_DIRENV_DEBUG` will enable bash-tracing with `set -x` and skip env-cache.
+
+  For example, if you are troubleshooting or trying to debug something weird on
+  your environment, use `env ASDF_DIRENV_DEBUG=true direnv reload` and provide any
+  relevant output on an [issue](issues/new).
+
+  Also, if you are contributing a new feature or bug-fix try running
+  `env ASDF_DIRENV_DEBUG=true make` to run all tests with trace mode. If any test
+  fails you will see more output.
+
 ## Useful links
 
 Read [direnv documentation](https://direnv.net/) for more on `.envrc`

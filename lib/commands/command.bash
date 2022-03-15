@@ -3,6 +3,10 @@
 # Exit on error, since this is an executable an not a sourced file.
 set -eo pipefail
 
+if [ -n "$ASDF_DIRENV_DEBUG" ]; then
+  set -x
+fi
+
 # Load direnv stdlib if not already loaded
 if [ -z "$(declare -f -F watch_file)" ]; then
   eval "$(asdf exec direnv stdlib)"
@@ -60,7 +64,7 @@ _asdf_cached_envrc() {
   tools_cksum="$(_cksum "$tools_file" "$@")"
   env_file="$dump_dir/$tools_cksum"
 
-  if [ -f "$env_file" ]; then
+  if [ -f "$env_file" ] && [ -z "$ASDF_DIRENV_DEBUG" ]; then
     echo "$env_file"
     return 0
   fi
@@ -84,6 +88,9 @@ _asdf_cached_envrc() {
 }
 
 _asdf_envrc() {
+  if [ -n "$ASDF_DIRENV_DEBUG" ]; then
+    echo 'set -x'
+  fi
   local tools_file="$1"
   _load_global_plugins_env "$tools_file"
   _load_local_plugins_env "$tools_file"
