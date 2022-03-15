@@ -125,8 +125,8 @@ teardown() {
   # plugin bin at head of PATH
   path_as_lines
   path_as_lines | sed -n 1p | grep "direnv"
-  path_as_lines | sed -n 2p | grep "$(dummy_shims_path dummy 1.0)"
-  path_as_lines | sed -n 3p | grep "$(dummy_bin_path dummy 1.0)"
+  path_as_lines | sed -n 2p | grep "$(dummy_bin_path dummy 1.0)"
+  path_as_lines | sed -n 3p | grep "$(dummy_shims_path dummy 1.0)"
 }
 
 @test "use asdf - exports plugin custom env not only PATH" {

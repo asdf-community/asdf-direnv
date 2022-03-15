@@ -203,7 +203,9 @@ _direnv_bash_dump() {
 _plugin_env_bash() {
   local plugin="${1}"
   local version="${2}"
-  local old_env new_env old_path new_path
+
+  # NOTE: unlike asdf, asdf-direnv does not support other installation types.
+  local install_type="version"
 
   plugin_path=$(get_plugin_path "$plugin")
   if [ ! -d "$plugin_path" ]; then
@@ -211,20 +213,28 @@ _plugin_env_bash() {
     exit 1
   fi
   if [ "$version" != "system" ]; then
-    install_path=$(get_install_path "$plugin" "version" "$version")
+    install_path=$(get_install_path "$plugin" "$install_type" "$version")
     if [ ! -d "$install_path" ]; then
       log_error "$plugin $version not installed. Run 'asdf install' and then 'direnv reload'."
       exit 1
     fi
   fi
-  old_env="$(_direnv_bash_dump)"
-  new_env="$(with_plugin_env "$plugin" "$version" _direnv_bash_dump | _new_items <(echo -n "$old_env"))"
 
-  echo "$new_env" | _tgrep -vF 'export PATH=' # export all env except PATH
-  eval "$(echo -n "$old_env" | _tgrep -F 'export PATH=' | sed -e 's#export PATH=#old_path=#')"
-  eval "$(echo -n "$new_env" | _tgrep -F 'export PATH=' | sed -e 's#export PATH=#new_path=#')"
+  # If plugin has custom-shims, add them first to they appear last on final PATH
+  if [ -d "$plugin_path/shims" ]; then
+    echo PATH_add "$plugin_path/shims"
+  fi
 
-  _path_changed_entries "$old_path" "$new_path" | _tail_r | _each_do echo PATH_add
+  # Add plugin bin_paths to PATH. We add them in reverse order to preserve original PATH.
+  # NOTE: The plugin returns a list of space-separated dirs relative to install_dir.
+  # NOTE: We don't add custom shims into path.
+  list_plugin_bin_paths "$plugin_name" "$version" "$install_type" |
+    tr $' ' $'\n' | _tail_r | sed -e "s#^#$install_path/#" | _each_do echo PATH_add
+
+  # If the plugin defines custom environment, source it.
+  if [ -f "${plugin_path}/bin/exec-env" ]; then
+    echo "ASDF_INSTALL_TYPE='$install_type' ASDF_INSTALL_VERSION='$version' ASDF_INSTALL_PATH='$install_path' source_env ${plugin_path}/bin/exec-env"
+  fi
 }
 
 case "$1" in
