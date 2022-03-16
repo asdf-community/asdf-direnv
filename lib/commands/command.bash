@@ -61,7 +61,7 @@ _asdf_cached_envrc() {
   dump_dir="$(_cache_dir)/env"
   generating_dump_dir="$(_cache_dir)/env-generating"
   tools_file="$(_local_versions_file)"
-  tools_cksum="$(_cksum "$tools_file" "$@")"
+  tools_cksum="$(_cksum "$tools_file" "$ASDF_DIRENV_DEBUG" "$@")"
   env_file="$dump_dir/$tools_cksum"
 
   if [ -f "$env_file" ] && [ -z "$ASDF_DIRENV_DEBUG" ]; then
