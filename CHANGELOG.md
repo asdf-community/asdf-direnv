@@ -9,7 +9,6 @@ All notable changes to this project will be documented in this file. See [Conven
 
 * Prepare for release 0.2.0 ([391c158](https://github.com/asdf-community/asdf-direnv/commit/391c158d168deda7b59a670919438e793e216f64))
 
-## [unreleased]
 
 ### Merged
 
