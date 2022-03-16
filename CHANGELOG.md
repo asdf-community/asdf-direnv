@@ -1,85 +1,68 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [ConventionalCommits.org](https://www.conventionalcommits.org/en/v1.0.0/)
+All notable changes to this project will be documented in this file.
 
-## 0.2.0 (2022-03-16)
+Please update it as part of your Pull-Request. Add a new entry at the top of the `Unreleased` section.
+Try to keep it short. Just a single line an the number of your PR/Issues. All other details should be provided
+on an related issues or the PR itself.
+
+When creating a new release, just create another section and include a link to the release and a
+github compare-link with the previous one.
+
+## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.2.0..master)
 
 
-### Miscellaneous Chores
-
-* Prepare for release 0.2.0 ([391c158](https://github.com/asdf-community/asdf-direnv/commit/391c158d168deda7b59a670919438e793e216f64))
+## [0.2.0](https://github.com/asdf-community/asdf-direnv/releases/v0.2.0) [(2022-03-16)](https://github.com/asdf-community/asdf-direnv/compare/0.1.0..v0.2.0)
 
 
-### Merged
+- Fix bug introduced by ASDF_DIRENV_DEBUG that was keeeping `set -x` on cached file. #111
 
-- Merge pull request #112 from asdf-community/please-release
+- Enable tracing with non-empty ASDF_DIRENV_DEBUG #110
 
- ([a59ea2a](a59ea2a37ff23732d70e3969ed81775daa4b4082))
+- Custom plugin shims now lower in PATH than bins #109
 
-- Merge pull request #111 from jfly/jfly/include-ASDF_DIRENV_DEBUG-in-checksum
+- Fix race condition when 2 processes are generating env files at the same time #107
 
- ([35efbc6](35efbc6daf18d9e7592ada59d216f3a1ad76b42f))
+- Do not assume that the $ASDF_DIR env var is set #104
 
-- Merge pull request #110 from asdf-community/debug
+- Use a different directory for cached envrc files. #105
 
-Enable tracing with non-empty ASDF_DIRENV_DEBUG ([925f70c](925f70c293e5976b447c8e520646b79c2e745cb8))
+- Use EditorConfig for shfmt "parser or printer flags" #98
 
-- Merge pull request #109 from asdf-community/bins-before-shims
+- Handle special characters in the watch patch. #99
 
-Custom plugin shims now lower in PATH than bins ([0b06acb](0b06acb61639fe700beaf86e5c34ade317ca7363))
+- Alternative way of loading asdf utils #96
 
-- Merge pull request #107 from jfly/issue-106
+- Better help #97
 
- ([ee6f68c](ee6f68c07b673f756e3d48f4d116e160833f428c))
+- Don't bother checking if a "system" version of a plugin is installed. #93
 
-- Merge pull request #104 from jfly/issue-96-do-not-assume-ASDF_DIR-is-set
+- More robust error handling #88
 
- ([6daf8f9](6daf8f90a63d130eed9803da2bfc92baae754cef))
+- Add export to environment variable #86
 
-- Merge pull request #105 from jfly/issue-103-use-different-directory-for-cached-envrc
+- Bump version shown in readme #71
 
-Use a different directory for cached envrc files. ([e7547a4](e7547a489312d45b51ccdc9b41308c17a4523fb8))
+- Improve handling of SIGINT, SIGTERM, and ERR #70
 
-- Merge pull request #100 from asdf-community/dependabot/github_actions/actions/checkout-3
+- Add support for Darwin on arm #65
 
- ([6426f13](6426f1336c7d06d1a12404b1df349a3ecf8d8490))
 
-- Merge pull request #98 from jfly/jfly/use-editorconfig-for-shfmt
+## [0.1.0](https://github.com/asdf-community/asdf-direnv/releases/0.1.0) [(2020-08-22)](https://github.com/asdf-community/asdf-direnv/compare/ca7e2145aee7c81d9208668a12395e356595518f..0.1.0)
 
-Use EditorConfig for shfmt "parser or printer flags" ([895397d](895397d8ac0dd44a23e1dffdce1d7c227ec7aa47))
+- Recommend having a wrapper direnv function so that people dont have to write asdf exec direnv stuff
 
-- Merge pull request #99 from jfly/issue-67-special-characters
+- Old shim is now part of asdf direnv extension command.
 
-Handle special characters in the watch patch. ([ddcac31](ddcac31ae687e90fc72b10ef3a98e436cb00544d))
+- You can have an .envrc with use asdf even if the directory has no .tool-versions file. All asdf current tools will be activated. In alpha
 
-- Merge pull request #96 from jfly/jfly/issue-95-brew-installed-asdf
+- Remove all variants of use asdf * have been removed.
 
- ([dc035c8](dc035c8214fd106d3a59c814f2ae2110a6aa0e2d))
+  Doing use asdf will just ask asdf which versions are available in current directory.
+  use asdf local/global were just internal apis and not intended for people to use.
+  use asdf tool version was a bad choice since people should store versions on their .tool-versions file.
 
-- Merge pull request #97 from jfly/jfly/better-help-message
+- Move commands to new asdf `lib/commands/*.bash` location
+  See https://asdf-vm.com/#/plugins-create?id=extension-commands-for-asdf-cli
 
- ([d840357](d840357a56e09fb75e46cbf7a441fd79247499a7))
-
-- Merge pull request #93 from jfly/issue-90
-
- ([1ee7d01](1ee7d0125de1d38bd71613cb1840ddd9ce7f107f))
-
-- Merge pull request #88 from jfly/better-errors
-
-More robust error handling ([d3f53b4](d3f53b4bc9d8f810e7abc5cefcb30d97933af31f))
-
-- Merge pull request #86 from glasserc/add-export-plugin-variable
-
-Add `export` to environment variable ([c4df7c1](c4df7c1f71c3183cfab662beee656a8e4e3b5594))
-
-- Merge pull request #71 from Jarred-Sumner/patch-1
-
-Bump version shown in readme ([0a0e1c4](0a0e1c42f55ba8c76e5e575491234e11b4f8a58c))
-
-- Merge pull request #70 from asdf-community/handle-error
-
-Improve handling of SIGINT, SIGTERM, and ERR ([f97cbd5](f97cbd50593b6f92e1c59b23cf96d06cf01448db))
-
-- Merge pull request #65 from zsprackett/master
-
-Add support for Darwin on arm ([e96ecf3](e96ecf374cb9588c7b400f991254814e3226eefb))
+- use `asdf exec direnv` in .bashrc (#39)
