@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [ConventionalCommits.org](https://www.conventionalcommits.org/en/v1.0.0/)
 
-## [unreleased]
+## 0.2.0 (2022-03-16)
+
+
+### Miscellaneous Chores
+
+* Prepare for release 0.2.0 ([391c158](https://github.com/asdf-community/asdf-direnv/commit/391c158d168deda7b59a670919438e793e216f64))
+
 
 ### Merged
 
@@ -77,5 +83,3 @@ Improve handling of SIGINT, SIGTERM, and ERR ([f97cbd5](f97cbd50593b6f92e1c59b23
 - Merge pull request #65 from zsprackett/master
 
 Add support for Darwin on arm ([e96ecf3](e96ecf374cb9588c7b400f991254814e3226eefb))
-
-
