@@ -235,8 +235,11 @@ _plugin_env_bash() {
   # Add plugin bin_paths to PATH. We add them in reverse order to preserve original PATH.
   # NOTE: The plugin returns a list of space-separated dirs relative to install_dir.
   # NOTE: We don't add custom shims into path.
-  list_plugin_bin_paths "$plugin_name" "$version" "$install_type" |
-    tr $' ' $'\n' | _tail_r | sed -e "s#^#$install_path/#" | _each_do echo PATH_add
+  # NOTE: If install_path is empty (ex. "system" version), skip this step so /bin doesn't get added to PATH.
+  if [ -n "$install_path" ]; then
+    list_plugin_bin_paths "$plugin_name" "$version" "$install_type" |
+      tr $' ' $'\n' | _tail_r | sed -e "s#^#$install_path/#" | _each_do echo PATH_add
+  fi
 
   # If the plugin defines custom environment, source it.
   if [ -f "${plugin_path}/bin/exec-env" ]; then
