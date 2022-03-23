@@ -11,6 +11,8 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.2.0..master)
 
+- Do not add plugin paths for "system" versions. #116 
+
 
 ## [0.2.0](https://github.com/asdf-community/asdf-direnv/releases/v0.2.0) [(2022-03-16)](https://github.com/asdf-community/asdf-direnv/compare/0.1.0..v0.2.0)
 
