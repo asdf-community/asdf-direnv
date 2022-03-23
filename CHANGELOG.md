@@ -3,8 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 Please update it as part of your Pull-Request. Add a new entry at the top of the `Unreleased` section.
-Try to keep it short. Just a single line an the number of your PR/Issues. All other details should be provided
-on an related issues or the PR itself.
+Try to keep it short. Just a single line and the number of your PR/Issues. 
+All other relevant information should be provided on related issues or the PR itself.
 
 When creating a new release, just create another section and include a link to the release and a
 github compare-link with the previous one.
@@ -14,7 +14,7 @@ github compare-link with the previous one.
 - Do not add plugin paths for "system" versions. #116 
 
 
-## [0.2.0](https://github.com/asdf-community/asdf-direnv/releases/v0.2.0) [(2022-03-16)](https://github.com/asdf-community/asdf-direnv/compare/0.1.0..v0.2.0)
+## [0.2.0](https://github.com/asdf-community/asdf-direnv/releases/v0.2.0) (2022-03-16)
 
 
 - Fix bug introduced by ASDF_DIRENV_DEBUG that was keeeping `set -x` on cached file. #111
@@ -50,7 +50,7 @@ github compare-link with the previous one.
 - Add support for Darwin on arm #65
 
 
-## [0.1.0](https://github.com/asdf-community/asdf-direnv/releases/0.1.0) [(2020-08-22)](https://github.com/asdf-community/asdf-direnv/compare/ca7e2145aee7c81d9208668a12395e356595518f..0.1.0)
+## [0.1.0](https://github.com/asdf-community/asdf-direnv/releases/0.1.0) (2020-08-22)
 
 - Recommend having a wrapper direnv function so that people dont have to write asdf exec direnv stuff
 
