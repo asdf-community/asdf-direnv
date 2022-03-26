@@ -349,6 +349,9 @@ watch_file "package.json"
   
 </details>
 
+- Sad that `asdf shell` doesn't work anymore? Try out `asdf direnv shell`
+  instead.
+
 ## Useful links
 
 Read [direnv documentation](https://direnv.net/) for more on `.envrc`

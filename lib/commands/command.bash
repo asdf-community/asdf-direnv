@@ -221,7 +221,7 @@ _load_plugin_version_and_file() {
 
   for version in "${versions[@]}"; do
     echo log_status "using asdf ${plugin_name} ${version}"
-    _plugin_env_bash "$plugin_name" "$version"
+    _plugin_env_bash "$plugin_name" "$version" "$plugin $version not installed. Run 'asdf install' and then 'direnv reload'."
   done
   if [ -f "$path" ]; then
     printf 'watch_file %q\n' "$path"
@@ -247,6 +247,7 @@ _direnv_bash_dump() {
 _plugin_env_bash() {
   local plugin="${1}"
   local version="${2}"
+  local not_installed_message="${3}"
 
   # NOTE: unlike asdf, asdf-direnv does not support other installation types.
   local install_type="version"
@@ -259,7 +260,7 @@ _plugin_env_bash() {
   if [ "$version" != "system" ]; then
     install_path=$(get_install_path "$plugin" "$install_type" "$version")
     if [ ! -d "$install_path" ]; then
-      log_error "$plugin $version not installed. Run 'asdf install' and then 'direnv reload'."
+      log_error "$not_installed_message"
       exit 1
     fi
   fi
@@ -284,11 +285,13 @@ _plugin_env_bash() {
   fi
 }
 
-case "$1" in
-  "_"*)
-    "$@"
-    ;;
-  *)
-    exec "$direnv" "$@"
-    ;;
-esac
+if [ "$0" == "${BASH_SOURCE[0]}" ]; then
+  case "$1" in
+    "_"*)
+      "$@"
+      ;;
+    *)
+      exec "$direnv" "$@"
+      ;;
+  esac
+fi
