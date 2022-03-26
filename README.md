@@ -267,7 +267,7 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 ```bash
 # ~/.bashrc or equivalent
 
-# Dont source `~/.asdf/asdf.sh`
+# Don't source `~/.asdf/asdf.sh`
 PATH="$PATH:~/.asdf/bin"
 source "~/.asdf/lib/asdf.sh" # just load the asdf wrapper function
 ```
