@@ -17,7 +17,7 @@ setup_asdf_direnv() {
   ASDF_DIRENV="$(dirname "$BATS_TEST_DIRNAME")"
 
   ASDF_WHERE_DIRENV="$(asdf where direnv)"
-  test -n "$ASDF_WHERE_DIRENV" || die "Expected asdf-direnv to be already be installed."
+  test -n "$ASDF_WHERE_DIRENV" || die "Expected asdf-direnv plugin to be already be installed."
 
   ASDF_DIRENV_VERSION="$(basename "$ASDF_WHERE_DIRENV")"
   PATH_WITHOUT_ASDF="$(echo "$PATH" | tr ':' $'\n' | grep -v asdf | tr $'\n' ':' | sed -e 's#:$##')"
@@ -39,6 +39,9 @@ setup_asdf_direnv() {
 
   echo "direnv $ASDF_DIRENV_VERSION" >"$HOME/.tool-versions"
   asdf reshim direnv "$ASDF_DIRENV_VERSION"
+
+  ASDF_DIRENV_BIN="$(asdf which direnv)" # uses ASDF_DIRENV_VERSION from env.
+  test -x "$ASDF_DIRENV_BIN"             # make sure it's executable
 
   PROJECT_DIR=$HOME/project
   mkdir -p "$PROJECT_DIR"
