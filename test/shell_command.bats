@@ -28,7 +28,6 @@ teardown() {
 
 @test "calling with plugin name but without version fails" {
   run asdf direnv shell dummy
-  echo "$output" # debugging CI
   [ "$status" -eq 1 ]
   echo "$output" | grep "Please specify a version for dummy"
 }
