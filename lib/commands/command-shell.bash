@@ -10,26 +10,39 @@ fi
 # shellcheck source=lib/commands/command.bash
 source "$(dirname "${BASH_SOURCE[0]}")/command.bash"
 
-if [ $# -eq 0 ]; then
-  echo "Usage: asdf direnv shell <name> <version> [<name> <version>]..."
-  echo ""
-  echo "Example:"
-  echo ""
-  echo "$ asdf direnv shell python 3.8.10 nodejs 14.18.2"
-  exit 1
-fi
+case "$1" in
+  "" | "-h" | "--help" | "help")
+    cat <<-EOF
+Usage: asdf direnv shell <name> <version> [<name> <version>]... [-- <command> <args>...]
 
-load_plugins() {
+Examples:
+
+$ asdf direnv shell python 3.8.10 nodejs 14.18.2
+
+$ asdf direnv shell nodejs 14.18.2 -- npx servor
+EOF
+    exit 1
+    ;;
+esac
+
+run_with_plugins() {
   while [ $# -gt 0 ]; do
+    if [ "--" = "$1" ]; then
+      shift
+      break
+    fi
+
     plugin="$1"
     shift
+
     if [ $# -eq 0 ]; then
       log_error "Please specify a version for $plugin."
-      exit 1
+      return 1
     fi
     version="$1"
     shift
-    echo "Loading $plugin $version" >/dev/stderr
+
+    log_status "using asdf $plugin $version"
 
     # Set the appropriate ASDF_*_VERSION environment variable. This isn't
     # strictly necessary because we're not using shims, but it's nice because
@@ -45,8 +58,12 @@ load_plugins() {
 
     eval "$(_plugin_env_bash "$plugin" "$version" "$plugin $version not installed. Run 'asdf install $plugin $version' and try again.")"
   done
+
+  if [ $# -eq 0 ]; then
+    $SHELL
+  else
+    "$@"
+  fi
 }
 
-load_plugins "$@"
-
-$SHELL
+run_with_plugins "$@"
