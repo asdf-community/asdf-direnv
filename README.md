@@ -89,7 +89,8 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ## Usage
 
-#### Setup
+<details open>
+  <summary><h3>Setup</h3></summary>
 
 First, make sure you install this plugin, which will make all the
 `asdf direnv` subcommands available to you:
@@ -142,6 +143,11 @@ source "$(asdf direnv hook asdf)"
 # Uncomment the following line to make direnv silent by default.
 # export DIRENV_LOG_FORMAT=""
 ```
+  
+</details>
+
+<details open>
+  <summary><h4>Per-Project setup</h4></summary>
 
 ##### The .envrc file in your project root.
 
@@ -156,8 +162,11 @@ use asdf
 ```
 
 Finally, run `direnv allow` to trust your new file.
+  
+</details>
 
-###### Cached environment
+<details>
+  <summary><h6>Cached environment</h6></summary>
 
 To speed up things a lot, this plugin creates direnv `envrc` files that contain
 your plugins environment. They are created whenever your `.envrc` or your
@@ -177,8 +186,11 @@ direnv: using asdf elixir 1.8.1-otp-21
 direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
+  
+</details>
 
-## Benchmark
+<details>
+  <summary><h6>Benchmark</h6></summary>
 
 ![benchmark](https://user-images.githubusercontent.com/38746192/67657932-8483fb80-f99b-11e9-96d8-3d46d419ea62.png)
 
@@ -219,8 +231,11 @@ without asdf-direnv:
 ```bash
 hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 ```
+  
+</details>
 
-### Pro-Tips
+<details>
+  <summary><h3>Pro-Tips</h3></summary>
 
 - Take a look at `direnv help true`.
 
@@ -314,6 +329,8 @@ watch_file "package.json"
   Also, if you are contributing a new feature or bug-fix try running
   `env ASDF_DIRENV_DEBUG=true make` to run all tests with trace mode. If any test
   fails you will see more output.
+  
+</details>
 
 ## Useful links
 
