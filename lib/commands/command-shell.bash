@@ -37,7 +37,7 @@ run_with_plugins() {
 
     if [ $# -eq 0 ]; then
       log_error "Please specify a version for $plugin."
-      return 1
+      exit 1
     fi
     version="$1"
     shift
@@ -60,9 +60,9 @@ run_with_plugins() {
   done
 
   if [ $# -eq 0 ]; then
-    $SHELL
+    exec $SHELL
   else
-    "$@"
+    exec "$@"
   fi
 }
 
