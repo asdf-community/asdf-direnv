@@ -8,6 +8,11 @@
 
 ## Motivation (or shims de-motivation)
 
+asdf version resolution makes shims [*slow*](https://github.com/asdf-community/asdf-direnv/issues/80#issuecomment-1079485165)
+
+<details>
+  
+  
 [asdf](https://asdf-vm.com) is a great tool for managing multiple versions of
 command-line tools. 99% of the time these managed tools work just as expected.
 
@@ -47,8 +52,15 @@ with tons of system tools that will shadow those already installed on your
 system. While this may be desirable while the language is in use, having it
 installed and not activated leaves dead shims all over the place.
 
+</details>
+  
 ## Solution
 
+Perform asdf version resolution only once and defer environment loading to direnv.
+
+<details>
+  
+  
 All these previously mentioned issues can be solved by using asdf along with the
 [direnv](https://direnv.net/) tool.
 
@@ -66,6 +78,8 @@ asdf-managed executable in PATH. Which will improve speed since version
 resolution is out of the way and made only once by `direnv` upon entering your
 project directory. Commands trying to find themselves in PATH will find their
 expected location. Also, no more _reshim_ needed upon `npm install`.
+  
+</details>
 
 ## Prerequirements
 
@@ -77,25 +91,38 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 #### Setup
 
-First, make sure you install this plugin, then install and globally activate the
-most recent direnv version:
+First, make sure you install this plugin, which will make all the
+`asdf direnv` subcommands available to you:
 
 ```bash
 asdf plugin-add direnv
+asdf help # you should see `asdf direnv` commands listed here.
+```
+
+Then, make sure you have [direnv](https://direnv.net/) installed.
+You can either use your system package manager or asdf to install it:
+
+```bash
+# When already installed just activate the system version:
+asdf global direnv system
+```
+
+```bash
+# Install with asdf and globally activate:
 asdf install direnv latest
 asdf global direnv latest
 ```
+
 
 Then edit your `.bashrc` or equivalent shell profile:
 
 ```bash
 # File: ~/.bashrc
 
-# Hook direnv into your shell.
-eval "$(asdf exec direnv hook bash)"
+export ASDF_DIRENV_BIN="$(asdf which direnv)" # or `$(command -v direnv)` for system managed.
 
-# A shortcut for asdf managed direnv.
-direnv() { asdf exec direnv "$@"; }
+# Hook direnv into your shell.
+eval "$($ASDF_DIRENV_BIN hook bash)"
 ```
 
 If you are not using bash, adapt the previous snippet by following the
@@ -134,8 +161,7 @@ Finally, run `direnv allow` to trust your new file.
 
 To speed up things a lot, this plugin creates direnv `envrc` files that contain
 your plugins environment. They are created whenever your `.envrc` or your
-`.tool-versions` files change, and are cached under the current direnv
-installation directory inside `env/*`.
+`.tool-versions` files change, and are cached under `$XDG_CACHE_HOME/asdf-direnv`.
 
 If you ever need to regenerate a cached environment file, just `touch .envrc`.
 
