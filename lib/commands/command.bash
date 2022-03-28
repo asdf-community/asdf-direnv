@@ -21,7 +21,7 @@ if [ -z "$(declare -f -F watch_file)" ]; then
   #
   # If all of this fails, we inform the users with an error.
   #
-  direnv="${ASDF_DIRENV_BIN:-$direnv}"
+  direnv="${direnv:-$ASDF_DIRENV_BIN}"
 
   if [ -z "$direnv" ]; then
     direnv="$(command -v direnv || true)" # prevent exit on failure
