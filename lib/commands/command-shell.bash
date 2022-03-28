@@ -32,6 +32,8 @@ run_with_plugins() {
       break
     fi
 
+    local plugin version
+
     plugin="$1"
     shift
 
