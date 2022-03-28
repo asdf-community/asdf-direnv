@@ -9,7 +9,14 @@ fi
 
 # Load direnv stdlib if not already loaded
 if [ -z "$(declare -f -F watch_file)" ]; then
-  eval "$(asdf exec direnv stdlib)"
+  # try using direnv from PATH if already available, since
+  # this is much faster than going thru asdf.
+  # Otherwise for non-system direnv we take the slow path.
+  if command -v direnv >&2>/dev/null; then
+    eval "$(direnv stdlib)"
+  else
+    eval "$(asdf exec direnv stdlib)"
+  fi
 fi
 
 # This is inspired by https://stackoverflow.com/a/1116890
