@@ -11,6 +11,8 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.2.0..master)
 
+- Speed up direnv stdlib by trying not to use asdf exec. #120
+
 - Do not add plugin paths for "system" versions. #116 
 
 
