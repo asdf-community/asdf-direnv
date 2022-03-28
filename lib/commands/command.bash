@@ -9,14 +9,44 @@ fi
 
 # Load direnv stdlib if not already loaded
 if [ -z "$(declare -f -F watch_file)" ]; then
-  # try using direnv from PATH if already available, since
-  # this is much faster than going thru asdf.
-  # Otherwise for non-system direnv we take the slow path.
-  if command -v direnv >&2>/dev/null; then
-    eval "$(direnv stdlib)"
-  else
-    eval "$(asdf exec direnv stdlib)"
+  # We need to eval direnv stdlib, but before doing so
+  # we need to determine which direnv executable we should use.
+  #
+  # The fastest way is either an already loaded $direnv variable
+  # (as exported by direnv stdlib) or a user specified $ASDF_DIRENV_BIN.
+  #
+  # Otherwise if we find direnv in PATH, we use that.
+  #
+  # Otherwise - but a bit slow path - we ask asdf to resolve direnv.
+  #
+  # If all of this fails, we inform the users with an error.
+  #
+  direnv="${ASDF_DIRENV_BIN:-$direnv}"
+
+  if [ -z "$direnv" ]; then
+    direnv="$(command -v direnv || true)" # prevent exit on failure
   fi
+
+  if [ -z "$direnv" ]; then
+    direnv="$(asdf which direnv 2>/dev/null || true)" # prevent exit on failure
+  fi
+
+  if [ -z "$direnv" ]; then
+    cat <<-'EOF' >&2
+No direnv executable found. Please do one of the following:
+
+With a system installed direnv
+
+    export ASDF_DIRENV_BIN="$(command -v direnv)"
+
+With an asdf installed direnv
+
+    export ASDF_DIRENV_BIN="$(asdf which direnv)"
+EOF
+    exit 1
+  fi
+
+  eval "$("$direnv" stdlib)"
 fi
 
 # This is inspired by https://stackoverflow.com/a/1116890
