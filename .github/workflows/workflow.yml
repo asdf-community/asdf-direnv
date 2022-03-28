@@ -48,7 +48,7 @@ jobs:
 
       - name: Install bats-core
         run: |
-          git clone --depth 1 --branch v1.1.0 https://github.com/bats-core/bats-core.git $HOME/bats-core
+          git clone --depth 1 --branch v1.5.0 https://github.com/bats-core/bats-core.git $HOME/bats-core
           echo "$HOME/bats-core/bin" >>"$GITHUB_PATH"
 
       - name: Run tests
