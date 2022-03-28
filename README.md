@@ -8,7 +8,7 @@
 
 ## Motivation (or shims de-motivation)
 
-asdf version resolution makes shims [*slow*](https://github.com/asdf-community/asdf-direnv/issues/80#issuecomment-1079485165)
+asdf version resolution [*is slow*](https://github.com/asdf-community/asdf-direnv/issues/80#issuecomment-1079485165) which makes every command execution pay that penalty. `asdf reshim` is needed for finding new executables, and some tools are not happy with their executables being masked by shims.
 
 <details>
   
