@@ -11,6 +11,8 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.2.0..master)
 
+- Add `asdf direnv setup` and `asdf direnv local`. #122
+
 - Document `ASDF_DIRENV_BIN` variable used to avoid doing direnv version resolution. #121
 
 - Speed up direnv stdlib by trying not to use asdf exec. #120
