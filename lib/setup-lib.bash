@@ -159,7 +159,7 @@ EOF
 }
 
 function direnv_asdf_integration() {
-  local rcfile="${XDG_CONFIG_HOME:-$HOME/.config}/direnv/direnvrc"
+  local rcfile="${XDG_CONFIG_HOME:-$HOME/.config}/direnv/lib/use_asdf.sh"
   cat <<-EOF | grep_or_add "$rcfile"
 source "\$(asdf direnv hook asdf)"
 

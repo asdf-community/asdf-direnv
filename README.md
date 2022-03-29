@@ -136,13 +136,13 @@ If you are not using bash, adapt the previous snippet by following the
 
 ##### Global asdf-direnv integration.
 
-The [`~/.config/direnv/direnvrc`](https://direnv.net/#faq) file is a good place
-to add common functionality for all `.envrc` file.
+The [`~/.config/direnv/`](https://direnv.net/#faq) directory is a good place
+to add common functionality for all `.envrc` files.
 
 The following snippet makes the `use asdf` feature available:
 
 ```bash
-# File: ~/.config/direnv/direnvrc
+# File: ~/.config/direnv/lib/use_asdf.sh
 source "$(asdf direnv hook asdf)"
 
 # Uncomment the following line to make direnv silent by default.
