@@ -49,6 +49,7 @@ setup_asdf_direnv() {
 
   PROJECT_DIR=$HOME/project
   mkdir -p "$PROJECT_DIR"
+  cd "$PROJECT_DIR" || exit 1
 }
 
 clean_asdf_direnv() {
