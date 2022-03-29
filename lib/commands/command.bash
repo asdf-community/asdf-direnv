@@ -8,12 +8,11 @@ if [ -n "$ASDF_DIRENV_DEBUG" ]; then
 fi
 
 # Load direnv stdlib if not already loaded
-if [ -z "$(declare -f -F watch_file)" ]; then
+if [ -z "$direnv" ] && [ -z "$(declare -f -F watch_file)" ]; then
   # We need to eval direnv stdlib, but before doing so
   # we need to determine which direnv executable we should use.
   #
-  # The fastest way is either an already loaded $direnv variable
-  # (as exported by direnv stdlib) or a user specified $ASDF_DIRENV_BIN.
+  # The fastest way is a user specified $ASDF_DIRENV_BIN.
   #
   # Otherwise if we find direnv in PATH, we use that.
   #
@@ -21,7 +20,7 @@ if [ -z "$(declare -f -F watch_file)" ]; then
   #
   # If all of this fails, we inform the users with an error.
   #
-  direnv="${direnv:-$ASDF_DIRENV_BIN}"
+  direnv="${ASDF_DIRENV_BIN}"
 
   if [ -z "$direnv" ]; then
     direnv="$(command -v direnv || true)" # prevent exit on failure
