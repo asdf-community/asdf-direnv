@@ -89,18 +89,23 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ## Usage
 
-<details open>
-  <summary><h3>Setup</h3></summary>
+### Setup
 
-First, make sure you install this plugin, which will make all the
-`asdf direnv` subcommands available to you:
+Install this plugin and run the automatic setup: `asdf direnv setup`.
+You can run this command for all of your preferred shells `bash`/`fish`/`zsh`.
 
 ```bash
 asdf plugin-add direnv
-asdf help # you should see `asdf direnv` commands listed here.
+asdf direnv setup bash
 ```
 
-Then, make sure you have [direnv](https://direnv.net/) installed.
+The automatic setup follows the steps documented bellow in the manual section,
+and will hint which files were modified, you might want to review its changes.
+
+<details>
+  <summary><h6>System Manual Setup</h6></summary>
+
+Make sure you have [direnv](https://direnv.net/) installed.
 You can either use your system package manager or asdf to install it:
 
 ```bash
@@ -146,8 +151,20 @@ source "$(asdf direnv hook asdf)"
   
 </details>
 
-<details open>
-  <summary><h4>Per-Project setup</h4></summary>
+### Per-Project setup
+
+The `asdf direnv local` command lets you install plugins, tool-versions, and activate
+your environment, all in a single command.
+
+
+``` bash
+asdf direnv local [<tool> <version>]...
+```
+
+<details>
+  <summary><h6>Per-Project Manual setup</h6></summary>
+
+Create a `.tool-versions` file either manually or using the `asdf local` command.
 
 ##### The .envrc file in your project root.
 

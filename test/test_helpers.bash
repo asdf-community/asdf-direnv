@@ -24,9 +24,13 @@ setup_asdf_direnv() {
 
   BASE_DIR=$(mktemp -dt asdf.XXXX)
   HOME=$BASE_DIR/home
+  XDG_CONFIG_HOME="$HOME/.config"
+  XDG_CACHE_HOME="$HOME/.cache"
   ASDF_DIR="$HOME/.asdf"
   ASDF_DATA_DIR="$ASDF_DIR"
   PATH="${ASDF_DIR}/bin:$PATH_WITHOUT_ASDF" # NOTE: dont add shims directory to PATH
+
+  mkdir -p "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME"
 
   mkdir -p "${ASDF_DIR}"/{bin,lib}
   mkdir -p "${ASDF_DATA_DIR}"/{plugins,installs,shims}
