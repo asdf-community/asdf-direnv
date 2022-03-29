@@ -91,7 +91,7 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ### Setup
 
-Install this plugin and run the automatic setup: `asdf direnv setup`.
+Install this plugin and run the automatic setup: `asdf direnv setup <shell>`.
 You can run this command for all of your preferred shells `bash`/`fish`/`zsh`.
 
 ```bash
@@ -99,11 +99,13 @@ asdf plugin-add direnv
 asdf direnv setup bash
 ```
 
+After setup, close and open your terminal.
+
 The automatic setup follows the steps documented bellow in the manual section,
 and will hint which files were modified, you might want to review its changes.
 
 <details>
-  <summary><h6>System Manual Setup</h6></summary>
+  <summary>manual steps</summary>
 
 Make sure you have [direnv](https://direnv.net/) installed.
 You can either use your system package manager or asdf to install it:
@@ -151,18 +153,17 @@ source "$(asdf direnv hook asdf)"
   
 </details>
 
-### Per-Project setup
+### Per-Project Environments
 
-The `asdf direnv local` command lets you install plugins, tool-versions, and activate
-your environment, all in a single command.
-
+Once direnv is hooked into your system, use the  `asdf direnv local`
+command on your project root directory to update your environment.
 
 ``` bash
 asdf direnv local [<tool> <version>]...
 ```
 
 <details>
-  <summary><h6>Per-Project Manual setup</h6></summary>
+  <summary>manual steps</summary>
 
 Create a `.tool-versions` file either manually or using the `asdf local` command.
 
@@ -182,7 +183,7 @@ Finally, run `direnv allow` to trust your new file.
   
 </details>
 
-<details>
+<details open>
   <summary><h4>Temporary environments for one-shot commands</h4></summary>
 
   Some times you just want to execute a one-shot commmand under certain
