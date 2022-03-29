@@ -101,7 +101,7 @@ asdf direnv setup bash
 
 After setup, close and open your terminal.
 
-The automatic setup follows the steps documented bellow in the manual section,
+The automatic setup follows the steps documented below in the manual section,
 and will hint which files were modified, you might want to review its changes.
 
 <details>
