@@ -183,6 +183,25 @@ Finally, run `direnv allow` to trust your new file.
 </details>
 
 <details>
+  <summary><h4>Temporary environments for one-shot commands</h4></summary>
+
+  Some times you just want to execute a one-shot commmand under certain
+  environment without creating/modifying `.envrc` and `.tool-versions` files
+  on your project directory. In those cases, you might want to try using
+  `asdf direnv shell`.
+
+
+``` bash
+# Enter a new shell having python and node
+$ asdf direnv shell python 3.8.10 nodejs 14.18.2
+
+# Just execute a npx command under some node version.
+$ asdf direnv shell nodejs 14.18.2 -- npx create-react-app
+```
+
+</details>
+
+<details>
   <summary><h6>Cached environment</h6></summary>
 
 To speed up things a lot, this plugin creates direnv `envrc` files that contain
@@ -267,7 +286,7 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 ```bash
 # ~/.bashrc or equivalent
 
-# Dont source `~/.asdf/asdf.sh`
+# Don't source `~/.asdf/asdf.sh`
 PATH="$PATH:~/.asdf/bin"
 source "~/.asdf/lib/asdf.sh" # just load the asdf wrapper function
 ```

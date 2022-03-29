@@ -18,6 +18,6 @@ lint:
 .PHONY: lint
 
 test:
-	bats test
+	env TERM=xterm bats -F tap test
 .PHONY: test
 

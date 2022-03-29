@@ -3,13 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 Please update it as part of your Pull-Request. Add a new entry at the top of the `Unreleased` section.
-Try to keep it short. Just a single line and the number of your PR/Issues. 
+Try to keep it short. Just a single line and the number of your PR/Issues.
 All other relevant information should be provided on related issues or the PR itself.
 
 When creating a new release, just create another section and include a link to the release and a
 github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.2.0..master)
+
+- Add a `asdf direnv shell` command that acts similar to the shims-based `asdf shell` command. #117
 
 - Add `asdf direnv setup` and `asdf direnv local`. #122
 
