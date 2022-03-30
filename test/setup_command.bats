@@ -27,7 +27,7 @@ teardown() {
 
 @test "setup fish modifies rcfile" {
   run asdf direnv setup fish
-  grep "set -g ASDF_DIRENV_BIN" "$XDG_CONFIG_HOME/fish/conf.d/asdf_direnv.fish"
+  grep "set -gx ASDF_DIRENV_BIN" "$XDG_CONFIG_HOME/fish/conf.d/asdf_direnv.fish"
   grep "direnv hook fish" "$XDG_CONFIG_HOME/fish/conf.d/asdf_direnv.fish"
   grep "asdf direnv hook asdf" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
 }
