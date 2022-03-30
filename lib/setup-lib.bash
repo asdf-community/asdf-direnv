@@ -148,7 +148,7 @@ EOF
     *fish*)
       rcfile="${XDG_CONFIG_HOME:-$HOME/.config}/fish/conf.d/asdf_direnv.fish"
       cat <<-EOF | grep_or_add "$rcfile"
-set -g ASDF_DIRENV_BIN "$ASDF_DIRENV_BIN"
+set -gx ASDF_DIRENV_BIN "$ASDF_DIRENV_BIN"
 $ASDF_DIRENV_BIN hook fish | source
 EOF
       ;;
