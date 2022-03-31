@@ -1,13 +1,28 @@
-# Summary
+**Choose your PR title well:** Your pull request title is what's used to create release notes, and your pull request should add a reference to it on CHANGELOG.md, so please make it descriptive of the change itself, which may be different from the initial motivation to make the change.
 
-<!-- Provide a general description of the code changes in your pull request. -->
+## Overview
 
-Fixes: List issue numbers here
+What does this change accomplish and why? i.e. How does it change the user experience?
 
-<!-- Please also add a CHANGELOG.md entry as part of your pull-request. -->
+Feel free to include "before and after" examples if appropriate. (You can copy/paste screenshots directly into this editor.)
 
-## Other Information
+If relevant, which Github issues does it close? (See [closing-issues-using-keywords](https://help.github.com/en/enterprise/2.16/user/github/managing-your-work-on-github/closing-issues-using-keywords).)
 
-<!-- If there is anything else that is relevant please include it here. -->
+## Implementation notes
 
-<!-- Thank you for contributing to asdf-direnv! -->
+How does it accomplish it, in broad strokes? i.e. How does it change the Haskell codebase?
+
+## Interesting/controversial decisions
+
+Include anything that you thought twice about, debated, chose arbitrarily, etc. 
+What could have been done differently, but wasn't? And why?
+
+## Test coverage
+
+Have you included tests (which could be a transcript) for this change, or is it somehow covered by existing tests? 
+
+Would you recommend improving the test coverage (either as part of this PR or as a separate issue) or do you think it’s adequate?
+
+## Loose ends
+
+Link to related issues that address things you didn't get to. Stuff you encountered on the way and decided not to include in this PR.
