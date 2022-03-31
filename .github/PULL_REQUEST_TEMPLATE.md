@@ -10,7 +10,7 @@ If relevant, which Github issues does it close? (See [closing-issues-using-keywo
 
 ## Implementation notes
 
-How does it accomplish it, in broad strokes? i.e. How does it change the Haskell codebase?
+How does it accomplish it, in broad strokes? i.e. How does it change the codebase?
 
 ## Interesting/controversial decisions
 
