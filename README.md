@@ -11,8 +11,8 @@
 asdf version resolution [*is slow*](https://github.com/asdf-community/asdf-direnv/issues/80#issuecomment-1079485165) which makes every command execution pay that penalty. `asdf reshim` is needed for finding new executables, and some tools are not happy with their executables being masked by shims.
 
 <details>
-  
-  
+
+
 [asdf](https://asdf-vm.com) is a great tool for managing multiple versions of
 command-line tools. 99% of the time these managed tools work just as expected.
 
@@ -53,14 +53,14 @@ system. While this may be desirable while the language is in use, having it
 installed and not activated leaves dead shims all over the place.
 
 </details>
-  
+
 ## Solution
 
 Perform asdf version resolution only once and defer environment loading to direnv.
 
 <details>
-  
-  
+
+
 All these previously mentioned issues can be solved by using asdf along with the
 [direnv](https://direnv.net/) tool.
 
@@ -78,7 +78,7 @@ asdf-managed executable in PATH. Which will improve speed since version
 resolution is out of the way and made only once by `direnv` upon entering your
 project directory. Commands trying to find themselves in PATH will find their
 expected location. Also, no more _reshim_ needed upon `npm install`.
-  
+
 </details>
 
 ## Prerequirements
@@ -91,12 +91,13 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ### Setup
 
-Install this plugin and run the automatic setup: `asdf direnv setup <shell>`.
+Install this plugin and run the automatic setup.
 You can run this command for all of your preferred shells `bash`/`fish`/`zsh`.
+`--version` can be `system`/`latest`/`<direnv-release-version>`.
 
 ```bash
 asdf plugin-add direnv
-asdf direnv setup bash
+asdf direnv setup --shell bash --version latest
 ```
 
 After setup, close and open your terminal.
@@ -149,7 +150,7 @@ direnv: using asdf elixir 1.8.1-otp-21
 direnv: using asdf nodejs 12.6.0
 direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
 ```
-  
+
 </details>
 
 <details>
@@ -194,7 +195,7 @@ without asdf-direnv:
 ```bash
 hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 ```
-  
+
 </details>
 
 <details>
@@ -292,7 +293,7 @@ watch_file "package.json"
   Also, if you are contributing a new feature or bug-fix try running
   `env ASDF_DIRENV_DEBUG=true make` to run all tests with trace mode. If any test
   fails you will see more output.
-  
+
 </details>
 
 ## Useful links
