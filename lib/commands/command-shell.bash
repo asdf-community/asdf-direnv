@@ -7,8 +7,8 @@ if [ -n "$ASDF_DIRENV_DEBUG" ]; then
   set -x
 fi
 
-# shellcheck source=lib/commands/command.bash
-source "$(dirname "${BASH_SOURCE[0]}")/command.bash"
+# shellcheck source=lib/tools-environment-lib.bash
+source "$(dirname "${BASH_SOURCE[0]}")/../tools-environment-lib.bash"
 
 case "$1" in
   "" | "-h" | "--help" | "help")
