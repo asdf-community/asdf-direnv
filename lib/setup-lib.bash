@@ -89,7 +89,7 @@ function asdf_bin_in_path() {
 function installed_direnv() {
   local version=$1
   case "$version" in
-    system | SYSTEM | "")
+    system | SYSTEM)
       ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION=system asdf which direnv)"
       ;;
     latest | LATEST)
@@ -153,7 +153,7 @@ EOF
 function print_usage() {
   echo "Usage: asdf direnv setup [--shell SHELL] [--version VERSION]"
   echo ""
-  echo "SHELL: one of bash, zsh, or fish. If not specified, defaults to $shell"
+  echo "SHELL: one of bash, zsh, or fish. If not specified, defaults to $SHELL"
   echo "VERSION: one of system, latest, or x.y.z"
 }
 
