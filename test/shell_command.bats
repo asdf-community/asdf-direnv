@@ -4,11 +4,11 @@
 load test_helpers
 
 setup() {
-  setup_asdf_direnv
+  env_setup
 }
 
 teardown() {
-  clean_asdf_direnv
+  env_teardown
 }
 
 @test "calling without arguments prints help" {

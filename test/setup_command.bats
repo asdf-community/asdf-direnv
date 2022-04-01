@@ -4,11 +4,18 @@
 load test_helpers
 
 setup() {
-  setup_asdf_direnv
+  env_setup
+  EXPECTED_USE_ASDF="$(cat <<-'EOF'
+use_asdf() {
+  source_env "$(asdf direnv envrc "$@")"
+}
+EOF
+)"
+  export EXPECTED_USE_ASDF
 }
 
 teardown() {
-  clean_asdf_direnv
+  env_teardown
 }
 
 @test "setup bash modifies rcfile" {
@@ -18,7 +25,7 @@ teardown() {
   grep "export ASDF_DIRENV_BIN" "$XDG_CONFIG_HOME/asdf-direnv/bashrc"
   # shellcheck disable=SC2016
   grep -F 'eval "$($ASDF_DIRENV_BIN hook bash)"' "$XDG_CONFIG_HOME/asdf-direnv/bashrc"
-  grep "asdf direnv hook asdf" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
+  grep -F "$EXPECTED_USE_ASDF" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
 }
 
 @test "setup zsh modifies rcfile" {
@@ -28,7 +35,7 @@ teardown() {
   grep "export ASDF_DIRENV_BIN" "$XDG_CONFIG_HOME/asdf-direnv/zshrc"
   # shellcheck disable=SC2016
   grep -F 'eval "$($ASDF_DIRENV_BIN hook zsh)"' "$XDG_CONFIG_HOME/asdf-direnv/zshrc"
-  grep "asdf direnv hook asdf" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
+  grep -F "$EXPECTED_USE_ASDF" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
 }
 
 @test "setup fish modifies rcfile" {
@@ -36,7 +43,7 @@ teardown() {
   grep "set -gx ASDF_DIRENV_BIN" "$XDG_CONFIG_HOME/fish/conf.d/asdf_direnv.fish"
   # shellcheck disable=SC2016
   grep -F '$ASDF_DIRENV_BIN hook fish' "$XDG_CONFIG_HOME/fish/conf.d/asdf_direnv.fish"
-  grep "asdf direnv hook asdf" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
+  grep -F "$EXPECTED_USE_ASDF" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
 }
 
 @test "can re-run setup" {
