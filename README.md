@@ -101,57 +101,7 @@ asdf direnv setup bash
 
 After setup, close and open your terminal.
 
-The automatic setup follows the steps documented below in the manual section,
-and will hint which files were modified, you might want to review its changes.
-
-<details>
-  <summary>manual steps</summary>
-
-Make sure you have [direnv](https://direnv.net/) installed.
-You can either use your system package manager or asdf to install it:
-
-```bash
-# When already installed just activate the system version:
-asdf global direnv system
-```
-
-```bash
-# Install with asdf and globally activate:
-asdf install direnv latest
-asdf global direnv latest
-```
-
-
-Then edit your `.bashrc` or equivalent shell profile:
-
-```bash
-# File: ~/.bashrc
-
-export ASDF_DIRENV_BIN="$(asdf which direnv)" # or `$(command -v direnv)` for system managed.
-
-# Hook direnv into your shell.
-eval "$($ASDF_DIRENV_BIN hook bash)"
-```
-
-If you are not using bash, adapt the previous snippet by following the
-[instructions to hook direnv into various other SHELLS](https://github.com/direnv/direnv/blob/master/docs/hook.md)
-
-##### Global asdf-direnv integration.
-
-The [`~/.config/direnv/`](https://direnv.net/#faq) directory is a good place
-to add common functionality for all `.envrc` files.
-
-The following snippet makes the `use asdf` feature available:
-
-```bash
-# File: ~/.config/direnv/lib/use_asdf.sh
-source "$(asdf direnv hook asdf)"
-
-# Uncomment the following line to make direnv silent by default.
-# export DIRENV_LOG_FORMAT=""
-```
-  
-</details>
+The automatic setup will hint which files were modified, you might want to review its changes.
 
 ### Per-Project Environments
 
@@ -162,34 +112,12 @@ command on your project root directory to update your environment.
 asdf direnv local [<tool> <version>]...
 ```
 
-<details>
-  <summary>manual steps</summary>
+#### Temporary environments for one-shot commands
 
-Create a `.tool-versions` file either manually or using the `asdf local` command.
-
-##### The .envrc file in your project root.
-
-Once hooked into your shell, `direnv` will expect to find a `.envrc` file
-whenever you need to change tool versions.
-
-On your project directory, create an `.envrc` file like this:
-
-```bash
-# File: /your/project/.envrc
-use asdf
-```
-
-Finally, run `direnv allow` to trust your new file.
-  
-</details>
-
-<details open>
-  <summary><h4>Temporary environments for one-shot commands</h4></summary>
-
-  Some times you just want to execute a one-shot commmand under certain
-  environment without creating/modifying `.envrc` and `.tool-versions` files
-  on your project directory. In those cases, you might want to try using
-  `asdf direnv shell`.
+Some times you just want to execute a one-shot commmand under certain
+environment without creating/modifying `.envrc` and `.tool-versions` files
+on your project directory. In those cases, you might want to try using
+`asdf direnv shell`.
 
 
 ``` bash
@@ -199,8 +127,6 @@ $ asdf direnv shell python 3.8.10 nodejs 14.18.2
 # Just execute a npx command under some node version.
 $ asdf direnv shell nodejs 14.18.2 -- npx create-react-app
 ```
-
-</details>
 
 <details>
   <summary><h6>Cached environment</h6></summary>
