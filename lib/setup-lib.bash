@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-if [ -n "$ASDF_DIRENV_DEBUG" ]; then
+set -euo pipefail
+
+if [ -n "${ASDF_DIRENV_DEBUG:-}" ]; then
   set -x
 fi
 
@@ -28,21 +30,6 @@ function fail() {
   fi
   echo >&2
   exit 1
-}
-
-function prompt() {
-  local input default
-  if test -n "$1"; then
-    echo -n "⌨  $1: " >&2
-    shift
-  fi
-  default="$1"
-  read -r input
-  if test -n "$input"; then
-    echo "$input"
-  else
-    echo "$default"
-  fi
 }
 
 function run_cmd() {
@@ -100,37 +87,32 @@ function asdf_bin_in_path() {
 }
 
 function installed_direnv() {
-  local bin
-  bin="${ASDF_DIRENV_BIN:-$(asdf which direnv 2>/dev/null || true)}"
-  if test -x "$bin"; then
-    ASDF_DIRENV_BIN="$bin"
-  else
-    local version
-    version="$(prompt "Please specify a direnv version to use [version-number/latest/SYSTEM]" "system")"
-    case "$version" in
-      system | SYSTEM | "")
-        ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION=system asdf which direnv)"
-        ;;
-      latest | LATEST)
-        run_cmd asdf install direnv latest
-        version="$(asdf list direnv | tail -n 1 | sed -e 's/ //g')" # since `ASDF_DIRENV_VERSION=latest asdf which direnv` does not work
-        ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION="$version" asdf which direnv)"
+  local version=$1
+  case "$version" in
+    system | SYSTEM | "")
+      ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION=system asdf which direnv)"
+      ;;
+    latest | LATEST)
+      run_cmd asdf install direnv latest
+      version="$(asdf list direnv | tail -n 1 | sed -e 's/ //g')" # since `ASDF_DIRENV_VERSION=latest asdf which direnv` does not work
+      ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION="$version" asdf which direnv)"
 
-        ;;
-      *)
-        run_cmd asdf install direnv "$version"
-        ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION="$version" asdf which direnv)"
-        ;;
-    esac
-  fi
+      ;;
+    *)
+      run_cmd asdf install direnv "$version"
+      ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION="$version" asdf which direnv)"
+      ;;
+  esac
+
   test -x "$ASDF_DIRENV_BIN"
   ok "Found direnv at ${ASDF_DIRENV_BIN}"
   export ASDF_DIRENV_BIN
 }
 
 function direnv_shell_integration() {
+  local shell=$1
   local rcfile
-  case "${ASDF_DIRENV_SHELL:-$SHELL}" in
+  case "$shell" in
     *bash*)
       rcfile="$HOME/.bashrc"
       cat <<-EOF | grep_or_add "$rcfile"
@@ -168,14 +150,50 @@ source "\$(asdf direnv hook asdf)"
 EOF
 }
 
+function print_usage() {
+  echo "Usage: asdf direnv setup [--shell SHELL] [--version VERSION]"
+  echo ""
+  echo "SHELL: one of bash, zsh, or fish. If not specified, defaults to $shell"
+  echo "VERSION: one of system, latest, or x.y.z"
+}
+
 function setup_command() {
-  if test -n "$1"; then
-    export ASDF_DIRENV_SHELL="$1"
+  local shell="$SHELL"
+  local version=""
+
+  while [[ $# -gt 0 ]]; do
+    arg=$1
+    shift
+    case $arg in
+      -h | --help)
+        print_usage
+        exit 1
+        ;;
+      --shell)
+        shell="$1"
+        shift
+        ;;
+      --version)
+        version="$1"
+        shift
+        ;;
+      *)
+        echo "Unknown option: $arg"
+        exit 1
+        ;;
+    esac
+  done
+
+  if [ -z "$version" ]; then
+    echo "Please specify a version using --version"
+    echo
+    print_usage
+    exit 1
   fi
 
   check_for "asdf" asdf_bin_in_path || fail "Make sure you have asdf installed. Follow instructions at https://asdf-vm.com"
-  check_for "direnv" installed_direnv || fail "An installation of direnv is required to continue. See https://github.com/asdf-community/asdf-direnv"
-  check_for "direnv shell integration" direnv_shell_integration || fail "direnv shell hook must be installed. See https://direnv.net/docs/hook.html"
+  check_for "direnv" installed_direnv "$version" || fail "An installation of direnv is required to continue. See https://github.com/asdf-community/asdf-direnv"
+  check_for "direnv shell integration" direnv_shell_integration "$shell" || fail "direnv shell hook must be installed. See https://direnv.net/docs/hook.html"
   check_for "direnv asdf integration" direnv_asdf_integration || fail "asdf-direnv function must be installed on direnvrc. See https://github.com/asdf-community/asdf-direnv"
 }
 
@@ -194,8 +212,8 @@ function local_command() {
     maybe_run_cmd asdf plugin-add "$plugin"
     run_cmd asdf install "$plugin" "$version"
     run_cmd asdf local "$plugin" "$version"
-  done
 
-  printf "use asdf\n\0" | grep_or_add ".envrc"
-  run_cmd direnv allow
+    printf "use asdf\n\0" | grep_or_add ".envrc"
+    run_cmd direnv allow
+  done
 }
