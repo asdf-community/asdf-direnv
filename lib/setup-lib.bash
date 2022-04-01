@@ -135,21 +135,21 @@ function direnv_shell_integration() {
       rcfile="$HOME/.bashrc"
       cat <<-EOF | grep_or_add "$rcfile"
 export ASDF_DIRENV_BIN="$ASDF_DIRENV_BIN"
-eval "\$($ASDF_DIRENV_BIN hook bash)"
+eval "\$(\$ASDF_DIRENV_BIN hook bash)"
 EOF
       ;;
     *zsh*)
       rcfile="$HOME/.zshrc"
       cat <<-EOF | grep_or_add "$rcfile"
 export ASDF_DIRENV_BIN="$ASDF_DIRENV_BIN"
-eval "\$($ASDF_DIRENV_BIN hook zsh)"
+eval "\$(\$ASDF_DIRENV_BIN hook zsh)"
 EOF
       ;;
     *fish*)
       rcfile="${XDG_CONFIG_HOME:-$HOME/.config}/fish/conf.d/asdf_direnv.fish"
       cat <<-EOF | grep_or_add "$rcfile"
 set -gx ASDF_DIRENV_BIN "$ASDF_DIRENV_BIN"
-$ASDF_DIRENV_BIN hook fish | source
+\$ASDF_DIRENV_BIN hook fish | source
 EOF
       ;;
     *)
