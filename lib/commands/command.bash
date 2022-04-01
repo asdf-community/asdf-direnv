@@ -11,6 +11,6 @@ case "$1" in
     "$@"
     ;;
   *)
-    exec direnv "$@"
+    exec "$direnv" "$@"
     ;;
 esac
