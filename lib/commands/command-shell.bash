@@ -3,10 +3,6 @@
 # Exit on error, since this is an executable and not a sourced file.
 set -eo pipefail
 
-if [ -n "$ASDF_DIRENV_DEBUG" ]; then
-  set -x
-fi
-
 # shellcheck source=lib/tools-environment-lib.bash
 source "$(dirname "${BASH_SOURCE[0]}")/../tools-environment-lib.bash"
 
