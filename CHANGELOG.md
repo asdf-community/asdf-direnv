@@ -9,7 +9,16 @@ All other relevant information should be provided on related issues or the PR it
 When creating a new release, just create another section and include a link to the release and a
 github compare-link with the previous one.
 
-## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.2.0..master)
+## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0..master)
+
+
+## [0.3.0](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0) (2022-04-03)
+
+- Removed old `asdf direnv hook asdf` and `asdf direnv` commands. #130
+
+- `asdf direnv setup` now takes ownership of some files on `XDG_CONFIG_HOME/asdf-direnv`. #131
+
+- Make `asdf direnv setup` non-interactive to facilitate scripting setups. #129
 
 - Add a `asdf direnv shell` command that acts similar to the shims-based `asdf shell` command. #117
 
