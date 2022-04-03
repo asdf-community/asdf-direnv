@@ -4,24 +4,15 @@
 load test_helpers
 
 setup() {
-  setup_asdf_direnv
+  env_setup
+  asdf direnv setup --shell bash --version system
+  source $HOME/.bashrc
 }
 
 teardown() {
-  clean_asdf_direnv
+  env_teardown
 }
 
-@test "asdf executable should be on path" {
-  command -v asdf
-}
-
-@test "direnv executable should be on path" {
-  [ $(command -v direnv) ]
-}
-
-@test "direnv is available via asdf" {
-  direnv --version
-}
 
 @test "dummy 1.0 is available via asdf exec" {
   install_dummy_plugin "dummy" "1.0"
@@ -40,31 +31,37 @@ teardown() {
   [ "$FOO" ==  "BAR" ]
 }
 
+# This is to support asdf multiple version multiline feature
 @test "use multiple versions for same plugin - multiline" {
   install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
+  asdf direnv local dummy 2.0 dummy 1.0
   asdf local dummy 2.0
   echo "dummy 1.0" >> .tool-versions
-  envrc_use_asdf
+
+  asdf direnv local
   envrc_load
 
-  path_as_lines | sed -n 1p | grep "$(dummy_bin_path dummy 2.0)"
-  path_as_lines | sed -n 2p | grep "$(dummy_bin_path dummy 1.0)"
+  run path_as_lines
+  [ "${lines[0]}" = "$(dummy_bin_path dummy 2.0)" ]
+  [ "${lines[1]}" = "$(dummy_bin_path dummy 1.0)" ]
 }
 
+# This is to support asdf multiple version inline feature
 @test "use multiple versions for same plugin - inline" {
   install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
   asdf local dummy 2.0 1.0
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
-  path_as_lines | sed -n 1p | grep "$(dummy_bin_path dummy 2.0)"
-  path_as_lines | sed -n 2p | grep "$(dummy_bin_path dummy 1.0)"
+  run path_as_lines
+  [ "${lines[0]}" = "$(dummy_bin_path dummy 2.0)" ]
+  [ "${lines[1]}" = "$(dummy_bin_path dummy 1.0)" ]
 }
 
 @test "use asdf - makes global tools available in PATH" {
@@ -72,7 +69,7 @@ teardown() {
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  envrc_use_asdf
+  asdf direnv local
 
   [ ! $(command -v dummy) ] # not available
 
@@ -90,7 +87,7 @@ teardown() {
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  envrc_use_asdf
+  asdf direnv local
 
   [ ! $(command -v dummy) ] # not available
 
@@ -110,7 +107,7 @@ teardown() {
   asdf global dummy 1.0
 
   cd "$PROJECT_DIR"
-  envrc_use_asdf
+  asdf direnv local
 
   [ ! $(command -v mummy) ] # not available
   [ ! $(command -v dummy) ] # not available
@@ -123,7 +120,7 @@ teardown() {
   [ "$output" == "This is dummy 1.0" ] # executable in path
 
   # plugin bin at head of PATH
-  path_as_lines
+  run path_as_lines
   path_as_lines | sed -n 1p | grep "direnv"
   path_as_lines | sed -n 2p | grep "$(dummy_bin_path dummy 1.0)"
   path_as_lines | sed -n 3p | grep "$(dummy_shims_path dummy 1.0)"
@@ -140,7 +137,7 @@ EOF
 
   cd "$PROJECT_DIR"
   export ASDF_DUMMY_VERSION=1.0
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   [ "$JOJO" == "JAJA" ] # Env exported by plugin
@@ -154,7 +151,7 @@ EOF
   cd "$PROJECT_DIR"
   asdf global dummy 1.0
   asdf local dummy 2.0
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   run dummy
@@ -167,7 +164,7 @@ EOF
 
   cd "$PROJECT_DIR"
   asdf local dummy 1.0
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   direnv status | grep -F 'Loaded watch: ".tool-versions"'
@@ -179,7 +176,7 @@ EOF
 
   cd "$PROJECT_DIR"
   echo "1.0" > "$PROJECT_DIR/.dummy-version"
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   run dummy
@@ -204,7 +201,7 @@ EOF
   echo "2.0" > "$PROJECT_DIR/.dummy-version"
   asdf local puppy 2.0
 
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   run dummy # selected from legacyfile
@@ -234,7 +231,7 @@ EOF
   asdf local dummy 2.0
   asdf local puppy 2.0
 
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   direnv status | grep -F 'Loaded watch: ".tool-versions"'
@@ -248,7 +245,7 @@ EOF
   cd "$PROJECT_DIR"
   echo "2.0" > "$PROJECT_DIR/.dummy-version"
 
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   direnv status
@@ -272,7 +269,7 @@ EOF
   asdf local puppy 1.0
   asdf local gummy 1.0
 
-  envrc_use_asdf
+  asdf direnv local
   envrc_load
 
   path_as_lines

@@ -5,4 +5,4 @@ set -eo pipefail
 
 # shellcheck source=lib/setup-lib.bash
 source "$(dirname "${BASH_SOURCE[0]}")/../setup-lib.bash"
-local_command "${@}"
+local_command "$@"

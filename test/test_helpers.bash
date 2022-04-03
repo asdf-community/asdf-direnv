@@ -6,10 +6,10 @@ die() {
 }
 
 direnv() {
-  asdf direnv "$@"
+  "$ASDF_DIRENV_BIN" "$@"
 }
 
-setup_asdf_direnv() {
+env_setup() {
   ASDF_CMD="$(command -v asdf)"
   test -x "$ASDF_CMD" || die "Expected asdf command to be available."
   ASDF_ROOT="$(dirname "$(dirname "$ASDF_CMD")")"
@@ -28,7 +28,10 @@ setup_asdf_direnv() {
   XDG_CACHE_HOME="$HOME/.cache"
   ASDF_DIR="$HOME/.asdf"
   ASDF_DATA_DIR="$ASDF_DIR"
-  PATH="${ASDF_DIR}/bin:$PATH_WITHOUT_ASDF" # NOTE: dont add shims directory to PATH
+
+  # NOTE: dont add asdf shims directory to PATH
+  # NOTE: we add direnv to PATH for testing system-installed direnv setup.
+  PATH="${ASDF_DIR}/bin:$PATH_WITHOUT_ASDF:${ASDF_WHERE_DIRENV}/bin"
 
   mkdir -p "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME"
 
@@ -44,28 +47,24 @@ setup_asdf_direnv() {
   echo "direnv $ASDF_DIRENV_VERSION" >"$HOME/.tool-versions"
   asdf reshim direnv "$ASDF_DIRENV_VERSION"
 
-  ASDF_DIRENV_BIN="$(asdf which direnv)" # uses ASDF_DIRENV_VERSION from env.
-  test -x "$ASDF_DIRENV_BIN"             # make sure it's executable
+  ASDF_DIRENV_BIN="$ASDF_WHERE_DIRENV/bin/direnv" # uses ASDF_DIRENV_VERSION from env.
+  test -x "$ASDF_DIRENV_BIN"                      # make sure it's executable
 
   PROJECT_DIR=$HOME/project
   mkdir -p "$PROJECT_DIR"
   cd "$PROJECT_DIR" || exit 1
 }
 
-clean_asdf_direnv() {
+env_teardown() {
   rm -rf "$BASE_DIR"
   unset ASDF_CONCURRENCY
 }
 
 envrc_load() {
+  direnv export bash | sed -e "s/;export/\n export/g"
   eval "$(direnv export bash)"
-}
-
-envrc_use_asdf() {
-  # shellcheck disable=SC2016
-  echo 'source $(asdf direnv hook asdf)' >".envrc"
-  echo "use asdf $*" >>".envrc"
-  direnv allow
+  direnv status
+  cat .envrc
 }
 
 dummy_bin_path() {

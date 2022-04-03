@@ -216,7 +216,6 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 
 # Don't source `~/.asdf/asdf.sh`
 PATH="$PATH:~/.asdf/bin"
-source "~/.asdf/lib/asdf.sh" # just load the asdf wrapper function
 ```
 
 - If you want to silence the console output of direnv, you can do that by
@@ -256,20 +255,6 @@ export ASDF_PLUGIN_VERSION=1.0
 use asdf
 ```
 
-- You can omit direnv on your global `~/.tool-versions` file.
-
-  You just need to provide the version via an environment variable.
-
-```bash
-# File: ~/.bashrc
-
-# Hook direnv into your shell.
-eval "$(env ASDF_DIRENV_VERSION=2.20.0 asdf direnv hook bash)"
-
-# A shortcut for asdf managed direnv.
-direnv() { env ASDF_DIRENV_VERSION=2.20.0 asdf direnv "$@"; }
-```
-
 - Remember `direnv` can reload the environment whenever a file changes. By
   default this plugin will watch any `.tool-versions` file or legacy version
   file that explicitly selects a tool.
@@ -291,7 +276,7 @@ watch_file "package.json"
   relevant output on an [issue](issues/new).
 
   Also, if you are contributing a new feature or bug-fix try running
-  `env ASDF_DIRENV_DEBUG=true make` to run all tests with trace mode. If any test
+  `env ASDF_DIRENV_DEBUG=true bats -x test` to run all tests with trace mode. If any test
   fails you will see more output.
 
 </details>
