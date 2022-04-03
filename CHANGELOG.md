@@ -18,11 +18,9 @@ github compare-link with the previous one.
 
 - `asdf direnv setup` now takes ownership of some files on `XDG_CONFIG_HOME/asdf-direnv`. #131
 
-- Make `asdf direnv setup` non-interactive to facilitate scripting setups. #129
-
 - Add a `asdf direnv shell` command that acts similar to the shims-based `asdf shell` command. #117
 
-- Add `asdf direnv setup` and `asdf direnv local`. #122
+- Add `asdf direnv setup` and `asdf direnv local`. #122 #129
 
 - Document `ASDF_DIRENV_BIN` variable used to avoid doing direnv version resolution. #121
 
