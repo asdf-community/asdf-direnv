@@ -149,7 +149,7 @@ eval "\$(\$ASDF_DIRENV_BIN hook bash)"
 EOF
       ;;
     *zsh*)
-      rcfile="$HOME/.zshrc"
+      rcfile="${ZDOTDIR:-$HOME}/.zshrc"
       # shellcheck disable=SC2016
       asdf_direnv_rcfile_expr='${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc'
       asdf_direnv_rcfile=$(eval echo "$asdf_direnv_rcfile_expr")
