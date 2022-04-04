@@ -28,10 +28,22 @@ teardown() {
   grep -F "$EXPECTED_USE_ASDF" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
 }
 
-@test "setup zsh modifies rcfile" {
+@test "setup zsh modifies rcfile (ZDOTDIR unset)" {
+  unset ZDOTDIR
   run asdf direnv setup --shell zsh --version system
   # shellcheck disable=SC2016
   grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc' "$HOME/.zshrc"
+  grep "export ASDF_DIRENV_BIN" "$XDG_CONFIG_HOME/asdf-direnv/zshrc"
+  # shellcheck disable=SC2016
+  grep -F 'eval "$($ASDF_DIRENV_BIN hook zsh)"' "$XDG_CONFIG_HOME/asdf-direnv/zshrc"
+  grep -F "$EXPECTED_USE_ASDF" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
+}
+
+@test "setup zsh modifies rcfile (ZDOTDIR set)" {
+  export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+  run asdf direnv setup --shell zsh --version system
+  # shellcheck disable=SC2016
+  grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc' "$HOME/.config/zsh/.zshrc"
   grep "export ASDF_DIRENV_BIN" "$XDG_CONFIG_HOME/asdf-direnv/zshrc"
   # shellcheck disable=SC2016
   grep -F 'eval "$($ASDF_DIRENV_BIN hook zsh)"' "$XDG_CONFIG_HOME/asdf-direnv/zshrc"
