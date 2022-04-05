@@ -90,6 +90,14 @@ install_dummy_plugin() {
 
   mkdir -p "${ASDF_DATA_DIR}/plugins/${plugin_name}/bin"
 
+  # create a 'list-all' script
+  local list_all_path="${ASDF_DATA_DIR}/plugins/${plugin_name}/bin/list-all"
+  cat <<-EOF >"$list_all_path"
+#!/usr/bin/env bash
+echo 1.0 2.0 2.1
+EOF
+  chmod +x "$list_all_path"
+
   if test -n "$shim"; then
     local plugin_shims
     plugin_shims="${ASDF_DATA_DIR}/plugins/${plugin_name}/shims"

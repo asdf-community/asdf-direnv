@@ -242,7 +242,7 @@ _direnv_bash_dump() {
 
 _plugin_env_bash() {
   local plugin="${1}"
-  local version="${2}"
+  local full_version="${2}"
   local not_installed_message="${3}"
 
   # NOTE: unlike asdf, asdf-direnv does not support other installation types.
@@ -253,6 +253,19 @@ _plugin_env_bash() {
     log_error "asdf plugin not installed: $plugin"
     exit 1
   fi
+
+  local version
+
+  # The full_version may be of the form `latest:X`, so we resolve the latest
+  # version here. This is the same method asdf itself uses; see
+  # https://github.com/asdf-vm/asdf/blob/7493f4099c844e40af72d7f05635d7991a463d1a/lib/commands/command-install.bash#L161
+  IFS=':' read -r -a version_info <<<"$full_version"
+  if [ "${version_info[0]}" = "latest" ]; then
+    version=$(asdf latest "$plugin_name" "${version_info[1]}")
+  else
+    version="${version_info[0]}"
+  fi
+
   if [ "$version" != "system" ]; then
     install_path=$(get_install_path "$plugin" "$install_type" "$version")
     if [ ! -d "$install_path" ]; then
