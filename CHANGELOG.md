@@ -11,6 +11,7 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0..master)
 
+- Add support for resolving 'latest:X' in .tool-versions #136
 
 ## [0.3.0](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0) (2022-04-03)
 
