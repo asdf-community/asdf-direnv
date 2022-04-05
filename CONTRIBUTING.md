@@ -26,6 +26,11 @@ in order to stop on first error. Commands shall not source each other. The ony
 way to share code is to source other bash files outside of `lib/commands`.
 
 
+We are not strictly POSIX complaint, not seek to have it as a requirement
+but our CI test should at least run on Linux and MacOS. When possible, prefer
+commands and options that work on most platforms.
+
+
 Naming is hard, try to name shell functions according to their intention.
 As a convention, private auxiliary functions (not intended to be used by commands)
 might start with an underscore.
