@@ -283,7 +283,9 @@ watch_file "package.json"
 
 ## Useful links
 
-Read [direnv documentation](https://direnv.net/) for more on `.envrc`
+Read [direnv documentation](https://direnv.net/) for more on `.envrc`.
+  
+If you are willing to contribute, be sure to read our [CONTRIBUTING](https://github.com/asdf-community/asdf-direnv/blob/master/CONTRIBUTING.md) guide.
 
 ## License
 
