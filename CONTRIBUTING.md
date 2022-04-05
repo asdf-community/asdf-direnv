@@ -8,16 +8,16 @@ The only requirement is being kind and mindful of others, all communication
 shall be done with respect and without any kind of discrimination nor aggresive
 language/attitudes towards anyone.
 
-# Contributing Code.
+# Contributing code
 
 When contributing code, consider adding a new test unless you see that your code
 change is trivial and is already being covered by an existing test.
 In that case, mention which test is already testing your feature on the pull-request.
 
-For new features, it's essential to have a new test that exercices the new code path
+For new features, it's essential to have a new test that exercises the new code path
 and feature.
 
-## Code conventions.
+## Code conventions
 
 Executable commands are under `lib/commands/command-*.bash` and follow the asdf
 convention for defining custom commands. These commands are intended to be
@@ -26,9 +26,9 @@ in order to stop on first error. Commands shall not source each other. The ony
 way to share code is to source other bash files outside of `lib/commands`.
 
 
-We are not strictly POSIX complaint, not seek to have it as a requirement
-but our CI test should at least run on Linux and MacOS. When possible, prefer
-commands and options that work on most platforms.
+We are not strictly POSIX complaint, nor seek to have it as a requirement, but
+we do want things to work on both Linux and MacOS (our CI runs on both OSes).
+When possible, prefer commands and options that work on most platforms.
 
 
 Naming is hard, try to name shell functions according to their intention.
@@ -46,7 +46,7 @@ If you are adding a new command, create a new test suite (that is a `.bats` file
 
 See how other tests are implemented, and use them as starting point. Use our `envrc_load`
 defined at `test_helpers.bash` in order to load the direnv environment on your test.
-Also, be sure to read about [`bats-core`](https://github.com/bats-core/bats-core) usage, most importantly it's `run` and `$output`.
+Also, be sure to read about [`bats-core`](https://github.com/bats-core/bats-core) usage, most importantly its `run` and `$output`.
 
 ## Development tools
 
@@ -58,12 +58,12 @@ freely where these tools come from on your local environment.
 
 ## Running tests
 
-Running `make` will perform all integration tests, check formatting and check for common shell problems in code.
+Running `make` will perform all integration tests, check formatting, and check for common shell problems in code.
 
 ## Debugging tests
 
 If you find a test broken by your changes sometimes it's better to run just that particular test
-with tracing mode enabled. 
+with tracing mode enabled.
 
 ```
 # Run a single test, all things you echo on your test code will be visible on your terminal. tip: `echo $output`
@@ -72,10 +72,8 @@ env ASDF_DIRENV_DEBUG=true  bats -x test/use_asdf.bats -f 'use multiple versions
 
 ## Getting help
 
-Your pull-request needs not to be perfect. If you feel like you've implemented your core idea
+Your pull-request does not need to be perfect. If you feel like you've implemented your core idea
 and did your best on writing tests but something still fails, push and create the pull-request anyways.
-Ask for help and we will be happy to get things sorted out. 
+Ask for help and we will be happy to get things sorted out.
 
 > Quærendo Invenietis: Seek and you shall find.
-
-
