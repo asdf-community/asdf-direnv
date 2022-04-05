@@ -254,15 +254,16 @@ _plugin_env_bash() {
     exit 1
   fi
 
+  local version
+
   # The full_version may be of the form `latest:X`, so we resolve the latest
   # version here. This is the same method asdf itself uses; see
   # https://github.com/asdf-vm/asdf/blob/7493f4099c844e40af72d7f05635d7991a463d1a/lib/commands/command-install.bash#L161
   IFS=':' read -r -a version_info <<<"$full_version"
   if [ "${version_info[0]}" = "latest" ]; then
-    local version
     version=$(asdf latest "$plugin_name" "${version_info[1]}")
   else
-    local version="${version_info[0]}"
+    version="${version_info[0]}"
   fi
 
   if [ "$version" != "system" ]; then
