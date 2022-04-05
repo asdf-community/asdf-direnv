@@ -159,17 +159,17 @@ EOF
 }
 
 @test "use asdf - resolves latest:X version from tool-versions" {
-  install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
+  install_dummy_plugin dummy 2.1
 
   cd "$PROJECT_DIR"
-  asdf global dummy 1.0
+  asdf global dummy 2.0
   asdf local dummy latest:2
   asdf direnv local
   envrc_load
 
   run dummy
-  [ "$output" == "This is dummy 2.0" ] # executable in path
+  [ "$output" == "This is dummy 2.1" ] # executable in path
 }
 
 @test "use asdf - watches tool-versions for changes" {

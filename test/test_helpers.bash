@@ -90,20 +90,13 @@ install_dummy_plugin() {
 
   mkdir -p "${ASDF_DATA_DIR}/plugins/${plugin_name}/bin"
 
-  # keep track of versions installed in a versions.txt file
-  local version_file="${ASDF_DATA_DIR}/plugins/${plugin_name}/data/versions.txt"
-  mkdir -p "$(dirname "$version_file")"
-  echo "$version" >>"$version_file"
-
   # create a 'list-all' script
   local list_all_path="${ASDF_DATA_DIR}/plugins/${plugin_name}/bin/list-all"
-  if test -n "$list_all_path"; then
-    cat <<-EOF >"$list_all_path"
+  cat <<-EOF >"$list_all_path"
 #!/usr/bin/env bash
-xargs < "$version_file"
+echo 1.0 2.0 2.1
 EOF
-    chmod +x "$list_all_path"
-  fi
+  chmod +x "$list_all_path"
 
   if test -n "$shim"; then
     local plugin_shims
