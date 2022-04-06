@@ -129,6 +129,19 @@ $ asdf direnv shell python 3.8.10 nodejs 14.18.2
 $ asdf direnv shell nodejs 14.18.2 -- npx create-react-app
 ```
 
+### Updating
+
+Updating this plugin is the same as any asdf plugin:
+
+    asdf plugin update direnv
+
+Updating the version of direnv you use depends on which installation method you've chosen:
+
+- `system`: Nothing special required here, direnv will update whenever you
+  update direnv with your system package manager.
+- `latest` or `<direnv-release-version>`: Re-run `asdf direnv setup --version
+  latest --shell ...` to update to the latest version of direnv.
+
 <details>
   <summary><h6>Cached environment</h6></summary>
 
@@ -284,7 +297,7 @@ watch_file "package.json"
 ## Useful links
 
 Read [direnv documentation](https://direnv.net/) for more on `.envrc`.
-  
+
 If you are willing to contribute, be sure to read our [CONTRIBUTING](https://github.com/asdf-community/asdf-direnv/blob/master/CONTRIBUTING.md) guide.
 
 ## License
