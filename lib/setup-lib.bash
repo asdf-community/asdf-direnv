@@ -111,11 +111,10 @@ function asdf_bin_in_path() {
 
 function installed_direnv() {
   local version=$1
-  local path_without_asdf
   case "$version" in
     system | SYSTEM)
-      path_without_asdf="$(echo "$PATH" | tr ':' $'\n' | grep -v asdf | tr $'\n' ':' | sed -e 's#:$##')"
-      ASDF_DIRENV_BIN="$(run_cmd env PATH="$path_without_asdf" command -v direnv)"
+      # Take only the first direnv that is not provided by asdf shims.
+      ASDF_DIRENV_BIN="$(which -a direnv | grep -v asdf | head -n 1)"
       ;;
     latest | LATEST)
       run_cmd asdf install direnv latest
@@ -129,7 +128,7 @@ function installed_direnv() {
       ;;
   esac
 
-  test -x "$ASDF_DIRENV_BIN" || fail "No direnv found"
+  test -x "$ASDF_DIRENV_BIN" || fail "No direnv executable found"
   ok "Found direnv at ${ASDF_DIRENV_BIN}"
   export ASDF_DIRENV_BIN
 }
