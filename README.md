@@ -91,18 +91,20 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ### Setup
 
-Install this plugin and run the automatic setup.
-You can run this command for all of your preferred shells `bash`/`fish`/`zsh`.
-`--version` can be `system`/`latest`/`<direnv-release-version>`.
+Install this plugin and run the setup command.
 
 ```bash
 asdf plugin-add direnv
 asdf direnv setup --shell bash --version latest
 ```
 
-After setup, close and open your terminal.
+You can run this command for all of your preferred shells `bash`/`fish`/`zsh`.
+The `--version` value can be `system` if you aleady have a `direnv` installation,
+or `latest`/[`<direnv-release-version>`](https://github.com/direnv/direnv/releases)
+if you prefer asdf to install it for you.
 
-The automatic setup will hint which files were modified, you might want to review its changes.
+The setup will hint which files were modified, you might want to review its changes.
+After setup, close and open your terminal.
 
 ### Per-Project Environments
 
