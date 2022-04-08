@@ -39,7 +39,7 @@ function run_cmd() {
   else
     local status="$?"
     hmm "Failed with status $status"
-    return "$status"
+    exit "$status"
   fi
 }
 
@@ -111,9 +111,11 @@ function asdf_bin_in_path() {
 
 function installed_direnv() {
   local version=$1
+  local path_without_asdf
   case "$version" in
     system | SYSTEM)
-      ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION=system asdf which direnv)"
+      path_without_asdf="$(echo "$PATH" | tr ':' $'\n' | grep -v asdf | tr $'\n' ':' | sed -e 's#:$##')"
+      ASDF_DIRENV_BIN="$(run_cmd env PATH="$path_without_asdf" command -v direnv)"
       ;;
     latest | LATEST)
       run_cmd asdf install direnv latest
