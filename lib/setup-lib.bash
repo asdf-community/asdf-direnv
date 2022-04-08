@@ -103,9 +103,9 @@ function check_for() {
 
 function asdf_bin_in_path() {
   local bin
-  bin="$(command -v asdf 2>/dev/null)"
+  bin="$(type -P asdf 2>/dev/null)"
   if test -x "$bin"; then
-    ok "Found asdf at $(command -v asdf)"
+    ok "Found asdf at $bin"
   fi
 }
 
@@ -114,7 +114,7 @@ function installed_direnv() {
   case "$version" in
     system | SYSTEM)
       # Take only the first direnv that is not provided by asdf shims.
-      ASDF_DIRENV_BIN="$(which -a direnv | grep -v asdf | head -n 1)"
+      ASDF_DIRENV_BIN="$(type -aP direnv | grep -v asdf | head -n 1)"
       ;;
     latest | LATEST)
       run_cmd asdf install direnv latest
