@@ -39,7 +39,7 @@ function run_cmd() {
   else
     local status="$?"
     hmm "Failed with status $status"
-    return "$status"
+    exit "$status"
   fi
 }
 
@@ -113,7 +113,8 @@ function installed_direnv() {
   local version=$1
   case "$version" in
     system | SYSTEM)
-      ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION=system asdf which direnv)"
+      # Take only the first direnv that is not provided by asdf shims.
+      ASDF_DIRENV_BIN="$(which -a direnv | grep -v asdf | head -n 1)"
       ;;
     latest | LATEST)
       run_cmd asdf install direnv latest
@@ -127,7 +128,7 @@ function installed_direnv() {
       ;;
   esac
 
-  test -x "$ASDF_DIRENV_BIN"
+  test -x "$ASDF_DIRENV_BIN" || fail "No direnv executable found"
   ok "Found direnv at ${ASDF_DIRENV_BIN}"
   export ASDF_DIRENV_BIN
 }
