@@ -29,9 +29,13 @@ env_setup() {
   ASDF_DIR="$HOME/.asdf"
   ASDF_DATA_DIR="$ASDF_DIR"
 
+  # A temporary "system" direnv binary outside of asdf.
+  DIRENV_SYS=$(mktemp -dt direnv.XXXX)
+  ln -s "$ASDF_WHERE_DIRENV/bin/direnv" "$DIRENV_SYS/direnv"
+
   # NOTE: dont add asdf shims directory to PATH
   # NOTE: we add direnv to PATH for testing system-installed direnv setup.
-  PATH="${ASDF_DIR}/bin:$PATH_WITHOUT_ASDF:${ASDF_WHERE_DIRENV}/bin"
+  PATH="${ASDF_DIR}/bin:$PATH_WITHOUT_ASDF:${DIRENV_SYS}"
 
   mkdir -p "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME"
 
