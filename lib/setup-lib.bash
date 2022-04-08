@@ -129,7 +129,7 @@ function installed_direnv() {
       ;;
   esac
 
-  test -x "$ASDF_DIRENV_BIN"
+  test -x "$ASDF_DIRENV_BIN" || fail "No direnv found"
   ok "Found direnv at ${ASDF_DIRENV_BIN}"
   export ASDF_DIRENV_BIN
 }
