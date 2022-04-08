@@ -10,7 +10,7 @@ direnv() {
 }
 
 env_setup() {
-  ASDF_CMD="$(command -v asdf)"
+  ASDF_CMD="$(type -P asdf)"
   test -x "$ASDF_CMD" || die "Expected asdf command to be available."
   ASDF_ROOT="$(dirname "$(dirname "$ASDF_CMD")")"
 

@@ -20,7 +20,7 @@ if [ -z "$direnv" ] && [ -z "$(declare -f -F watch_file)" ]; then
   direnv="${ASDF_DIRENV_BIN}"
 
   if [ -z "$direnv" ]; then
-    direnv="$(command -v direnv || true)" # prevent exit on failure
+    direnv="$(type -P direnv || true)" # prevent exit on failure
   fi
 
   if [ -z "$direnv" ]; then
@@ -33,7 +33,7 @@ No direnv executable found. Please do one of the following:
 
 With a system installed direnv
 
-    export ASDF_DIRENV_BIN="$(command -v direnv)"
+    export ASDF_DIRENV_BIN="$(type -P direnv)"
 
 With an asdf installed direnv
 
@@ -67,7 +67,7 @@ _follow_symlink() {
 
 _load_asdf_utils() {
   if [ -z "$(declare -f -F with_plugin_env)" ]; then
-    ASDF_DIR="${ASDF_DIR:-"$(_follow_symlink "$(command -v asdf)" | xargs dirname | xargs dirname)"}"
+    ASDF_DIR="${ASDF_DIR:-"$(_follow_symlink "$(type -P asdf)" | xargs dirname | xargs dirname)"}"
     # libexec is a Homebrew specific thing. See
     # https://github.com/asdf-community/asdf-direnv/issues/95 for details.
     local lib_file

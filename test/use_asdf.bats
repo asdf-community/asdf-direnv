@@ -71,7 +71,7 @@ teardown() {
   cd "$PROJECT_DIR"
   asdf direnv local
 
-  [ ! $(command -v dummy) ] # not available
+  [ ! $(type -P dummy) ] # not available
 
   asdf global dummy 1.0
   rm -f "$PROJECT_DIR"/.tool-versions # no local tools
@@ -89,7 +89,7 @@ teardown() {
   cd "$PROJECT_DIR"
   asdf direnv local
 
-  [ ! $(command -v dummy) ] # not available
+  [ ! $(type -P dummy) ] # not available
 
   asdf global dummy 1.0 # should be ignored by asdf
   asdf local dummy 2.0
@@ -109,8 +109,8 @@ teardown() {
   cd "$PROJECT_DIR"
   asdf direnv local
 
-  [ ! $(command -v mummy) ] # not available
-  [ ! $(command -v dummy) ] # not available
+  [ ! $(type -P mummy) ] # not available
+  [ ! $(type -P dummy) ] # not available
   envrc_load
 
   run mummy
@@ -226,7 +226,7 @@ EOF
   run gummy # selected from global tool-versions
   [ "$output" == "This is gummy 1.0" ]
 
-  [ ! $(command -v mummy) ] # never selected
+  [ ! $(type -P mummy) ] # never selected
   [ ! $(path_as_lines | grep "$(dummy_bin_path dummy 1.0)") ]
 }
 
