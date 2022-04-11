@@ -140,7 +140,7 @@ function direnv_shell_integration() {
     *bash*)
       rcfile="$HOME/.bashrc"
       # shellcheck disable=SC2016
-      asdf_direnv_rcfile_expr='${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/bashrc'
+      asdf_direnv_rcfile_expr='"${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/bashrc"'
       asdf_direnv_rcfile=$(eval echo "$asdf_direnv_rcfile_expr")
       echo "source \"$asdf_direnv_rcfile_expr\"" | grep_or_add "$rcfile"
       cat <<-EOF | clobber_if_different "$asdf_direnv_rcfile"
@@ -152,7 +152,7 @@ EOF
     *zsh*)
       rcfile="${ZDOTDIR:-$HOME}/.zshrc"
       # shellcheck disable=SC2016
-      asdf_direnv_rcfile_expr='${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc'
+      asdf_direnv_rcfile_expr='"${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"'
       asdf_direnv_rcfile=$(eval echo "$asdf_direnv_rcfile_expr")
       echo "source $asdf_direnv_rcfile_expr" | grep_or_add "$rcfile"
       cat <<-EOF | clobber_if_different "$asdf_direnv_rcfile"
