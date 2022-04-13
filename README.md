@@ -91,17 +91,18 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 
 ### Setup
 
-Install this plugin and run the setup command.
+Install this plugin and run the setup command for all of your preferred shells `bash`/`fish`/`zsh`.
 
 ```bash
 asdf plugin-add direnv
 asdf direnv setup --shell bash --version latest
 ```
 
-You can run this command for all of your preferred shells `bash`/`fish`/`zsh`.
-The `--version` value can be `system` if you aleady have a `direnv` installation,
-or `latest`/[`<direnv-release-version>`](https://github.com/direnv/direnv/releases)
-if you prefer asdf to install it for you.
+If you already have a `direnv` installation, you can specify `--version system`.
+
+Otherwise this plugin can install it for you. Specify either `--version latest`
+or a [direnv release](https://github.com/direnv/direnv/releases) as shown by `asdf list-all direnv`.
+
 
 The setup will hint which files were modified, you might want to review its changes.
 After setup, close and open your terminal.
@@ -131,7 +132,8 @@ $ asdf direnv shell python 3.8.10 nodejs 14.18.2
 $ asdf direnv shell nodejs 14.18.2 -- npx create-react-app
 ```
 
-### Updating
+<details>
+<summary><h3>Updating</h3></summary>
 
 Updating this plugin is the same as any asdf plugin:
 
@@ -139,10 +141,13 @@ Updating this plugin is the same as any asdf plugin:
 
 Updating the version of direnv you use depends on which installation method you've chosen:
 
-- `system`: Nothing special required here, direnv will update whenever you
-  update direnv with your system package manager.
+- `system`: Nothing special required here, whenever your system package manager
+  updates direnv, this plugin will use the updated version.
+
 - `latest` or `<direnv-release-version>`: Re-run `asdf direnv setup --version
   latest --shell ...` to update to the latest version of direnv.
+
+</details>
 
 <details>
   <summary><h6>Cached environment</h6></summary>
