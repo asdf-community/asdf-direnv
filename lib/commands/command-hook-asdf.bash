@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eo pipefail
+
 # TODO: remove once we release 0.4.0
 cat <<-'EOF' >&2
 Looks like you are using the 'asdf direnv hook asdf' command which was removed in asdf-direnv 0.3.0.
