@@ -154,9 +154,12 @@ Updating the version of direnv you use depends on which installation method you'
 
 To speed up things a lot, this plugin creates direnv `envrc` files that contain
 your plugins environment. They are created whenever your `.envrc` or your
-`.tool-versions` files change, and are cached under `$XDG_CACHE_HOME/asdf-direnv`.
+`.tool-versions` files change, and are cached under `$XDG_CACHE_HOME/asdf-direnv/env`.
 
 If you ever need to regenerate a cached environment file, just `touch .envrc`.
+
+Also, the `asdf direnv envrc` command will print the path to the cached environment
+file used for your project.
 
 Now when you leave your project directory and come back to it, direnv will
 manage the environment variables for you really fast. For example:
