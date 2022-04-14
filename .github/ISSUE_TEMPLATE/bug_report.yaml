@@ -44,7 +44,7 @@ body:
     id: debug
     attributes:
       label: Debug Output
-      description: Copy the output of `env ASDF_DIRENV_DEBUG=true direnv reload` here
+      description: Copy the output of `env ASDF_DIRENV_DEBUG=true direnv reload` here. If possible, please include the content of the generated environment file (path will be shown on output), or any other shell variable you might find important.
       render: shell
     validations:
       required: true
