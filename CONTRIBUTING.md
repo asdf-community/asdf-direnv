@@ -21,7 +21,7 @@ and feature.
 
 Executable commands are under `lib/commands/command-*.bash` and follow the asdf
 convention for defining custom commands. These commands are intended to be
-executed directly by our users, and shall always start with `set -eo pipefail`
+executed directly by our users, and shall always start with `set -Eeuo pipefail`
 in order to stop on first error. Commands shall not source each other. The ony
 way to share code is to source other bash files outside of `lib/commands`.
 
