@@ -265,7 +265,7 @@ _plugin_env_bash() {
   # https://github.com/asdf-vm/asdf/blob/7493f4099c844e40af72d7f05635d7991a463d1a/lib/commands/command-install.bash#L161
   IFS=':' read -r -a version_info <<<"$full_version"
   if [ "${version_info[0]}" = "latest" ]; then
-    version=$(asdf latest "$plugin_name" "${version_info[1]}")
+    version=$(asdf latest "$plugin" "${version_info[1]}")
   else
     version="${version_info[0]}"
   fi
@@ -288,7 +288,7 @@ _plugin_env_bash() {
   # NOTE: We don't add custom shims into path.
   # NOTE: If install_path is empty (ex. "system" version), skip this step so /bin doesn't get added to PATH.
   if [ -n "$install_path" ]; then
-    list_plugin_bin_paths "$plugin_name" "$version" "$install_type" |
+    list_plugin_bin_paths "$plugin" "$version" "$install_type" |
       tr $' ' $'\n' | _tail_r | sed -e "s#^#$install_path/#" | _each_do echo PATH_add
   fi
 
