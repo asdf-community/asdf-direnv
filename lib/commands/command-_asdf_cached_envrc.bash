@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -Eeuo pipefail
 
 # TODO: remove once we release 0.4.0
 cat <<-'EOF' >&2

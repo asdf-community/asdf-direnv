@@ -12,7 +12,7 @@ teardown() {
   env_teardown
 }
 
-@test "local command touches .tool-versions and .envrc" {
+@test "local command touches .tool-versions and .envrc - single tool" {
   install_dummy_plugin "dummy" "1.0"
 
   run asdf direnv local dummy 1.0

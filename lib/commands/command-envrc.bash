@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -Eeuo pipefail
 
 # shellcheck source=lib/tools-environment-lib.bash
 source "$(dirname "${BASH_SOURCE[0]}")/../tools-environment-lib.bash"
