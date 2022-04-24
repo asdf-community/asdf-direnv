@@ -206,7 +206,12 @@ _load_local_plugins_env() {
 _load_plugin_version_and_file() {
   local plugin_name=$1
   local versions_and_path
-  versions_and_path="$(find_versions "$plugin_name" "$(pwd)")"
+  # NOTE: temporary disable nounset since find_versions expects ASDF_DEFAULT_TOOL_VERSIONS_FILENAME to be set.
+  versions_and_path="$(
+    set +u
+    find_versions "$plugin_name" "$(pwd)"
+    set -u
+  )"
   if test -z "$versions_and_path"; then
     return 0
   fi
