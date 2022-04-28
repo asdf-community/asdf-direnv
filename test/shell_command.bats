@@ -52,6 +52,9 @@ teardown() {
   asdf local dummy 2.0
   asdf direnv local
 
+  path_as_lines | run grep 'shims'
+  [ "$status" != 0 ] # should not have asdf shims on PATH
+
   envrc_load
   run dummy
   [ "$status" -eq 0 ]
@@ -82,6 +85,9 @@ teardown() {
   asdf local dummy 2.0
   asdf direnv local
 
+  path_as_lines | run grep 'shims'
+  [ "$status" != 0 ] # should not have asdf shims on PATH
+
   envrc_load
   run dummy
   [ "$status" -eq 0 ]
@@ -93,7 +99,6 @@ teardown() {
   [ "${lines[1]}" == "This is dummy 3.0" ]
 
   run dummy
-  echo "$output"
   [ "$status" -eq 0 ]
   [ "${lines[0]}" == "This is dummy 2.0" ]
 }
