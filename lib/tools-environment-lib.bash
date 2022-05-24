@@ -276,6 +276,7 @@ _plugin_env_bash() {
     version="${version_info[0]}"
   fi
 
+  local install_path
   if [ "$version" != "system" ]; then
     install_path=$(get_install_path "$plugin" "$install_type" "$version")
     if [ ! -d "$install_path" ]; then
@@ -293,13 +294,13 @@ _plugin_env_bash() {
   # NOTE: The plugin returns a list of space-separated dirs relative to install_dir.
   # NOTE: We don't add custom shims into path.
   # NOTE: If install_path is empty (ex. "system" version), skip this step so /bin doesn't get added to PATH.
-  if [ -n "$install_path" ]; then
+  if [ -n "${install_path-}" ]; then
     list_plugin_bin_paths "$plugin" "$version" "$install_type" |
       tr $' ' $'\n' | _tail_r | sed -e "s#^#$install_path/#" | _each_do echo PATH_add
   fi
 
   # If the plugin defines custom environment, source it.
   if [ -f "${plugin_path}/bin/exec-env" ]; then
-    echo "ASDF_INSTALL_TYPE='$install_type' ASDF_INSTALL_VERSION='$version' ASDF_INSTALL_PATH='$install_path' source_env ${plugin_path}/bin/exec-env"
+    echo "ASDF_INSTALL_TYPE='$install_type' ASDF_INSTALL_VERSION='$version' ASDF_INSTALL_PATH='${install_path-}' source_env ${plugin_path}/bin/exec-env"
   fi
 }
