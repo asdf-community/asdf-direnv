@@ -301,6 +301,6 @@ _plugin_env_bash() {
 
   # If the plugin defines custom environment, source it.
   if [ -f "${plugin_path}/bin/exec-env" ]; then
-    echo "ASDF_INSTALL_TYPE='$install_type' ASDF_INSTALL_VERSION='$version' ASDF_INSTALL_PATH='${install_path-}' source_env ${plugin_path}/bin/exec-env"
+    echo "ASDF_INSTALL_TYPE='$install_type' ASDF_INSTALL_VERSION='$version' ASDF_INSTALL_PATH='${install_path:-}' source_env ${plugin_path}/bin/exec-env"
   fi
 }
