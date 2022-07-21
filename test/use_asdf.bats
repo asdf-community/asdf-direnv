@@ -13,7 +13,6 @@ teardown() {
   env_teardown
 }
 
-
 @test "dummy 1.0 is available via asdf exec" {
   install_dummy_plugin "dummy" "1.0"
   ASDF_DUMMY_VERSION=1.0 run asdf exec dummy
@@ -24,11 +23,11 @@ teardown() {
   cd "$PROJECT_DIR"
 
   [ -z "$FOO" ]
-  echo 'export FOO=BAR' > "$PROJECT_DIR/.envrc"
+  echo 'export FOO=BAR' >"$PROJECT_DIR/.envrc"
   direnv allow "$PROJECT_DIR/.envrc"
 
   envrc_load
-  [ "$FOO" ==  "BAR" ]
+  [ "$FOO" == "BAR" ]
 }
 
 # This is to support asdf multiple version multiline feature
@@ -39,7 +38,7 @@ teardown() {
   cd "$PROJECT_DIR"
   asdf direnv local dummy 2.0 dummy 1.0
   asdf local dummy 2.0
-  echo "dummy 1.0" >> .tool-versions
+  echo "dummy 1.0" >>.tool-versions
 
   asdf direnv local
   envrc_load
@@ -100,7 +99,6 @@ teardown() {
   [ "$output" == "This is dummy 2.0" ] # executable in path
 }
 
-
 @test "use asdf - prepends plugin custom shims to PATH" {
   echo "If a plugin has helper shims defined, they also appear on PATH"
   install_dummy_plugin dummy 1.0 mummy
@@ -128,7 +126,7 @@ teardown() {
 
 @test "use asdf - exports plugin custom env not only PATH" {
   install_dummy_plugin dummy 1.0
-  cat <<-EOF > "$ASDF_DATA_DIR/plugins/dummy/bin/exec-env"
+  cat <<-EOF >"$ASDF_DATA_DIR/plugins/dummy/bin/exec-env"
 #!/usr/bin/env bash
 export JOJO=JAJA
 export FOO=$'\nBAR' # something starting with new line
@@ -140,7 +138,7 @@ EOF
   asdf direnv local
   envrc_load
 
-  [ "$JOJO" == "JAJA" ] # Env exported by plugin
+  [ "$JOJO" == "JAJA" ]  # Env exported by plugin
   [ "$FOO" == $'\nBAR' ] # Keeps special chars
 }
 
@@ -188,7 +186,7 @@ EOF
   setup_dummy_legacyfile dummy .dummy-version
 
   cd "$PROJECT_DIR"
-  echo "1.0" > "$PROJECT_DIR/.dummy-version"
+  echo "1.0" >"$PROJECT_DIR/.dummy-version"
   asdf direnv local
   envrc_load
 
@@ -211,7 +209,7 @@ EOF
   asdf global dummy 1.0
   asdf global gummy 1.0
 
-  echo "2.0" > "$PROJECT_DIR/.dummy-version"
+  echo "2.0" >"$PROJECT_DIR/.dummy-version"
   asdf local puppy 2.0
 
   asdf direnv local
@@ -256,7 +254,7 @@ EOF
   setup_dummy_legacyfile dummy .dummy-version
 
   cd "$PROJECT_DIR"
-  echo "2.0" > "$PROJECT_DIR/.dummy-version"
+  echo "2.0" >"$PROJECT_DIR/.dummy-version"
 
   asdf direnv local
   envrc_load
@@ -278,7 +276,7 @@ EOF
   asdf global mummy 1.0
   asdf global rummy 1.0
 
-  echo "1.0" > "$PROJECT_DIR/.dummy-version"
+  echo "1.0" >"$PROJECT_DIR/.dummy-version"
   asdf local puppy 1.0
   asdf local gummy 1.0
 

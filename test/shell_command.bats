@@ -71,7 +71,7 @@ teardown() {
 }
 
 @test "without command it spawns a new SHELL with specified tools" {
-  echo "dummy" > $PWD/fake-shell
+  echo "dummy" >$PWD/fake-shell
   chmod +x $PWD/fake-shell
 
   asdf direnv setup --shell bash --version system
