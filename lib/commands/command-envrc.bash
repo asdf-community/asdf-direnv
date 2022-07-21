@@ -5,9 +5,9 @@ set -Eeuo pipefail
 # shellcheck source=lib/tools-environment-lib.bash
 source "$(dirname "${BASH_SOURCE[0]}")/../tools-environment-lib.bash"
 
-if ! env_file="$(_asdf_cached_envrc "$@")"; then
+function print_generic_error() {
   log_error "Error generating asdf cached envrc"
-  exit 1
-fi
+}
+trap print_generic_error ERR
 
-echo "$env_file"
+_print_asdf_cached_envrc "$@"
