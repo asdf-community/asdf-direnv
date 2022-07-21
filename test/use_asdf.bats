@@ -6,7 +6,8 @@ load test_helpers
 setup() {
   env_setup
   asdf direnv setup --shell bash --version system
-  source $HOME/.bashrc
+  # shellcheck source=/dev/null
+  source "$HOME/.bashrc"
 }
 
 teardown() {
@@ -70,7 +71,7 @@ teardown() {
   cd "$PROJECT_DIR"
   asdf direnv local
 
-  [ ! $(type -P dummy) ] # not available
+  [ ! "$(type -P dummy)" ] # not available
 
   asdf global dummy 1.0
   rm -f "$PROJECT_DIR"/.tool-versions # no local tools
@@ -88,7 +89,7 @@ teardown() {
   cd "$PROJECT_DIR"
   asdf direnv local
 
-  [ ! $(type -P dummy) ] # not available
+  [ ! "$(type -P dummy)" ] # not available
 
   asdf global dummy 1.0 # should be ignored by asdf
   asdf local dummy 2.0
@@ -107,8 +108,8 @@ teardown() {
   cd "$PROJECT_DIR"
   asdf direnv local
 
-  [ ! $(type -P mummy) ] # not available
-  [ ! $(type -P dummy) ] # not available
+  [ ! "$(type -P mummy)" ] # not available
+  [ ! "$(type -P dummy)" ] # not available
   envrc_load
 
   run mummy
@@ -224,8 +225,10 @@ EOF
   run gummy # selected from global tool-versions
   [ "$output" == "This is gummy 1.0" ]
 
-  [ ! $(type -P mummy) ] # never selected
-  [ ! $(path_as_lines | grep "$(dummy_bin_path dummy 1.0)") ]
+  [ ! "$(type -P mummy)" ] # not available
+  # It's nice to check test output consistently.
+  # shellcheck disable=SC2143
+  [ ! "$(path_as_lines | grep "$(dummy_bin_path dummy 1.0)")" ]
 }
 
 @test "use asdf - watches selection files" {
@@ -284,11 +287,16 @@ EOF
   envrc_load
 
   path_as_lines
-  local dummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path dummy 1.0)" | cut -d: -f1)"
-  local gummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path gummy 1.0)" | cut -d: -f1)"
-  local mummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path mummy 1.0)" | cut -d: -f1)"
-  local puppy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path puppy 1.0)" | cut -d: -f1)"
-  local rummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path rummy 1.0)" | cut -d: -f1)"
+  local dummy_line
+  dummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path dummy 1.0)" | cut -d: -f1)"
+  local gummy_line
+  gummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path gummy 1.0)" | cut -d: -f1)"
+  local mummy_line
+  mummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path mummy 1.0)" | cut -d: -f1)"
+  local puppy_line
+  puppy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path puppy 1.0)" | cut -d: -f1)"
+  local rummy_line
+  rummy_line="$(path_as_lines | grep -n -F "$(dummy_bin_path rummy 1.0)" | cut -d: -f1)"
 
   [ "$puppy_line" -lt "$gummy_line" ] # first tool in tool-versions is also first on PATH
   [ "$gummy_line" -lt "$mummy_line" ] # local plugins should be on PATH before gloabl ones
