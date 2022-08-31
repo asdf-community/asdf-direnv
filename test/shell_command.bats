@@ -42,7 +42,8 @@ teardown() {
 
 @test "one-shot command can use version different from global/local .tool-versions" {
   asdf direnv setup --shell bash --version system
-  source $HOME/.bashrc
+  # shellcheck source=/dev/null
+  source "$HOME/.bashrc"
 
   install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
@@ -71,11 +72,12 @@ teardown() {
 }
 
 @test "without command it spawns a new SHELL with specified tools" {
-  echo "dummy" > $PWD/fake-shell
-  chmod +x $PWD/fake-shell
+  echo "dummy" >"$PWD/fake-shell"
+  chmod +x "$PWD/fake-shell"
 
   asdf direnv setup --shell bash --version system
-  source $HOME/.bashrc
+  # shellcheck source=/dev/null
+  source "$HOME/.bashrc"
 
   install_dummy_plugin dummy 1.0
   install_dummy_plugin dummy 2.0
@@ -93,7 +95,7 @@ teardown() {
   [ "$status" -eq 0 ]
   [ "${lines[0]}" == "This is dummy 2.0" ]
 
-  run env SHELL=$PWD/fake-shell asdf direnv shell dummy 3.0 # Without arguments it should run SHELL
+  run env SHELL="$PWD/fake-shell" asdf direnv shell dummy 3.0 # Without arguments it should run SHELL
   [ "$status" -eq 0 ]
   [ "${lines[0]}" == "direnv: using asdf dummy 3.0" ]
   [ "${lines[1]}" == "This is dummy 3.0" ]

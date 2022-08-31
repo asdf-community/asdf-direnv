@@ -5,12 +5,13 @@ load test_helpers
 
 setup() {
   env_setup
-  EXPECTED_USE_ASDF="$(cat <<-'EOF'
+  EXPECTED_USE_ASDF="$(
+    cat <<-'EOF'
 use_asdf() {
   source_env "$(asdf direnv envrc "$@")"
 }
 EOF
-)"
+  )"
   export EXPECTED_USE_ASDF
 }
 
