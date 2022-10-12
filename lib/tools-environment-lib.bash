@@ -89,8 +89,8 @@ _cache_dir() {
   echo "$dir"
 }
 
-_asdf_cached_envrc() {
-  local dump_dir tools_file tools_cksum env_file
+_print_asdf_cached_envrc() {
+  local dump_dir tools_file tools_cksum
   dump_dir="$(_cache_dir)/env"
   generating_dump_dir="$(_cache_dir)/env-generating"
   tools_file="$(_local_versions_file)"
@@ -116,7 +116,6 @@ _asdf_cached_envrc() {
   generating_env_file="$(mktemp "$generating_dump_dir/$tools_cksum.XXXX")"
   _asdf_envrc "$tools_file" | _no_dups >"${generating_env_file}"
   mv "${generating_env_file}" "${env_file}"
-
   echo "$env_file"
 }
 

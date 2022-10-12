@@ -306,3 +306,28 @@ EOF
   [ "$dummy_line" -lt "$mummy_line" ] # dummy is resolved by `use asdf global` since its not in tool-versions
   [ "$mummy_line" -lt "$rummy_line" ]
 }
+
+@test "error in use asdf should not get cached" {
+  # Setup: use dummy plugin v1.0
+  install_dummy_plugin dummy 1.0
+  cd "$PROJECT_DIR"
+  asdf direnv local dummy 1.0
+
+  # Now switch to dummy v2.0, which we do *not* have installed. This should
+  # fail, but should *not* generate a cached env file of that failure.
+  echo "dummy 2.0" >.tool-versions
+  envrc_load &>/tmp/load1
+
+  # Now install dummmy 2.0. The next time someone enters this directory, we
+  # should successfully load this plugin.
+  install_dummy_plugin dummy 2.0
+
+  # Simulate someone entering this directory fresh: first unload before loading again.
+  envrc_unload
+  envrc_load
+
+  # Finally, verify that dummy 2.0 is actually loaded. It wouldn't be if we had
+  # a cached failure from the first load.
+  run path_as_lines
+  [ "${lines[0]}" = "$(dummy_bin_path dummy 2.0)" ]
+}

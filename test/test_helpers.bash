@@ -28,6 +28,7 @@ env_setup() {
   XDG_CACHE_HOME="$HOME/.cache"
   ASDF_DIR="$HOME/.asdf"
   ASDF_DATA_DIR="$ASDF_DIR"
+  EMPTY_DIR=$(mktemp -dt asdf.XXXX)
 
   # A temporary "system" direnv binary outside of asdf.
   DIRENV_SYS=$(mktemp -dt direnv.XXXX)
@@ -60,7 +61,7 @@ env_setup() {
 }
 
 env_teardown() {
-  rm -rf "$BASE_DIR"
+  rm -rf "$BASE_DIR" "$EMPTY_DIR"
   unset ASDF_CONCURRENCY
 }
 
@@ -69,6 +70,15 @@ envrc_load() {
   eval "$(direnv export bash)"
   direnv status
   cat .envrc
+}
+
+envrc_unload() {
+  # Simulate someone leaving a directory and direnv unloading by cd-ing into an
+  # empty directory and loading a `direnv export` (it's smart enough to unset
+  # environment variables as needed).
+  cd "$EMPTY_DIR" || exit 1
+  eval "$(direnv export bash)"
+  cd - || exit 1
 }
 
 dummy_bin_path() {
