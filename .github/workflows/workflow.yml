@@ -65,24 +65,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
       - name: Install shellcheck
-        run: sudo apt-get install -y shellcheck
+        run: brew install shellcheck
 
       - name: Run ShellCheck
         run: make lint
 
   format:
-    # ubuntu-latest is still pinned to Ubuntu 20, which doesn't have `shfmt`
-    # available to easily install.
-    # TODO: switch back to ubuntu-latest once Ubuntu 22 is the default.
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
       - name: Install shfmt
-        run: sudo apt-get install -y shfmt
+        run: brew install shfmt
 
       - name: Run shfmt
         run: make fmt-check
