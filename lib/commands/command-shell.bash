@@ -6,7 +6,7 @@ set -Eeuo pipefail
 # shellcheck source=lib/tools-environment-lib.bash
 source "$(dirname "${BASH_SOURCE[0]}")/../tools-environment-lib.bash"
 
-case "${1:-}" in
+case "${1-}" in
   "" | "-h" | "--help" | "help")
     cat <<-EOF
 Usage: asdf direnv shell <name> <version> [<name> <version>]... [-- <command> <args>...]
