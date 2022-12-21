@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -n "${ASDF_DIRENV_DEBUG:-}" ]; then
+if [ -n "${ASDF_DIRENV_DEBUG-}" ]; then
   set -x
 fi
 
