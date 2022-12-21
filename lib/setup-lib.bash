@@ -116,7 +116,7 @@ function installed_direnv() {
       ;;
     latest | LATEST)
       run_cmd asdf install direnv latest
-      version="$(asdf list direnv | tail -n 1 | sed -e 's/ //g')" # since `ASDF_DIRENV_VERSION=latest asdf which direnv` does not work
+      version="$(asdf list direnv | tail -n 1 | sed -e 's/[ *]//g')" # since `ASDF_DIRENV_VERSION=latest asdf which direnv` does not work
       ASDF_DIRENV_BIN="$(run_cmd env ASDF_DIRENV_VERSION="$version" asdf which direnv)"
 
       ;;
