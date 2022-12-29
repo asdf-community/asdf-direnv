@@ -184,14 +184,16 @@ EOF
 }
 
 function print_usage() {
-  echo "Usage: asdf direnv setup [--shell SHELL] [--version VERSION]"
+  echo "Usage: asdf direnv setup [--shell SHELL ] [--no-shell] [--version VERSION]"
   echo ""
   echo "SHELL: one of bash, zsh, or fish. If not specified, defaults to $SHELL"
   echo "VERSION: one of system, latest, or x.y.z"
+  echo "NO-SHELL: will not change your $SHELL config"
 }
 
 function setup_command() {
   local shell="$SHELL"
+  local no_shell=0
   local version=""
 
   while [[ $# -gt 0 ]]; do
@@ -205,6 +207,9 @@ function setup_command() {
       --shell)
         shell="$1"
         shift
+        ;;
+      --no-shell)
+        no_shell=1
         ;;
       --version)
         version="$1"
@@ -226,7 +231,9 @@ function setup_command() {
 
   check_for "asdf" asdf_bin_in_path || fail "Make sure you have asdf installed. Follow instructions at https://asdf-vm.com"
   check_for "direnv" installed_direnv "$version" || fail "An installation of direnv is required to continue. See https://github.com/asdf-community/asdf-direnv"
-  check_for "direnv shell integration" direnv_shell_integration "$shell" || fail "direnv shell hook must be installed. See https://direnv.net/docs/hook.html"
+  if [ $no_shell -eq 0 ]; then
+    check_for "direnv shell integration" direnv_shell_integration "$shell" || fail "direnv shell hook must be installed. See https://direnv.net/docs/hook.html"
+  fi
   check_for "direnv asdf integration" direnv_asdf_integration || fail "asdf-direnv function must be installed on direnvrc. See https://github.com/asdf-community/asdf-direnv"
 }
 
