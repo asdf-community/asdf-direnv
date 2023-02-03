@@ -238,12 +238,23 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 
   All shims are still available via `asdf exec <shim>`
 
-```bash
-# ~/.bashrc or equivalent
+  ```bash
+  # ~/.bashrc or equivalent
 
-# Don't source `~/.asdf/asdf.sh`
-PATH="$PATH:~/.asdf/bin"
-```
+  # Don't source `~/.asdf/asdf.sh`
+  PATH="$PATH:~/.asdf/bin"
+  ```
+
+  Note: This will break any [global defaults](https://asdf-vm.com/guide/getting-started.html#global) you have specified in
+  `~/.tool-versions`. There are various workarounds for this:
+
+   - Do all work in project directories with their own `.envrc` and `.tool-versions`
+   - Use [`asdf direnv shell`](#temporary-environments-for-one-shot-commands) for one-shot commands
+   - Create a `~/.envrc` with `use asdf` in it
+   - Use your OS's package manager to install any tools you want globally accessible
+
+  There are pros and cons to each of these approaches, it's up to you to pick
+  the approach that works best for your workstyle.
 
 - If you want to silence the console output of direnv, you can do that by
   setting an empty environment variable: `export DIRENV_LOG_FORMAT=""`.
