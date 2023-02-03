@@ -299,7 +299,7 @@ watch_file "package.json"
 - Using a non-empty `ASDF_DIRENV_DEBUG` will enable bash-tracing with `set -x` and skip env-cache.
 
   For example, if you are troubleshooting or trying to debug something weird on
-  your environment, use `env ASDF_DIRENV_DEBUG=true direnv reload` and provide any
+  your environment, use `export ASDF_DIRENV_DEBUG=true; direnv reload` and provide any
   relevant output on an [issue](issues/new).
 
   Also, if you are contributing a new feature or bug-fix try running
