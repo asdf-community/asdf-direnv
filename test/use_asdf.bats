@@ -352,3 +352,16 @@ EOF
   run path_as_lines
   [ "${lines[0]}" = "$(dummy_bin_path dummy 2.0)" ]
 }
+
+@test "use asdf - ignore missing plugin" {
+  install_dummy_plugin "dummy" "1.0"
+
+  asdf direnv local dummy 1.0
+  echo "missing 3.0" >>.tool-versions
+
+  export ASDF_DIRENV_IGNORE_MISSING_PLUGINS=1
+  asdf direnv local
+  run envrc_load
+
+  echo "$output" | grep "direnv: ignoring not installed plugin: missing"
+}
