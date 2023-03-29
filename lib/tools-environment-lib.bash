@@ -265,14 +265,20 @@ _plugin_env_bash() {
   local plugin="${1}"
   local full_version="${2}"
   local not_installed_message="${3}"
+  local ignore_missing_plugins="${ASDF_DIRENV_IGNORE_MISSING_PLUGINS:-0}"
 
   # NOTE: unlike asdf, asdf-direnv does not support other installation types.
   local install_type="version"
 
   plugin_path=$(get_plugin_path "$plugin")
   if [ ! -d "$plugin_path" ]; then
-    log_error "asdf plugin not installed: $plugin"
-    exit 1
+    if [ "$ignore_missing_plugins" -eq "0" ]; then
+      log_error "asdf plugin not installed: $plugin"
+      exit 1
+    else
+      log_error "ignoring not installed plugin: $plugin"
+      return
+    fi
   fi
 
   local version

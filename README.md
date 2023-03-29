@@ -107,6 +107,12 @@ or a [direnv release](https://github.com/direnv/direnv/releases) as shown by `as
 The setup will hint which files were modified, you might want to review its changes.
 After setup, close and open your terminal.
 
+### Configuration
+
+By default asdf-direnv will fail if a plugin is not installed, but is possible
+to change this using the environment variable
+`ASDF_DIRENV_IGNORE_MISSING_PLUGINS=1`
+
 ### Per-Project Environments
 
 Once direnv is hooked into your system, use the  `asdf direnv local`
