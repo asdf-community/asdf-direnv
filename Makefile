@@ -9,9 +9,9 @@ fmt:
 	shfmt -w $(SHFMT_BASE_FLAGS) $(SH_SRCFILES)
 .PHONY: fmt
 
-fmt-check:
+format-check:
 	shfmt -d $(SHFMT_BASE_FLAGS) $(SH_SRCFILES)
-.PHONY: fmt-check
+.PHONY: format-check
 
 lint:
 	shellcheck $(SH_SRCFILES)
