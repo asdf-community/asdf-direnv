@@ -52,6 +52,7 @@ teardown() {
 }
 
 @test "setup fish modifies rcfile" {
+  export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
   run asdf direnv setup --shell fish --version system
   grep "set -gx ASDF_DIRENV_BIN" "$XDG_DATA_HOME/fish/vendor_conf.d/asdf_direnv.fish"
   # shellcheck disable=SC2016
