@@ -41,6 +41,7 @@ teardown() {
 }
 
 @test "setup zsh modifies rcfile (ZDOTDIR set)" {
+  # shellcheck disable=SC2030
   export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
   run asdf direnv setup --shell zsh --version system
   # shellcheck disable=SC2016
@@ -58,6 +59,57 @@ teardown() {
   # shellcheck disable=SC2016
   grep -F '$ASDF_DIRENV_BIN hook fish' "$XDG_DATA_HOME/fish/vendor_conf.d/asdf_direnv.fish"
   grep -F "$EXPECTED_USE_ASDF" "$XDG_CONFIG_HOME/direnv/lib/use_asdf.sh"
+}
+
+@test "setup bash, do not modify rcfile (ASDF_DIRENV_NO_TOUCH_RC_FILE unset)" {
+  unset ASDF_DIRENV_NO_TOUCH_RC_FILE
+  run asdf direnv setup --no-touch-rc-file --shell bash --version system
+  # shellcheck disable=SC2016
+  grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/bashrc' "$HOME/.bashrc" && return 1 || return 0
+}
+
+@test "setup zsh, do not modify rcfile (ASDF_DIRENV_NO_TOUCH_RC_FILE unset) (ZDOTDIR unset)" {
+  unset ASDF_DIRENV_NO_TOUCH_RC_FILE
+  unset ZDOTDIR
+  run asdf direnv setup --no-touch-rc-file --shell zsh --version system
+  # shellcheck disable=SC2016
+  grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc' "$HOME/.zshrc" && return 1 || return 0
+}
+
+@test "setup zsh, do not modify rcfile (ASDF_DIRENV_NO_TOUCH_RC_FILE unset) (ZDOTDIR set)" {
+  unset ASDF_DIRENV_NO_TOUCH_RC_FILE
+  # shellcheck disable=SC2030,SC2031
+  export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+  run asdf direnv setup --no-touch-rc-file --shell zsh --version system
+  # shellcheck disable=SC2016
+  grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc' "$HOME/.config/zsh/.zshrc" && return 1 || return 0
+}
+
+@test "setup bash, do not modify rcfile (ASDF_DIRENV_NO_TOUCH_RC_FILE set)" {
+  # shellcheck disable=SC2030,SC2031
+  export ASDF_DIRENV_NO_TOUCH_RC_FILE=1
+  run asdf direnv setup --shell bash --version system
+  # shellcheck disable=SC2016
+  grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/bashrc' "$HOME/.bashrc" && return 1 || return 0
+}
+
+@test "setup zsh, do not modify rcfile (ASDF_DIRENV_NO_TOUCH_RC_FILE set) (ZDOTDIR unset)" {
+  # shellcheck disable=SC2030,SC2031
+  export ASDF_DIRENV_NO_TOUCH_RC_FILE=1
+  unset ZDOTDIR
+  run asdf direnv setup --shell zsh --version system
+  # shellcheck disable=SC2016
+  grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc' "$HOME/.zshrc" && return 1 || return 0
+}
+
+@test "setup zsh, do not modify rcfile (ASDF_DIRENV_NO_TOUCH_RC_FILE set) (ZDOTDIR set)" {
+  # shellcheck disable=SC2031
+  export ASDF_DIRENV_NO_TOUCH_RC_FILE=1
+  # shellcheck disable=SC2031
+  export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+  run asdf direnv setup --shell zsh --version system
+  # shellcheck disable=SC2016
+  grep -F '${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc' "$HOME/.config/zsh/.zshrc" && return 1 || return 0
 }
 
 @test "can re-run setup" {

@@ -151,7 +151,12 @@ Updating the version of direnv you use depends on which installation method you'
   updates direnv, this plugin will use the updated version.
 
 - `latest` or `<direnv-release-version>`: Re-run `asdf direnv setup --version
-  latest --shell ...` to update to the latest version of direnv.
+  latest --shell ...` to update to the latest version of direnv. One may optionally
+  add `--no-touch-rc-file` to the command to prevent the shell rc file from being
+  modified during the update.
+
+  (NOTE: One may alternatively `export ASDF_DIRENV_NO_TOUCH_RC_FILE=1` to permanently
+  prevent modification of shell rc files during updates.)
 
 </details>
 
