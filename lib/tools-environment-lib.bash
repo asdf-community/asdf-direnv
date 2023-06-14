@@ -65,20 +65,32 @@ _follow_symlink() {
   echo "$(pwd -P)/$filename"
 }
 
-_load_asdf_utils() {
-  if [ -z "$(declare -f -F with_plugin_env)" ]; then
+_load_asdf_lib() {
+  local expected_function
+  local path
+  expected_function=$1
+  path=$2
+  if [ -z "$(declare -f -F "$expected_function")" ]; then
     ASDF_DIR="${ASDF_DIR:-"$(_follow_symlink "$(type -P asdf)" | xargs dirname | xargs dirname)"}"
     # libexec is a Homebrew specific thing. See
     # https://github.com/asdf-community/asdf-direnv/issues/95 for details.
     local lib_file
-    lib_file=$(ls "$ASDF_DIR"/{lib,libexec/lib}/utils.bash 2>/dev/null || true)
+    lib_file=$(ls "$ASDF_DIR"/{lib,libexec/lib}/"$path" 2>/dev/null || true)
     if [ ! -f "$lib_file" ]; then
-      log_error "Could not find asdf utils.bash file in $ASDF_DIR"
+      log_error "Could not find asdf $path file in $ASDF_DIR"
       return 1
     fi
     # shellcheck source=/dev/null # we don't want shellcheck trying to find this file
     source "$lib_file"
   fi
+}
+
+_load_asdf_utils() {
+  _load_asdf_lib with_plugin_env utils.bash
+}
+
+_load_asdf_functions_versions() {
+  _load_asdf_lib latest_command functions/versions.bash
 }
 
 _cache_dir() {
@@ -253,26 +265,37 @@ _plugin_env_bash() {
   local plugin="${1}"
   local full_version="${2}"
   local not_installed_message="${3}"
+  local ignore_missing_plugins="${ASDF_DIRENV_IGNORE_MISSING_PLUGINS:-0}"
 
   # NOTE: unlike asdf, asdf-direnv does not support other installation types.
   local install_type="version"
 
   plugin_path=$(get_plugin_path "$plugin")
   if [ ! -d "$plugin_path" ]; then
-    log_error "asdf plugin not installed: $plugin"
-    exit 1
+    if [ "$ignore_missing_plugins" -eq "0" ]; then
+      log_error "asdf plugin not installed: $plugin"
+      exit 1
+    else
+      log_error "ignoring not installed plugin: $plugin"
+      return
+    fi
   fi
 
   local version
 
-  # The full_version may be of the form `latest:X`, so we resolve the latest
-  # version here. This is the same method asdf itself uses; see
-  # https://github.com/asdf-vm/asdf/blob/7493f4099c844e40af72d7f05635d7991a463d1a/lib/commands/command-install.bash#L161
+  # The full_version may be of the form `latest:X` or just `latest`, so we
+  # resolve the latest version here. This is the same method asdf itself uses;
+  # see
+  # https://github.com/asdf-vm/asdf/blob/a91b6d0ee3bc87af0af3cd4b29dd74695e8026b8/lib/functions/versions.bash#L40-L48
+  _load_asdf_functions_versions
   IFS=':' read -r -a version_info <<<"$full_version"
-  if [ "${version_info[0]}" = "latest" ]; then
-    version=$(asdf latest "$plugin" "${version_info[1]}")
+  if [ "${version_info[0]}" = "latest" ] && [ -n "${version_info[1]-}" ]; then
+    version=$(latest_command "$plugin_name" "${version_info[1]}")
+  elif [ "${version_info[0]}" = "latest" ] && [ -z "${version_info[1]-}" ]; then
+    version=$(latest_command "$plugin_name" "")
   else
-    version="${version_info[0]}"
+    # if branch handles ref: || path: || normal versions
+    version="$full_version"
   fi
 
   local install_path

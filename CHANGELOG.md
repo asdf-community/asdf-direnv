@@ -11,7 +11,11 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0..master)
 
+- Add '--no-touch-rc-file' option to prevent rc file modification during updates. #176
+- Alternatively, `export ASDF_DIRENV_NO_TOUCH_RC_FILE=1` to prevent rc file modification. #176
+
 - Add support for resolving 'latest:X' in .tool-versions #136
+- Add support for resolving 'latest' in .tool-versions #168
 
 ## [0.3.0](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0) (2022-04-03)
 
@@ -27,7 +31,7 @@ github compare-link with the previous one.
 
 - Speed up direnv stdlib by trying not to use asdf exec. #120
 
-- Do not add plugin paths for "system" versions. #116 
+- Do not add plugin paths for "system" versions. #116
 
 
 ## [0.2.0](https://github.com/asdf-community/asdf-direnv/releases/v0.2.0) (2022-03-16)

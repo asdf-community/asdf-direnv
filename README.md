@@ -107,6 +107,12 @@ or a [direnv release](https://github.com/direnv/direnv/releases) as shown by `as
 The setup will hint which files were modified, you might want to review its changes.
 After setup, close and open your terminal.
 
+### Configuration
+
+By default asdf-direnv will fail if a plugin is not installed, but is possible
+to change this using the environment variable
+`ASDF_DIRENV_IGNORE_MISSING_PLUGINS=1`
+
 ### Per-Project Environments
 
 Once direnv is hooked into your system, use the  `asdf direnv local`
@@ -145,7 +151,12 @@ Updating the version of direnv you use depends on which installation method you'
   updates direnv, this plugin will use the updated version.
 
 - `latest` or `<direnv-release-version>`: Re-run `asdf direnv setup --version
-  latest --shell ...` to update to the latest version of direnv.
+  latest --shell ...` to update to the latest version of direnv. One may optionally
+  add `--no-touch-rc-file` to the command to prevent the shell rc file from being
+  modified during the update.
+
+  (NOTE: One may alternatively `export ASDF_DIRENV_NO_TOUCH_RC_FILE=1` to permanently
+  prevent modification of shell rc files during updates.)
 
 </details>
 
@@ -238,12 +249,23 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
 
   All shims are still available via `asdf exec <shim>`
 
-```bash
-# ~/.bashrc or equivalent
+  ```bash
+  # ~/.bashrc or equivalent
 
-# Don't source `~/.asdf/asdf.sh`
-PATH="$PATH:~/.asdf/bin"
-```
+  # Don't source `~/.asdf/asdf.sh`
+  PATH="$PATH:~/.asdf/bin"
+  ```
+
+  Note: This will break any [global defaults](https://asdf-vm.com/guide/getting-started.html#global) you have specified in
+  `~/.tool-versions`. There are various workarounds for this:
+
+   - Do all work in project directories with their own `.envrc` and `.tool-versions`
+   - Use [`asdf direnv shell`](#temporary-environments-for-one-shot-commands) for one-shot commands
+   - Create a `~/.envrc` with `use asdf` in it
+   - Use your OS's package manager to install any tools you want globally accessible
+
+  There are pros and cons to each of these approaches, it's up to you to pick
+  the approach that works best for your workstyle.
 
 - If you want to silence the console output of direnv, you can do that by
   setting an empty environment variable: `export DIRENV_LOG_FORMAT=""`.
@@ -299,7 +321,7 @@ watch_file "package.json"
 - Using a non-empty `ASDF_DIRENV_DEBUG` will enable bash-tracing with `set -x` and skip env-cache.
 
   For example, if you are troubleshooting or trying to debug something weird on
-  your environment, use `env ASDF_DIRENV_DEBUG=true direnv reload` and provide any
+  your environment, use `export ASDF_DIRENV_DEBUG=true; direnv reload` and provide any
   relevant output on an [issue](issues/new).
 
   Also, if you are contributing a new feature or bug-fix try running

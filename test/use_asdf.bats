@@ -163,7 +163,28 @@ EOF
 
   cd "$PROJECT_DIR"
   asdf global dummy 2.0
-  asdf local dummy latest:2
+  # Note: we're writing directly to .tool-versions rather than using `asdf
+  # local dummy latest:2` because that `asdf local` command will actually
+  # resolve the appropriate vresion rather than putting the unresolved version
+  # in the .tool-versions file.
+  echo "dummy latest:2" >.tool-versions
+  asdf direnv local
+  envrc_load
+
+  run dummy
+  [ "$output" == "This is dummy 2.1" ] # executable in path
+}
+
+@test "use asdf - resolves latest version from tool-versions" {
+  install_dummy_plugin dummy 2.0
+  install_dummy_plugin dummy 2.1
+
+  cd "$PROJECT_DIR"
+  # Note: we're writing directly to .tool-versions rather than using `asdf
+  # local dummy latest` because that `asdf local` command will actually
+  # resolve the appropriate vresion rather than putting the unresolved version
+  # in the .tool-versions file.
+  echo "dummy latest" >.tool-versions
   asdf direnv local
   envrc_load
 
@@ -330,4 +351,17 @@ EOF
   # a cached failure from the first load.
   run path_as_lines
   [ "${lines[0]}" = "$(dummy_bin_path dummy 2.0)" ]
+}
+
+@test "use asdf - ignore missing plugin" {
+  install_dummy_plugin "dummy" "1.0"
+
+  asdf direnv local dummy 1.0
+  echo "missing 3.0" >>.tool-versions
+
+  export ASDF_DIRENV_IGNORE_MISSING_PLUGINS=1
+  asdf direnv local
+  run envrc_load
+
+  echo "$output" | grep "direnv: ignoring not installed plugin: missing"
 }
