@@ -11,6 +11,7 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0..master)
 
+- Fix `find` warning. #178
 - Add '--no-touch-rc-file' option to prevent rc file modification during updates. #176
 - Alternatively, `export ASDF_DIRENV_NO_TOUCH_RC_FILE=1` to prevent rc file modification. #176
 

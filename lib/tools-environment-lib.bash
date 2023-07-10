@@ -189,7 +189,7 @@ _plugins_in_file() {
 
 _all_plugins_list() {
   # NOTE: passing empty to `get_plugin_path` yields the plugins root.
-  find "$(get_plugin_path "")" ! -name '.DS_Store' -maxdepth 1 -mindepth 1 -exec basename '{}' \;
+  find "$(get_plugin_path "")" -maxdepth 1 -mindepth 1 ! -name '.DS_Store' -exec basename '{}' \;
 }
 
 _except_local_plugins_list() {
