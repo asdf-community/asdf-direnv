@@ -11,11 +11,16 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0..master)
 
+- Add new `asdf direnv install` command to help when installing tools that depend on each other. #180
+
 - Fix `find` warning. #178
+
 - Add '--no-touch-rc-file' option to prevent rc file modification during updates. #176
+
 - Alternatively, `export ASDF_DIRENV_NO_TOUCH_RC_FILE=1` to prevent rc file modification. #176
 
 - Add support for resolving 'latest:X' in .tool-versions #136
+
 - Add support for resolving 'latest' in .tool-versions #168
 
 ## [0.3.0](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0) (2022-04-03)
