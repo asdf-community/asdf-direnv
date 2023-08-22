@@ -213,22 +213,23 @@ _load_local_plugins_env() {
   fi
 }
 
-# from asdf plugin_current_command
-_load_plugin_version_and_file() {
+function _plugin_versions_and_path() {
   local plugin_name=$1
   local versions_and_path
-  # NOTE: temporary disable nounset since find_versions expects ASDF_DEFAULT_TOOL_VERSIONS_FILENAME to be set.
+  # NOTE: temporarily disable nounset since find_versions expects
+  # ASDF_DEFAULT_TOOL_VERSIONS_FILENAME to be set.
   versions_and_path="$(
     set +u
     find_versions "$plugin_name" "$(pwd)"
     set -u
   )"
-  if test -z "$versions_and_path"; then
+  if [ -z "$versions_and_path" ]; then
     return 0
   fi
 
   local path
   path=$(cut -d '|' -f 2 <<<"$versions_and_path")
+
   local versions=()
   while IFS=$' \t' read -r -a inline_versions; do
     for ((idx = ${#inline_versions[@]} - 1; idx >= 0; idx--)); do
@@ -237,12 +238,30 @@ _load_plugin_version_and_file() {
   done <<<"$(cut -d '|' -f 1 <<<"$versions_and_path" | uniq | _tail_r)"
 
   for version in "${versions[@]}"; do
-    echo log_status "using asdf ${plugin_name} ${version}"
-    _plugin_env_bash "$plugin_name" "$version" "$plugin_name $version not installed. Run 'asdf install' and then 'direnv reload'."
+    printf '%q|%q\n' "$version" "$path"
   done
-  if [ -f "$path" ]; then
-    printf 'watch_file %q\n' "$path"
+}
+
+# from asdf plugin_current_command
+_load_plugin_version_and_file() {
+  local plugin_name=$1
+
+  local plugin_versions_and_path
+  plugin_versions_and_path="$(_plugin_versions_and_path "$plugin_name")"
+  if [ -z "$plugin_versions_and_path" ]; then
+    return 0
   fi
+
+  while IFS=$'\n' read -r version_and_path; do
+    local version path
+    IFS='|' read -r version path <<<"$version_and_path"
+
+    echo log_status "using asdf ${plugin_name} ${version}"
+    _plugin_env_bash "$plugin_name" "$version" "$plugin_name $version not installed. Run 'asdf direnv install' to install."
+    if [ -f "$path" ]; then
+      printf 'watch_file %q\n' "$path"
+    fi
+  done <<<"$plugin_versions_and_path"
 }
 
 _new_items() {
