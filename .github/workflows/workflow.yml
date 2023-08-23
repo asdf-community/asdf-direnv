@@ -48,12 +48,12 @@ jobs:
 
       - name: Install bats-core
         run: |
-          git clone --depth 1 --branch v1.6.0 https://github.com/bats-core/bats-core.git $HOME/bats-core
+          git clone --depth 1 --branch v1.6.0 https://github.com/bats-core/bats-core.git "$HOME/bats-core"
           echo "$HOME/bats-core/bin" >>"$GITHUB_PATH"
 
       - name: Run tests
         run: |
-          asdf plugin-add direnv $GITHUB_WORKSPACE
+          asdf plugin-add direnv "$GITHUB_WORKSPACE"
           asdf install direnv ${{ matrix.direnv }}
           asdf global direnv ${{ matrix.direnv }}
           make test
