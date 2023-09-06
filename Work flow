@@ -1,0 +1,40 @@
+name: Hygiene
+skip if not required 
+jobs:
+  maintain hygiene:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set-up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Install dependencies
+        run: brew install actionlint shellcheck shfmt
+
+      - name: Check linting with actionlint
+        run: |
+          if [ -d .github/workflows ]; then
+            actionlint
+          else
+            echo "::warning title=No .github/workflows directory::No .github/workflows directory found, skipping actionlint"
+          fi
+      - name: Check if Makefile exists
+        id: makefile
+        run: |
+          if [ -f Makefile ]; then
+            echo "exists=true" >>"$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >>"$GITHUB_OUTPUT"
+            echo "::warning title=No Makefile::No Makefile found, skipping linting and formatting checks"
+          fi
+      - name: Check formatting with shfmt
+        run: make format-check
+        if: ${{ steps.makefile.outputs.exists == 'true' }}
+
+      - name: Check linting with shellcheck
+        run: make lint
+        if: ${{ steps.makefile.outputs.exists == 'true' }}
