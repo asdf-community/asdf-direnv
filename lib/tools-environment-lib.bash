@@ -125,7 +125,7 @@ _print_asdf_cached_envrc() {
   # around.
   # We use a randomly chosen filename to allow two different processes to
   # generate this at the same time without stepping on each other's toes.
-  generating_env_file="$(mktemp "$generating_dump_dir/$tools_cksum.XXXX")"
+  generating_env_file="$(mktemp "$generating_dump_dir/$tools_cksum.XXXXXX")"
   _asdf_envrc "$tools_file" | _no_dups >"${generating_env_file}"
   mv "${generating_env_file}" "${env_file}"
   echo "$env_file"
