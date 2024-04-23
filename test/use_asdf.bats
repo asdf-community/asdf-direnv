@@ -372,7 +372,7 @@ EOF
   asdf direnv local dummy ref:v1.0
 
   asdf direnv local
-  run envrc_load
+  envrc_load
 
   run asdf exec dummy
   [ "$output" == "This is dummy ref:v1.0" ]
