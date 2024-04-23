@@ -84,6 +84,8 @@ envrc_unload() {
 dummy_bin_path() {
   local plugin_name="${1:-dummy}"
   local version="${2:-'1.0'}"
+  # shellcheck disable=SC2001
+  version=$(echo "$version" | sed 's/^ref:/ref-/')
   echo "$ASDF_DATA_DIR/installs/${plugin_name}/${version}/bin"
 }
 
