@@ -11,7 +11,7 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0..master)
 
-- Support `ref:tag/commit/brach` and `path:~/local-tool-version` versions in `.tool-versions`
+- Support `ref:tag/branch/commit` and `path:/local/tool/version` versions in `.tool-versions`
   file. #188
 
 - Add new `asdf direnv install` command to help when installing tools that depend on each other. #180
