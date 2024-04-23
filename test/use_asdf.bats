@@ -365,3 +365,31 @@ EOF
 
   echo "$output" | grep "direnv: ignoring not installed plugin: missing"
 }
+
+@test "use asdf - resolves ref:version" {
+  install_dummy_plugin "dummy" "ref:v1.0"
+
+  asdf direnv local dummy ref:v1.0
+
+  asdf direnv local
+  run envrc_load
+
+  run asdf exec dummy
+  [ "$output" == "This is dummy ref:v1.0" ]
+}
+
+@test "use asdf - resolves path:version" {
+  install_dummy_plugin
+
+  echo "dummy path:~/src/dummy" >>.tool-versions
+
+  mkdir -p ~/src/dummy/bin
+  echo "echo This is dummy path" >~/src/dummy/bin/dummy
+  chmod +x ~/src/dummy/bin/dummy
+
+  asdf direnv local
+  envrc_load
+
+  run asdf exec dummy
+  [ "$output" == "This is dummy path" ]
+}
