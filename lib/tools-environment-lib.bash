@@ -286,7 +286,6 @@ _plugin_env_bash() {
   local not_installed_message="${3}"
   local ignore_missing_plugins="${ASDF_DIRENV_IGNORE_MISSING_PLUGINS:-0}"
 
-  # NOTE: unlike asdf, asdf-direnv does not support other installation types.
   local install_type="version"
 
   plugin_path=$(get_plugin_path "$plugin")
@@ -312,8 +311,13 @@ _plugin_env_bash() {
     version=$(latest_command "$plugin_name" "${version_info[1]}")
   elif [ "${version_info[0]}" = "latest" ] && [ -z "${version_info[1]-}" ]; then
     version=$(latest_command "$plugin_name" "")
+  elif [ "${version_info[0]}" = "ref" ]; then
+    install_type="${version_info[0]}"
+    version="${version_info[1]}"
+  elif [ "${version_info[0]}" = "path" ]; then
+    install_type="${version_info[0]}"
+    version="${version_info[1]}"
   else
-    # if branch handles ref: || path: || normal versions
     version="$full_version"
   fi
 

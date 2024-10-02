@@ -1,7 +1,7 @@
 SH_SRCFILES = $(shell git ls-files "bin/*" "*.bash" "*.bats")
 SHFMT_BASE_FLAGS = -s
 
-all: test lint fmt-check
+all: test lint fmt format-check
 
 .PHONY: all
 
