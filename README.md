@@ -8,10 +8,9 @@
 
 ## Motivation (or shims de-motivation)
 
-asdf version resolution [*is slow*](https://github.com/asdf-community/asdf-direnv/issues/80#issuecomment-1079485165) which makes every command execution pay that penalty. `asdf reshim` is needed for finding new executables, and some tools are not happy with their executables being masked by shims.
+asdf version resolution [_is slow_](https://github.com/asdf-community/asdf-direnv/issues/80#issuecomment-1079485165) which makes every command execution pay that penalty. `asdf reshim` is needed for finding new executables, and some tools are not happy with their executables being masked by shims.
 
 <details>
-
 
 [asdf](https://asdf-vm.com) is a great tool for managing multiple versions of
 command-line tools. 99% of the time these managed tools work just as expected.
@@ -60,7 +59,6 @@ Perform asdf version resolution only once and defer environment loading to diren
 
 <details>
 
-
 All these previously mentioned issues can be solved by using asdf along with the
 [direnv](https://direnv.net/) tool.
 
@@ -94,18 +92,22 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 Install this plugin and run the setup command for all of your preferred shells `bash`/`fish`/`zsh`.
 
 ```bash
+# for version 0.15 and before
 asdf plugin-add direnv
 asdf direnv setup --shell bash --version latest
+# for asdf 0.16 or higher
+asdf plugin add direnv
+asdf cmd direnv setup --shell bash --version latest
 ```
 
 If you already have a `direnv` installation, you can specify `--version system`.
 
 Otherwise this plugin can install it for you. Specify either `--version latest`
-or a [direnv release](https://github.com/direnv/direnv/releases) as shown by `asdf list-all direnv`.
+or a [direnv release](https://github.com/direnv/direnv/releases) as shown by
+`asdf list-all direnv` or`asdf list all direnv` in asdf 0.16 or later.
 
-
-The setup will hint which files were modified, you might want to review its changes.
-After setup, close and open your terminal.
+The setup will hint which files were modified, you might want to review its
+changes. After setup, close and open your terminal.
 
 ### Configuration
 
@@ -115,168 +117,154 @@ to change this using the environment variable
 
 ### Per-Project Environments
 
-Once direnv is hooked into your system, use the  `asdf direnv local`
-command on your project root directory to update your environment.
+Once direnv is hooked into your system, use the `asdf direnv local` (or `asdf
+cmd direnv local` for asdf 0.16 or higher) command on your project root
+directory to update your environment.
 
-``` bash
-asdf direnv local [<tool> <version>]...
-```
+````bash # pre asdf 0.15 asdf direnv local [<tool> <version>]... # asdf 0.16 and
+higher asdf cmd direnv local [<tool> <version>]... ```
 
 #### Temporary environments for one-shot commands
 
 Some times you just want to execute a one-shot commmand under certain
-environment without creating/modifying `.envrc` and `.tool-versions` files
-on your project directory. In those cases, you might want to try using
-`asdf direnv shell`.
+environment without creating/modifying `.envrc` and `.tool-versions` files on
+your project directory. In those cases, you might want to try using `asdf direnv
+shell` or `asdf cmd direnv shell` for asdf 0.16 or higher.
 
+```bash # Enter a new shell having python and node pre 0.16 $ asdf direnv shell
+python 3.8.10 nodejs 14.18.2 # asdf 0.16 and higher $ asdf cmd direnv shell
+python 3.8.10 nodejs 14.18.2
 
-``` bash
-# Enter a new shell having python and node
-$ asdf direnv shell python 3.8.10 nodejs 14.18.2
+# Just execute a npx command under some node version. pre 0.16 $ asdf direnv
+shell nodejs 14.18.2 -- npx create-react-app # asdf 0.16 and higher $ asdf cmd
+direnv shell nodejs 14.18.2 -- npx create-react-app ```
 
-# Just execute a npx command under some node version.
-$ asdf direnv shell nodejs 14.18.2 -- npx create-react-app
-```
-
-<details>
-<summary><h3>Updating</h3></summary>
+<details> <summary><h3>Updating</h3></summary>
 
 Updating this plugin is the same as any asdf plugin:
 
-    asdf plugin update direnv
+  asdf plugin update direnv
 
-Updating the version of direnv you use depends on which installation method you've chosen:
+Updating the version of direnv you use depends on which installation method
+you've chosen:
 
-- `system`: Nothing special required here, whenever your system package manager
-  updates direnv, this plugin will use the updated version.
+  - `system`: Nothing special required here, whenever your system package
+  manager updates direnv, this plugin will use the updated version.
 
-- `latest` or `<direnv-release-version>`: Re-run `asdf direnv setup --version
-  latest --shell ...` to update to the latest version of direnv. One may optionally
-  add `--no-touch-rc-file` to the command to prevent the shell rc file from being
-  modified during the update.
+  - `latest` or `<direnv-release-version>`: Re-run `asdf direnv setup --version
+  latest --shell ...` (or `asdf cmd direnv setup --version lastest --shell ...`
+  for asdf 0.16 or higher) to update to the latest version of direnv. One may
+  optionally add `--no-touch-rc-file` to the command to prevent the shell rc
+  file from being modified during the update.
 
-  (NOTE: One may alternatively `export ASDF_DIRENV_NO_TOUCH_RC_FILE=1` to permanently
-  prevent modification of shell rc files during updates.)
+  (NOTE: One may alternatively `export ASDF_DIRENV_NO_TOUCH_RC_FILE=1` to
+  permanently prevent modification of shell rc files during updates.)
 
 </details>
 
-<details>
-  <summary><h6>Cached environment</h6></summary>
+<details> <summary><h6>Cached environment</h6></summary>
 
 To speed up things a lot, this plugin creates direnv `envrc` files that contain
-your tools environment. They are created automatically whenever your `.envrc` or your
-`.tool-versions` files change.
+your tools environment. They are created automatically whenever your `.envrc` or
+your `.tool-versions` files change.
 
 Cached environment files can be found under `$XDG_CACHE_HOME/asdf-direnv/env`.
-On most systems that resolves to `~/.config/asdf-direnv/env`. It's always safe to
-remove files on this directory since they will be re-generated if missing.
+On most systems that resolves to `~/.config/asdf-direnv/env`. It's always safe
+to remove files on this directory since they will be re-generated if missing.
 
 If you ever need to regenerate a cached environment file, just `touch .envrc`.
+asdf 0.16 or higher)
 
-Also, the `asdf direnv envrc` command will print the path to the cached environment
-file used for your project.
+Also, the `asdf direnv envrc` (or `asdf cmd direnv envrc` for asdf 0.16 or
+higher) for command will print the path to the cached environment file used for
+your project.
 
 Now when you leave your project directory and come back to it, direnv will
 manage the environment variables for you really fast. For example:
 
-```bash
-direnv: loading .envrc
-direnv: using asdf
-direnv: Creating env file ~/.cache/asdf-direnv/env/909519368-2773408541-1591703797-361987458
-direnv: loading ~/.cache/asdf-direnv/env/909519368-2773408541-1591703797-361987458
-direnv: using asdf elixir 1.8.1-otp-21
-direnv: using asdf nodejs 12.6.0
-direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH
-```
+  ```bash direnv: loading .envrc direnv: using asdf direnv: Creating env file
+  ~/.cache/asdf-direnv/env/909519368-2773408541-1591703797-361987458 direnv:
+  loading ~/.cache/asdf-direnv/env/909519368-2773408541-1591703797-361987458
+  direnv: using asdf elixir 1.8.1-otp-21 direnv: using asdf nodejs 12.6.0
+  direnv: export +MIX_ARCHIVES +MIX_HOME +NPM_CONFIG_PREFIX ~PATH ```
 
 </details>
 
-<details>
-  <summary><h6>Benchmark</h6></summary>
+<details> <summary><h6>Benchmark</h6></summary>
 
 ![benchmark](https://user-images.githubusercontent.com/38746192/67657932-8483fb80-f99b-11e9-96d8-3d46d419ea62.png)
 
-#### `node --version`
+  #### `node --version`
 
 with asdf-direnv:
 
-| Mean [ms] | Min [ms] | Max [ms] | Relative |
-| --------: | -------: | -------: | -------: |
-| 4.3 ± 0.4 |      3.6 |      6.0 |     1.00 |
+| Mean [ms] | Min [ms] | Max [ms] | Relative | | --------: | -------: | -------:
+| -------: | | 4.3 ± 0.4 |      3.6 |      6.0 |     1.00 |
 
 without asdf-direnv:
 
-|   Mean [ms] | Min [ms] | Max [ms] | Relative |
-| ----------: | -------: | -------: | -------: |
-| 189.7 ± 2.7 |    185.6 |    194.0 |     1.00 |
+|   Mean [ms] | Min [ms] | Max [ms] | Relative | | ----------: | -------: |
+-------: | -------: | | 189.7 ± 2.7 |    185.6 |    194.0 |     1.00 |
 
-```bash
-hyperfine 'node --version'
-```
+```bash hyperfine 'node --version' ```
 
----
+  ---
 
-#### `npm install -g yarn`
+  #### `npm install -g yarn`
 
 with asdf-direnv:
 
-|    Mean [ms] | Min [ms] | Max [ms] | Relative |
-| -----------: | -------: | -------: | -------: |
-| 683.3 ± 17.3 |    667.9 |    725.1 |     1.00 |
+|    Mean [ms] | Min [ms] | Max [ms] | Relative | | -----------: | -------: |
+-------: | -------: | | 683.3 ± 17.3 |    667.9 |    725.1 |     1.00 |
 
 without asdf-direnv:
 
-|    Mean [ms] | Min [ms] | Max [ms] | Relative |
-| -----------: | -------: | -------: | -------: |
-| 870.0 ± 12.9 |    848.4 |    894.6 |     1.00 |
+|    Mean [ms] | Min [ms] | Max [ms] | Relative | | -----------: | -------: |
+-------: | -------: | | 870.0 ± 12.9 |    848.4 |    894.6 |     1.00 |
 
-```bash
-hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
-```
+```bash hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn' ```
 
 </details>
 
-<details>
-  <summary><h3>Pro-Tips</h3></summary>
+<details> <summary><h3>Pro-Tips</h3></summary>
 
-- Take a look at `direnv help true`.
+  - Take a look at `direnv help true`.
 
-- Getting `$ASDF_DIR/shims` out of the PATH.
+  - Getting `$ASDF_DIR/shims` out of the PATH.
 
-  Some users might want to bypass asdf shims altogether. To do so,
-  include only `$ASDF_DIR/bin` in your PATH but exclude the shims
-  directory.
+  Some users might want to bypass asdf shims altogether. To do so, include only
+  `$ASDF_DIR/bin` in your PATH but exclude the shims directory.
 
   All shims are still available via `asdf exec <shim>`
 
-  ```bash
-  # ~/.bashrc or equivalent
+  ```bash # ~/.bashrc or equivalent
 
-  # Don't source `~/.asdf/asdf.sh`
-  PATH="$PATH:~/.asdf/bin"
-  ```
+  # Don't source `~/.asdf/asdf.sh` PATH="$PATH:~/.asdf/bin" ```
 
-  Note: This will break any [global defaults](https://asdf-vm.com/guide/getting-started.html#global) you have specified in
-  `~/.tool-versions`. There are various workarounds for this:
+  Note: This will break any [global
+  defaults](https://asdf-vm.com/guide/getting-started.html#global) you have
+  specified in `~/.tool-versions`. There are various workarounds for this:
 
-   - Do all work in project directories with their own `.envrc` and `.tool-versions`
-   - Use [`asdf direnv shell`](#temporary-environments-for-one-shot-commands) for one-shot commands
-   - Create a `~/.envrc` with `use asdf` in it
-   - Use your OS's package manager to install any tools you want globally accessible
+  - Do all work in project directories with their own `.envrc` and
+  `.tool-versions`
+  - Use [`asdf direnv shell`](#temporary-environments-for-one-shot-commands) for
+  one-shot commands or `asdf cmd direnv shell` for asdf 0.16 and higher
+  - Create a `~/.envrc` with `use asdf` in it
+  - Use your OS's package manager to install any tools you want globally
+  accessible
 
   There are pros and cons to each of these approaches, it's up to you to pick
   the approach that works best for your workstyle.
 
-- If you want to silence the console output of direnv, you can do that by
+  - If you want to silence the console output of direnv, you can do that by
   setting an empty environment variable: `export DIRENV_LOG_FORMAT=""`.
 
-- Some times you might need to configure IDEs or other tools to find executables
-  like package managers/code linters/compilers being used on a project of yours.
-  For example, to execute `npm` outside your project directory you can do:
+  - Some times you might need to configure IDEs or other tools to find
+  executables like package managers/code linters/compilers being used on a
+  project of yours. For example, to execute `npm` outside your project directory
+  you can do:
 
-```bash
-direnv exec /some/project npm
-```
+```bash direnv exec /some/project npm ```
 
 - Remember that activation order is important.
 
@@ -287,7 +275,7 @@ direnv exec /some/project npm
 # .tool-versions
 toolA 1.0
 toolB 2.0
-```
+````
 
 - You can `use asdf` even if current directory has no `.tool-versions` file.
 
