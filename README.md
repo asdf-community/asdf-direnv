@@ -1,5 +1,8 @@
 # asdf-direnv
 
+> [!WARNING]  
+> Looking for maintainers. See https://github.com/asdf-community/asdf-direnv/issues/196
+
 [direnv](https://direnv.net) plugin for asdf version manager
 
 ## Build History
