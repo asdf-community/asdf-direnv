@@ -1,7 +1,15 @@
 # asdf-direnv
 
-> [!WARNING]  
-> Looking for maintainers. See https://github.com/asdf-community/asdf-direnv/issues/196
+> [!CAUTION]
+> This project is archived.
+> The asdf ecosystem has evolved since this project was created, and there are
+> better alternatives.
+> - If all you care about is speed, use the `go` rewrite of `asdf`
+>   ([0.16+](https://github.com/asdf-vm/asdf/blob/master/CHANGELOG.md#0160-2025-01-30)).
+> - If you want to avoid shims for non-speed reasons (such as confusing `which`
+>   output), [mise](https://mise.jdx.dev) is an alternative "front end" to the
+>   asdf plugin ecosystem, and it supports [PATH
+>   activation](https://mise.jdx.dev/dev-tools/shims.html#path-activation).
 
 [direnv](https://direnv.net) plugin for asdf version manager
 
