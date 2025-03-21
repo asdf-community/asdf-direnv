@@ -9,13 +9,13 @@ source "$(dirname "${BASH_SOURCE[0]}")/../tools-environment-lib.bash"
 case "${1-}" in
   "" | "-h" | "--help" | "help")
     cat <<-EOF
-Usage: asdf direnv shell <name> <version> [<name> <version>]... [-- <command> <args>...]
+Usage: asdf cmd direnv shell <name> <version> [<name> <version>]... [-- <command> <args>...]
 
 Examples:
 
-$ asdf direnv shell python 3.8.10 nodejs 14.18.2
+$ asdf cmd direnv shell python 3.8.10 nodejs 14.18.2
 
-$ asdf direnv shell nodejs 14.18.2 -- npx servor
+$ asdf cmd direnv shell nodejs 14.18.2 -- npx servor
 EOF
     exit 1
     ;;

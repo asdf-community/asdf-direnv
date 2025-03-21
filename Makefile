@@ -1,4 +1,4 @@
-SH_SRCFILES = $(shell git ls-files "bin/*" "*.bash" "*.bats")
+SH_SRCFILES = $(shell git ls-files "bin/*" "lib/commands/*" "*.bash" "*.bats")
 SHFMT_BASE_FLAGS = -s
 
 all: test lint fmt format-check
