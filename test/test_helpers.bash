@@ -17,7 +17,7 @@ env_setup() {
   ASDF_DIRENV="$(dirname "$BATS_TEST_DIRNAME")"
 
   ASDF_WHERE_DIRENV="$(asdf where direnv)"
-  test -n "$ASDF_WHERE_DIRENV" || die "Expected asdf-direnv plugin to be already be installed."
+  test -n "$ASDF_WHERE_DIRENV" || die "Expected asdf-direnv plugin to be already installed."
 
   ASDF_DIRENV_VERSION="$(basename "$ASDF_WHERE_DIRENV")"
   PATH_WITHOUT_ASDF="$(echo "$PATH" | tr ':' $'\n' | grep -v asdf | tr $'\n' ':' | sed -e 's#:$##')"
