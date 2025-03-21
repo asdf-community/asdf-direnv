@@ -12,7 +12,7 @@ direnv() {
 env_setup() {
   ASDF_CMD="$(type -P asdf)"
   test -x "$ASDF_CMD" || die "Expected asdf command to be available."
-  ASDF_ROOT="$(dirname "$(dirname "$ASDF_CMD")")"
+  ASDF_ROOT="${ASDF_DIR:-"$(dirname "$(dirname "$ASDF_CMD")")"}"
 
   ASDF_DIRENV="$(dirname "$BATS_TEST_DIRNAME")"
 
@@ -42,7 +42,7 @@ env_setup() {
 
   mkdir -p "${ASDF_DIR}"/{bin,lib}
   mkdir -p "${ASDF_DATA_DIR}"/{plugins,installs,shims}
-  cp "$ASDF_ROOT"/bin/asdf "${ASDF_DIR}/bin"
+  cp "$ASDF_CMD" "${ASDF_DIR}/bin"
   cp -r "$ASDF_ROOT"/lib/* "${ASDF_DIR}/lib"
 
   ln -s "$ASDF_DIRENV" "${ASDF_DATA_DIR}/plugins/direnv"
