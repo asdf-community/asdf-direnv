@@ -5,7 +5,7 @@ load test_helpers
 
 setup() {
   env_setup
-  asdf direnv setup --shell bash --version system
+  asdf cmd direnv setup --shell bash --version system
 }
 
 teardown() {
@@ -15,11 +15,11 @@ teardown() {
 @test "local command touches .tool-versions and .envrc - single tool" {
   install_dummy_plugin "dummy" "1.0"
 
-  run asdf direnv local dummy 1.0
+  run asdf cmd direnv local dummy 1.0
   grep "dummy 1.0" ".tool-versions"
   grep "use asdf" ".envrc"
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
   run dummy
 
@@ -30,7 +30,7 @@ teardown() {
   install_dummy_plugin "dummy" "1.0"
   install_dummy_plugin "gummy" "2.0"
 
-  asdf direnv local gummy 2.0 dummy 1.0
+  asdf cmd direnv local gummy 2.0 dummy 1.0
 
   run cat .tool-versions
   [ "${lines[0]}" = "gummy 2.0" ]

@@ -5,7 +5,7 @@ load test_helpers
 
 setup() {
   env_setup
-  asdf direnv setup --shell bash --version system
+  asdf cmd direnv setup --shell bash --version system
   # shellcheck source=/dev/null
   source "$HOME/.bashrc"
 }
@@ -37,11 +37,11 @@ teardown() {
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  asdf direnv local dummy 2.0 dummy 1.0
-  asdf local dummy 2.0
+  asdf cmd direnv local dummy 2.0 dummy 1.0
+  asdf set dummy 2.0
   echo "dummy 1.0" >>.tool-versions
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   run path_as_lines
@@ -55,8 +55,8 @@ teardown() {
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  asdf local dummy 2.0 1.0
-  asdf direnv local
+  asdf set dummy 2.0 1.0
+  asdf cmd direnv local
   envrc_load
 
   run path_as_lines
@@ -69,11 +69,11 @@ teardown() {
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  asdf direnv local
+  asdf cmd direnv local
 
   [ ! "$(type -P dummy)" ] # not available
 
-  asdf global dummy 1.0
+  asdf set -u dummy 1.0
   rm -f "$PROJECT_DIR"/.tool-versions # no local tools
   touch .envrc
   envrc_load
@@ -87,12 +87,12 @@ teardown() {
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  asdf direnv local
+  asdf cmd direnv local
 
   [ ! "$(type -P dummy)" ] # not available
 
-  asdf global dummy 1.0 # should be ignored by asdf
-  asdf local dummy 2.0
+  asdf set -u dummy 1.0 # should be ignored by asdf
+  asdf set dummy 2.0
   # Touching local .envrc file should re-create cached-envrc
   touch .envrc
   envrc_load
@@ -103,10 +103,10 @@ teardown() {
 @test "use asdf - prepends plugin custom shims to PATH" {
   echo "If a plugin has helper shims defined, they also appear on PATH"
   install_dummy_plugin dummy 1.0 mummy
-  asdf global dummy 1.0
+  asdf set -u dummy 1.0
 
   cd "$PROJECT_DIR"
-  asdf direnv local
+  asdf cmd direnv local
 
   [ ! "$(type -P mummy)" ] # not available
   [ ! "$(type -P dummy)" ] # not available
@@ -136,7 +136,7 @@ EOF
 
   cd "$PROJECT_DIR"
   export ASDF_DUMMY_VERSION=1.0
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   [ "$JOJO" == "JAJA" ]  # Env exported by plugin
@@ -148,9 +148,9 @@ EOF
   install_dummy_plugin dummy 2.0
 
   cd "$PROJECT_DIR"
-  asdf global dummy 1.0
-  asdf local dummy 2.0
-  asdf direnv local
+  asdf set -u dummy 1.0
+  asdf set dummy 2.0
+  asdf cmd direnv local
   envrc_load
 
   run dummy
@@ -162,13 +162,13 @@ EOF
   install_dummy_plugin dummy 2.1
 
   cd "$PROJECT_DIR"
-  asdf global dummy 2.0
+  asdf set -u dummy 2.0
   # Note: we're writing directly to .tool-versions rather than using `asdf
-  # local dummy latest:2` because that `asdf local` command will actually
+  # set dummy latest:2` because that `asdf set` command will actually
   # resolve the appropriate vresion rather than putting the unresolved version
   # in the .tool-versions file.
   echo "dummy latest:2" >.tool-versions
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   run dummy
@@ -181,11 +181,11 @@ EOF
 
   cd "$PROJECT_DIR"
   # Note: we're writing directly to .tool-versions rather than using `asdf
-  # local dummy latest` because that `asdf local` command will actually
+  # set dummy latest` because that `asdf set` command will actually
   # resolve the appropriate vresion rather than putting the unresolved version
   # in the .tool-versions file.
   echo "dummy latest" >.tool-versions
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   run dummy
@@ -196,8 +196,8 @@ EOF
   install_dummy_plugin dummy 1.0
 
   cd "$PROJECT_DIR"
-  asdf local dummy 1.0
-  asdf direnv local
+  asdf set dummy 1.0
+  asdf cmd direnv local
   envrc_load
 
   direnv status | grep -F 'Loaded watch: ".tool-versions"'
@@ -209,7 +209,7 @@ EOF
 
   cd "$PROJECT_DIR"
   echo "1.0" >"$PROJECT_DIR/.dummy-version"
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   run dummy
@@ -228,13 +228,13 @@ EOF
   setup_dummy_legacyfile dummy .dummy-version
 
   cd "$PROJECT_DIR"
-  asdf global dummy 1.0
-  asdf global gummy 1.0
+  asdf set -u dummy 1.0
+  asdf set -u gummy 1.0
 
   echo "2.0" >"$PROJECT_DIR/.dummy-version"
-  asdf local puppy 2.0
+  asdf set puppy 2.0
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   run dummy # selected from legacyfile
@@ -260,13 +260,13 @@ EOF
   install_dummy_plugin mummy 1.0 # installed, but not seelcted globally nor locally
 
   cd "$PROJECT_DIR"
-  asdf global dummy 1.0
-  asdf global gummy 1.0
+  asdf set -u dummy 1.0
+  asdf set -u gummy 1.0
 
-  asdf local dummy 2.0
-  asdf local puppy 2.0
+  asdf set dummy 2.0
+  asdf set puppy 2.0
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   direnv status | grep -F 'Loaded watch: ".tool-versions"'
@@ -280,7 +280,7 @@ EOF
   cd "$PROJECT_DIR"
   echo "2.0" >"$PROJECT_DIR/.dummy-version"
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   direnv status
@@ -297,14 +297,14 @@ EOF
   setup_dummy_legacyfile dummy .dummy-version
 
   cd "$PROJECT_DIR"
-  asdf global mummy 1.0
-  asdf global rummy 1.0
+  asdf set -u mummy 1.0
+  asdf set -u rummy 1.0
 
   echo "1.0" >"$PROJECT_DIR/.dummy-version"
-  asdf local puppy 1.0
-  asdf local gummy 1.0
+  asdf set puppy 1.0
+  asdf set gummy 1.0
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   path_as_lines
@@ -324,7 +324,7 @@ EOF
   [ "$puppy_line" -lt "$mummy_line" ]
   [ "$puppy_line" -lt "$dummy_line" ] # since dummy is not in tool-versions its loaded after local tools
   # global plugins order is lexicographical since they are not in tool-versions file
-  [ "$dummy_line" -lt "$mummy_line" ] # dummy is resolved by `use asdf global` since its not in tool-versions
+  [ "$dummy_line" -lt "$mummy_line" ] # dummy is resolved by `use asdf set -u` since its not in tool-versions
   [ "$mummy_line" -lt "$rummy_line" ]
 }
 
@@ -332,7 +332,7 @@ EOF
   # Setup: use dummy plugin v1.0
   install_dummy_plugin dummy 1.0
   cd "$PROJECT_DIR"
-  asdf direnv local dummy 1.0
+  asdf cmd direnv local dummy 1.0
 
   # Now switch to dummy v2.0, which we do *not* have installed. This should
   # fail, but should *not* generate a cached env file of that failure.
@@ -356,11 +356,11 @@ EOF
 @test "use asdf - ignore missing plugin" {
   install_dummy_plugin "dummy" "1.0"
 
-  asdf direnv local dummy 1.0
+  asdf cmd direnv local dummy 1.0
   echo "missing 3.0" >>.tool-versions
 
   export ASDF_DIRENV_IGNORE_MISSING_PLUGINS=1
-  asdf direnv local
+  asdf cmd direnv local
   run envrc_load
 
   echo "$output" | grep "direnv: ignoring not installed plugin: missing"
@@ -369,9 +369,9 @@ EOF
 @test "use asdf - resolves ref:version" {
   install_dummy_plugin "dummy" "ref:v1.0"
 
-  asdf direnv local dummy ref:v1.0
+  asdf cmd direnv local dummy ref:v1.0
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   run asdf exec dummy
@@ -387,7 +387,7 @@ EOF
   echo "echo This is dummy path" >~/src/dummy/bin/dummy
   chmod +x ~/src/dummy/bin/dummy
 
-  asdf direnv local
+  asdf cmd direnv local
   envrc_load
 
   run asdf exec dummy
