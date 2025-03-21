@@ -53,7 +53,7 @@ jobs:
 
       - name: Run tests
         run: |
-          asdf plugin-add direnv "$GITHUB_WORKSPACE"
+          asdf plugin add direnv "$GITHUB_WORKSPACE"
           asdf install direnv ${{ matrix.direnv }}
           asdf global direnv ${{ matrix.direnv }}
           make test
