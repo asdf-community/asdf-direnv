@@ -4,7 +4,7 @@
 source "$(dirname "${BASH_SOURCE[0]}")/tools-environment-lib.bash"
 
 function print_usage() {
-  echo "Usage: asdf direnv install"
+  echo "Usage: asdf cmd direnv install"
   echo ""
   echo "Installs tools needed for the current directory. This is very similar"
   echo "to 'asdf install' except it installs the tools in the exact order specified"
