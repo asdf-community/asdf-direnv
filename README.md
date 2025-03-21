@@ -97,14 +97,14 @@ expected location. Also, no more _reshim_ needed upon `npm install`.
 Install this plugin and run the setup command for all of your preferred shells `bash`/`fish`/`zsh`.
 
 ```bash
-asdf plugin-add direnv
-asdf direnv setup --shell bash --version latest
+asdf plugin add direnv
+asdf cmd direnv setup --shell bash --version latest
 ```
 
 If you already have a `direnv` installation, you can specify `--version system`.
 
 Otherwise this plugin can install it for you. Specify either `--version latest`
-or a [direnv release](https://github.com/direnv/direnv/releases) as shown by `asdf list-all direnv`.
+or a [direnv release](https://github.com/direnv/direnv/releases) as shown by `asdf list all direnv`.
 
 
 The setup will hint which files were modified, you might want to review its changes.
@@ -118,11 +118,11 @@ to change this using the environment variable
 
 ### Per-Project Environments
 
-Once direnv is hooked into your system, use the  `asdf direnv local`
+Once direnv is hooked into your system, use the  `asdf cmd direnv local`
 command on your project root directory to update your environment.
 
 ``` bash
-asdf direnv local [<tool> <version>]...
+asdf cmd direnv local [<tool> <version>]...
 ```
 
 #### Temporary environments for one-shot commands
@@ -130,15 +130,15 @@ asdf direnv local [<tool> <version>]...
 Some times you just want to execute a one-shot commmand under certain
 environment without creating/modifying `.envrc` and `.tool-versions` files
 on your project directory. In those cases, you might want to try using
-`asdf direnv shell`.
+`asdf cmd direnv shell`.
 
 
 ``` bash
 # Enter a new shell having python and node
-$ asdf direnv shell python 3.8.10 nodejs 14.18.2
+$ asdf cmd direnv shell python 3.8.10 nodejs 14.18.2
 
 # Just execute a npx command under some node version.
-$ asdf direnv shell nodejs 14.18.2 -- npx create-react-app
+$ asdf cmd direnv shell nodejs 14.18.2 -- npx create-react-app
 ```
 
 <details>
@@ -153,7 +153,7 @@ Updating the version of direnv you use depends on which installation method you'
 - `system`: Nothing special required here, whenever your system package manager
   updates direnv, this plugin will use the updated version.
 
-- `latest` or `<direnv-release-version>`: Re-run `asdf direnv setup --version
+- `latest` or `<direnv-release-version>`: Re-run `asdf cmd direnv setup --version
   latest --shell ...` to update to the latest version of direnv. One may optionally
   add `--no-touch-rc-file` to the command to prevent the shell rc file from being
   modified during the update.
@@ -176,7 +176,7 @@ remove files on this directory since they will be re-generated if missing.
 
 If you ever need to regenerate a cached environment file, just `touch .envrc`.
 
-Also, the `asdf direnv envrc` command will print the path to the cached environment
+Also, the `asdf cmd direnv envrc` command will print the path to the cached environment
 file used for your project.
 
 Now when you leave your project directory and come back to it, direnv will
@@ -263,7 +263,7 @@ hyperfine --cleanup 'npm uninstall -g yarn' 'npm install -g yarn'
   `~/.tool-versions`. There are various workarounds for this:
 
    - Do all work in project directories with their own `.envrc` and `.tool-versions`
-   - Use [`asdf direnv shell`](#temporary-environments-for-one-shot-commands) for one-shot commands
+   - Use [`asdf cmd direnv shell`](#temporary-environments-for-one-shot-commands) for one-shot commands
    - Create a `~/.envrc` with `use asdf` in it
    - Use your OS's package manager to install any tools you want globally accessible
 
