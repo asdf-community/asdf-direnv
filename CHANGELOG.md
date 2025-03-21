@@ -11,6 +11,8 @@ github compare-link with the previous one.
 
 ## [Unreleased](https://github.com/asdf-community/asdf-direnv/compare/v0.3.0..master)
 
+- Update `lib/*.bash`, `lib/commands/*` and `test/*.bats` to asdf-vm v1.16.x.
+
 - Support `ref:tag/branch/commit` and `path:/local/tool/version` versions in `.tool-versions`
   file. #188
 
