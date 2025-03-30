@@ -54,6 +54,8 @@ run_with_plugins() {
     local version_env_var="ASDF_${upcase_name}_VERSION"
     export "$version_env_var"="$version"
 
+    _load_asdf_lib get_plugin_path utils.bash
+
     eval "$(_plugin_env_bash "$plugin" "$version" "$plugin $version not installed. Run 'asdf install $plugin $version' and try again.")"
   done
 
