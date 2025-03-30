@@ -75,7 +75,7 @@ _load_asdf_lib() {
     # libexec is a Homebrew specific thing. See
     # https://github.com/asdf-community/asdf-direnv/issues/95 for details.
     local lib_file
-    lib_file=$(ls "$ASDF_DIR"/{lib,libexec/lib}/"$path" 2>/dev/null || true)
+    lib_file=$(ls "$ASDF_DIR"{,/plugins/direnv}/lib{,exec/lib,/asdf}/"$path" 2>/dev/null || true)
     if [ ! -f "$lib_file" ]; then
       log_error "Could not find asdf $path file in $ASDF_DIR"
       return 1
