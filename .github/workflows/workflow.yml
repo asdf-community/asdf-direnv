@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: asdf_plugin_test
-        uses: asdf-vm/actions/plugin-test@v3
+        uses: asdf-vm/actions/plugin-test@v4
         with:
           command: direnv version
 
@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup asdf
-        uses: asdf-vm/actions/setup@v3
+        uses: asdf-vm/actions/setup@v4
 
       - name: macOS coreutils # needed by bats-core
         if: matrix.os == 'macos-latest'
